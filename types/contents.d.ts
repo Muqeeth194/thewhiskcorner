@@ -9,7 +9,7 @@ export type HeroHeader = {
 export type Content = {
   text: string
   subtext: string
-  icon?: IconKeys
+  image?: IconKeys
 }
 export type Image = {
   image: string

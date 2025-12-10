@@ -1,8 +1,8 @@
 import {
   HeroHeader,
-  ContentSection,
   CarouselSection,
   CakeFilterSection,
+  ContentSection,
 } from "@/types/contents"
 
 /* ====================
@@ -58,34 +58,34 @@ export const carouselSection: CarouselSection = {
   ],
 }
 
-export const featureCards: ContentSection = {
+export const featuredCategory: ContentSection = {
   header: `Featured Catergories`,
   subheader: `Handcrafted wedding & celebration cakes made with love`,
   content: [
     {
       text: `Wedding Cakes`,
       subtext: `Open the Gallery to check the cakes`,
-      icon: "nextjs",
+      image: "nextjs",
     },
     {
       text: `Birthday Cakes`,
       subtext: `Open the Gallery to check the cakes`,
-      icon: "shadcnUi",
+      image: "shadcnUi",
     },
     {
       text: `Celebration Cakes`,
       subtext: `Open the Gallery to check the cakes`,
-      icon: "vercel",
+      image: "vercel",
     },
     {
       text: `Deserts`,
       subtext: `Open the Gallery to check the cakes`,
-      icon: "vercel",
+      image: "vercel",
     },
   ],
 }
 
-export const features: ContentSection = {
+export const testimonials: ContentSection = {
   header: `Testimonials`,
   subheader: `See what our customers have to say about us`,
   image: `/features-img.webp`,
@@ -93,17 +93,17 @@ export const features: ContentSection = {
     {
       text: `- Muqeeth`,
       subtext: `The Cakes were really good!!`,
-      icon: "fileSearch",
+      image: "fileSearch",
     },
     {
       text: `- Mahreen`,
       subtext: `Amazing Taste!`,
-      icon: "barChart",
+      image: "barChart",
     },
     {
       text: `- Mohammad`,
       subtext: `Great Effort!`,
-      icon: "settings",
+      image: "settings",
     },
   ],
 }
