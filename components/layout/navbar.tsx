@@ -6,7 +6,8 @@ import { ModeToggle } from "@/components/mode-toggle"
 import { siteConfig } from "@/config/site"
 import { navLinks } from "@/lib/links"
 import { settings } from "@/config/settings"
-import { Button } from "../ui/button"
+import { Button, buttonVariants } from "../ui/button"
+import { cn } from "@/lib/utils"
 
 export default function Navbar() {
   const [navbar, setNavbar] = useState(false)
@@ -24,25 +25,25 @@ export default function Navbar() {
   }, [navbar])
 
   return (
-    <header className="select-none">
-      <nav className="mx-auto justify-between px-4 md:flex md:items-center md:px-8 lg:max-w-6xl">
+    <header className="sticky top-0 z-50 w-full select-none border-b border-pink-100 bg-pink-200 backdrop-blur-md">
+      <nav className="mx-auto justify-between px-4  md:flex md:items-center md:px-[6.25rem] lg:max-w-7xl">
         <div>
-          <div className=" flex items-center justify-between px-0 py-3 md:block md:py-5">
+          <div className="flex items-center justify-between px-0 py-3 md:block md:py-3.5">
             <Link href="/" onClick={handleClick}>
-              <h1 className="text-2xl font-bold duration-200 lg:hover:scale-[1.10]">
+              <h1 className="text-baby-pink-900 lg:hover:text-baby-pink-700 font-serif text-2xl font-bold tracking-wide transition-all duration-200 lg:hover:scale-[1.05]  ">
                 {siteConfig.name}
               </h1>
             </Link>
             <div className="flex gap-1 md:hidden">
               <button
-                className="rounded-md p-2 text-primary outline-none focus:border focus:border-primary"
+                className="text-baby-pink-700 focus:border-baby-pink-500 rounded-md p-2 outline-none focus:border"
                 aria-label="Hamburger Menu"
                 onClick={() => setNavbar(!navbar)}
               >
                 {navbar ? (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 "
+                    className="h-6 w-6"
                     viewBox="0 0 20 20"
                     fill="currentColor"
                   >
@@ -55,7 +56,7 @@ export default function Navbar() {
                 ) : (
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 "
+                    className="h-6 w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -75,16 +76,16 @@ export default function Navbar() {
         </div>
         <div>
           <div
-            className={`absolute left-0 right-0 z-10 m-auto justify-self-center rounded-md border bg-background p-4 md:static md:mt-0 md:block md:border-none md:p-0 ${
+            className={`border-baby-pink-200 bg-baby-pink-50 absolute left-0 right-0 z-10 m-auto justify-self-center rounded-md border p-4  md:static md:mt-0 md:block md:border-none md:bg-transparent md:p-0  ${
               navbar ? "block" : "hidden"
             }`}
             style={{ width: "100%" }}
           >
-            <ul className="flex flex-col items-center space-y-4 text-primary opacity-60 md:flex-row md:space-x-6 md:space-y-0">
+            <ul className="text-baby-pink-700 flex flex-col items-center space-y-4 md:flex-row md:space-x-6 md:space-y-0 ">
               {navLinks.map((link) => (
                 <li key={link.route}>
                   <Link
-                    className="hover:underline"
+                    className="hover:text-baby-pink-900 inline-block font-bold transition-all duration-300 hover:scale-105 "
                     href={link.path}
                     onClick={handleClick}
                   >
@@ -97,8 +98,18 @@ export default function Navbar() {
         </div>
 
         {settings.themeToggleEnabled && (
-          <div className="hidden items-center justify-center gap-2 md:block md:flex">
-            <Button size="sm">Order Now</Button>
+          <div className="hidden items-center justify-center gap-2 md:flex">
+            <Button
+              className={cn(
+                buttonVariants({
+                  variant: "outline",
+                  size: "sm",
+                }),
+                "w-fit rounded-full border-2 border-yellow-400 bg-yellow-400 px-6 py-2 text-sm font-medium tracking-wider text-black shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-300 hover:scale-105 hover:bg-yellow-300 hover:shadow-2xl lg:px-8 lg:text-sm"
+              )}
+            >
+              Order Now
+            </Button>
             {/* <ModeToggle /> */}
           </div>
         )}

@@ -39,3 +39,7 @@ export type Cake = {
   image: string
   category: string
 }
+
+export type cakeIdParams = {
+  id: string
+}

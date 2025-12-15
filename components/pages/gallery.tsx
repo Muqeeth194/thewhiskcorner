@@ -105,18 +105,23 @@ export default function GalleryPage() {
           <p>Loading...</p>
         ) : currentCakes.length > 0 ? (
           currentCakes.map((cake) => (
-            <Card key={cake.id}>
-              <CardContent>
-                <img
-                  src={cake.image}
-                  alt={cake.name}
-                  className="h-64 w-full object-cover transition-transform hover:scale-105"
-                />
-              </CardContent>
-              <CardFooter className="flex justify-center p-4">
-                <CardTitle className="text-lg">{cake.name}</CardTitle>
-              </CardFooter>
-            </Card>
+            <Link key={cake.id} href={`/cake${cake.id}`}>
+              <Card
+                key={cake.id}
+                className="transition-transform hover:scale-105"
+              >
+                <CardContent>
+                  <img
+                    src={cake.image}
+                    alt={cake.name}
+                    className="h-64 w-full object-cover "
+                  />
+                </CardContent>
+                <CardFooter className="flex justify-center p-4">
+                  <CardTitle className="text-lg">{cake.name}</CardTitle>
+                </CardFooter>
+              </Card>
+            </Link>
           ))
         ) : (
           <p className="text-muted-foregroundl col-span-full text-center">

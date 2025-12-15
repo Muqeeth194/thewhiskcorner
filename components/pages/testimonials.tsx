@@ -26,7 +26,7 @@ export default function Testimonials() {
   )
 
   return (
-    <section className="container space-y-8 py-12 lg:py-20" id="features">
+    <section className="container space-y-8 py-12 lg:py-20 " id="features">
       {testimonials.header || testimonials.subheader ? (
         <HeadingText subtext={testimonials.subheader} className="text-center">
           {testimonials.header}
@@ -34,12 +34,7 @@ export default function Testimonials() {
       ) : null}
 
       <div className="flex flex-1 flex-col items-center gap-4 text-center lg:gap-8">
-        <Carousel
-          plugins={[plugin.current]}
-          className="w-full"
-          onMouseEnter={plugin.current.stop}
-          onMouseLeave={plugin.current.reset}
-        >
+        <Carousel plugins={[plugin.current]} className="w-full">
           <CarouselContent>
             {testimonials.content.map((cards, index) => (
               <CarouselItem key={index}>

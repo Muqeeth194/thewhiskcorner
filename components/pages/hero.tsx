@@ -5,7 +5,7 @@ import Image from "next/image"
 import * as React from "react"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { carouselSection, featureCards, heroHeader } from "@/config/contents"
+import { carouselSection, heroHeader } from "@/config/contents"
 import {
   Carousel,
   CarouselContent,
@@ -22,51 +22,51 @@ export default function HeroHeader() {
     Autoplay({ delay: 2000, stopOnInteraction: false })
   )
   return (
-    <section className="container flex flex-col gap-4 pb-12 pt-0 text-center lg:items-center lg:gap-8 lg:pb-8">
-      <div className="w-screen">
-        <Carousel
-          plugins={[plugin.current]}
-          className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-full"
-          onMouseEnter={plugin.current.stop}
-          onMouseLeave={plugin.current.reset}
-        >
-          <CarouselContent>
-            {carouselSection.content.map((cards, index) => (
-              <CarouselItem key={index} className="pl-0">
-                <div>
-                  <Card className="rounded-none border-0 bg-transparent shadow-none">
-                    <CardContent className="flex h-[60vh] w-full items-center justify-center p-0">
-                      <img
-                        src={cards.image}
-                        alt="Card image"
-                        className="h-full w-full object-cover"
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          {/* <CarouselPrevious />
-          <CarouselNext /> */}
-        </Carousel>
-      </div>
+    <section className="w-full overflow-hidden pb-0 pt-0">
+      <Carousel plugins={[plugin.current]} className="relative h-full w-full">
+        <CarouselContent className="h-[50vh] md:h-[60vh] lg:h-[70vh]">
+          {carouselSection.content.map((cards, index) => (
+            <CarouselItem key={index} className="h-full w-full pl-0">
+              <Card className="h-full w-full rounded-none border-0 bg-transparent shadow-none">
+                <CardContent className="flex h-full w-full items-center justify-center p-0">
+                  <img
+                    src={cards.image}
+                    alt="Card image"
+                    className="h-full w-full object-cover"
+                  />
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
 
-      <div className="flex w-full flex-1 flex-col items-center gap-4 text-center lg:gap-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold lg:text-5xl">
-            {heroHeader.header}
-          </h1>
-          <h2 className="text-lg font-light text-muted-foreground lg:text-2xl">
-            {heroHeader.subheader}
-          </h2>
+        {/* Text content */}
+        <div className="absolute left-8 top-1/2 flex w-[85%] -translate-y-1/2 flex-col gap-3 text-left md:left-16 md:w-2/3 lg:bottom-20 lg:left-48 lg:top-auto lg:w-1/3 lg:translate-y-0 lg:gap-5">
+          <div className="space-y-2 lg:space-y-4">
+            <h1 className="font-serif text-2xl font-semibold tracking-wide text-white antialiased drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] md:text-4xl lg:text-4xl">
+              {heroHeader.header}
+            </h1>
+            <h2 className="font-light tracking-wide text-white/95 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] md:text-lg lg:text-xl">
+              {heroHeader.subheader}
+            </h2>
+          </div>
+
+          <Button
+            className={cn(
+              buttonVariants({
+                variant: "outline",
+                size: "lg",
+              }),
+              "w-fit rounded-full border-2 border-yellow-400 bg-yellow-400 px-6 py-4 text-sm font-medium tracking-wider text-black shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] transition-all duration-300 hover:scale-105 hover:bg-yellow-300 hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-base"
+            )}
+          >
+            Order Now
+          </Button>
         </div>
-      </div>
 
-      <div className="hidden items-center justify-center gap-2 md:block md:flex">
-        <Button size="lg">Order Cake</Button>
-        <Button size="lg">View Gallery</Button>
-      </div>
+        {/* <CarouselPrevious className="absolute" />
+        <CarouselNext /> */}
+      </Carousel>
     </section>
   )
 }

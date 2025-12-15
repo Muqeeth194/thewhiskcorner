@@ -68,7 +68,7 @@ export const featuredCategory: ContentSection = {
       image: "nextjs",
     },
     {
-      text: `Birthday Cakes`,
+      text: `Anniversary Cakes`,
       subtext: `Open the Gallery to check the cakes`,
       image: "shadcnUi",
     },
