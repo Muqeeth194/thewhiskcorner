@@ -105,7 +105,7 @@ export default function GalleryPage() {
           <p>Loading...</p>
         ) : currentCakes.length > 0 ? (
           currentCakes.map((cake) => (
-            <Link key={cake.id} href={`/cake${cake.id}`}>
+            <Link key={cake.id} href={`cake?id=${cake.id}`}>
               <Card
                 key={cake.id}
                 className="transition-transform hover:scale-105"

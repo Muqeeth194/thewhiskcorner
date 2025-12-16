@@ -38,8 +38,13 @@ export type Cake = {
   name: string
   image: string
   category: string
+  description: string
 }
 
 export type cakeIdParams = {
-  id: string
+  params: {
+    // This Key MUST match your folder name!
+    // If your folder is named [id], use 'id'. If named [cakeId], use 'cakeId'.
+    id: string
+  }
 }
