@@ -1,7 +1,6 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import * as React from "react"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -10,8 +9,6 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Card, CardContent } from "@/components/ui/card"
 import Autoplay from "embla-carousel-autoplay"
@@ -19,53 +16,63 @@ import { Button } from "@/components/ui/button"
 
 export default function HeroHeader() {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false })
+    Autoplay({ delay: 4000, stopOnInteraction: false }) // Slowed down for a calmer feel
   )
+
   return (
-    <section className="w-full overflow-hidden pb-0 pt-0">
-      <Carousel plugins={[plugin.current]} className="relative h-full w-full">
-        <CarouselContent className="h-[50vh] md:h-[60vh] lg:h-[70vh]">
-          {carouselSection.content.map((cards, index) => (
+    <section className="relative w-full overflow-hidden pb-0 pt-0">
+      <Carousel
+        plugins={[plugin.current]}
+        className="relative h-full w-full"
+        opts={{ loop: true }}
+      >
+        <CarouselContent className="h-[60vh] md:h-[70vh] lg:h-[75vh]">
+          {carouselSection.content.map((card, index) => (
             <CarouselItem key={index} className="h-full w-full pl-0">
-              <Card className="h-full w-full rounded-none border-0 bg-transparent shadow-none">
-                <CardContent className="flex h-full w-full items-center justify-center p-0">
+              <Card className="h-full w-full border-0 bg-transparent shadow-none">
+                <CardContent className="relative flex h-full w-full items-center justify-center p-0">
+                  {/* Image */}
                   <img
-                    src={cards.image}
-                    alt="Card image"
+                    src={card.image}
+                    alt="Cake showcase"
                     className="h-full w-full object-cover"
                   />
+
+                  {/* Modern Gradient Overlay: Ensures text is readable on ANY image */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent lg:from-black/70 lg:via-transparent" />
                 </CardContent>
               </Card>
             </CarouselItem>
           ))}
         </CarouselContent>
 
-        {/* Text content */}
-        <div className="absolute left-8 top-1/2 flex w-[85%] -translate-y-1/2 flex-col gap-3 text-left md:left-16 md:w-2/3 lg:bottom-20 lg:left-48 lg:top-auto lg:w-1/3 lg:translate-y-0 lg:gap-5">
-          <div className="space-y-2 lg:space-y-4">
-            <h1 className="font-serif text-2xl font-semibold tracking-wide text-white antialiased drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] md:text-4xl lg:text-4xl">
-              {heroHeader.header}
-            </h1>
-            <h2 className="font-light tracking-wide text-white/95 drop-shadow-[0_1px_8px_rgba(0,0,0,0.5)] md:text-lg lg:text-xl">
-              {heroHeader.subheader}
-            </h2>
+        {/* Floating Text Content */}
+        <div className="absolute inset-0 flex items-center justify-center lg:justify-start">
+          <div className="container px-6 md:px-28">
+            <div className="flex max-w-xl flex-col gap-6 text-center lg:text-left">
+              <div className="space-y-4">
+                <h1 className="font-serif text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-4xl lg:text-5xl">
+                  {heroHeader.header}
+                </h1>
+                <h2 className="font-sans text-lg font-light italic leading-relaxed text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] md:text-xl lg:text-xl">
+                  {heroHeader.subheader}
+                </h2>
+              </div>
+
+              <div className="flex justify-center lg:justify-start">
+                <Button
+                  asChild
+                  className={cn(
+                    "rounded-full bg-white px-8 py-6 text-base font-semibold text-pink-950 shadow-xl transition-all hover:scale-105 hover:bg-pink-200 hover:shadow-2xl md:text-lg",
+                    "border-0 ring-0" // Removing borders for a cleaner look
+                  )}
+                >
+                  <Link href="/gallery">Order Now</Link>
+                </Button>
+              </div>
+            </div>
           </div>
-
-          <Button
-            className={cn(
-              buttonVariants({
-                variant: "outline",
-                size: "lg",
-              }),
-              "w-fit rounded-full border-2 border-yellow-400 bg-yellow-400 px-6 py-4 text-sm font-medium tracking-wider text-black shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.8)] transition-all duration-300 hover:scale-105 hover:bg-yellow-300 hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-base"
-            )}
-          >
-            Order Now
-          </Button>
         </div>
-
-        {/* <CarouselPrevious className="absolute" />
-        <CarouselNext /> */}
       </Carousel>
     </section>
   )

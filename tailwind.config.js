@@ -1,3 +1,5 @@
+const { fontFamily } = require("tailwindcss/defaultTheme")
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
@@ -16,6 +18,11 @@ module.exports = {
       },
     },
     extend: {
+      // 1. ADDED: Font Family Configuration
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+        serif: ["var(--font-serif)", ...fontFamily.serif],
+      },
       colors: {
         navbar: "#f199b3",
         body: "#fdeff3",

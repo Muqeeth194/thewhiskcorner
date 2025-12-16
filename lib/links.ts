@@ -1,23 +1,29 @@
+export interface NavItem {
+  title: string
+  href: string
+  disabled?: boolean
+}
+
 export const navLinks = [
   {
-    route: "Home",
-    path: "/",
+    title: "Home",
+    href: "/",
   },
   {
-    route: "Gallery",
-    path: "/gallery",
+    title: "Gallery",
+    href: "/gallery",
+  },
+  // {
+  //   route: "Catering",
+  //   href: "/catering",
+  // },
+  {
+    title: "About",
+    href: "/about",
   },
   {
-    route: "Catering",
-    path: "/catering",
-  },
-  {
-    route: "About",
-    path: "/about",
-  },
-  {
-    route: "Contact",
-    path: "/contact",
+    title: "Contact",
+    href: "/contact",
   },
   // {
   //   route: "Sign In",

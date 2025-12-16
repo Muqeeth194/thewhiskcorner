@@ -71,7 +71,7 @@ const cakesData = [
     id: "9",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
     description:
       "Three-tier buttercream cake with handcrafted sugar roses. Perfect for intimate weddings up to 100 guests.",
   },
@@ -79,7 +79,7 @@ const cakesData = [
     id: "10",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
     description:
       "Three-tier buttercream cake with handcrafted sugar roses. Perfect for intimate weddings up to 100 guests.",
   },
@@ -87,7 +87,7 @@ const cakesData = [
     id: "11",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
     description:
       "Three-tier buttercream cake with handcrafted sugar roses. Perfect for intimate weddings up to 100 guests.",
   },
@@ -95,7 +95,7 @@ const cakesData = [
     id: "12",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
     description:
       "Three-tier buttercream cake with handcrafted sugar roses. Perfect for intimate weddings up to 100 guests.",
   },
@@ -103,7 +103,7 @@ const cakesData = [
     id: "13",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
     description:
       "Three-tier buttercream cake with handcrafted sugar roses. Perfect for intimate weddings up to 100 guests.",
   },
@@ -111,7 +111,7 @@ const cakesData = [
     id: "14",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
     description:
       "Three-tier buttercream cake with handcrafted sugar roses. Perfect for intimate weddings up to 100 guests.",
   },
