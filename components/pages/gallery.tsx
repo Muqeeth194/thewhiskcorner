@@ -91,14 +91,15 @@ export default function GalleryPage() {
           return (
             <Link
               key={filter.name}
-              className={cn(
-                buttonVariants({
-                  variant: isActive ? "default" : "outline",
-                  size: "lg",
-                }),
-                "rounded-full px-6 font-serif text-base font-medium antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.1)] transition-all hover:scale-105 hover:shadow-lg "
-              )}
               href={`?filter=${filter.name}&page=1`}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" }),
+                "rounded-full px-6 font-serif text-base font-medium antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.1)] transition-all duration-200",
+
+                isActive
+                  ? "border-pink-700 bg-pink-700 text-white shadow-md hover:bg-pink-800 hover:text-white"
+                  : "bg-white text-slate-700 hover:scale-105 hover:bg-pink-50 hover:text-pink-900 hover:shadow-lg"
+              )}
             >
               {filter.name}
             </Link>

@@ -41,10 +41,18 @@ export type Cake = {
   description: string
 }
 
+// This is for the search route with Cake ID
 export type cakeIdParams = {
   params: {
     // This Key MUST match your folder name!
     // If your folder is named [id], use 'id'. If named [cakeId], use 'cakeId'.
     id: string
   }
+}
+
+export type Form = {
+  name: string
+  contact: string // Can be Phone or Email
+  type: string // Default selection
+  message: string
 }

@@ -89,7 +89,7 @@ export default function CakeDetailsPage() {
             <img
               src={cake.image}
               alt={cake.name}
-              className="aspect-square h-auto w-full max-w-lg rounded-xl object-cover drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]"
+              className="aspect-square h-auto w-full max-w-[480px] rounded-xl object-cover drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]"
             />
           )}
         </div>
@@ -142,7 +142,7 @@ export default function CakeDetailsPage() {
                       variant: "outline",
                       size: "lg",
                     }),
-                    "hover:bg-black-300 w-fit rounded-full border-2 border-yellow-400 bg-yellow-400 px-6 py-4 text-lg font-semibold tracking-wider text-black shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-100 hover:scale-105 hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-base"
+                    "hover:bg-black-300 w-fit rounded-full border-2 border-pink-800 bg-pink-700 px-6 py-4 font-sans text-lg font-semibold tracking-wider text-white shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-lg"
                   )}
                 >
                   Request Quote

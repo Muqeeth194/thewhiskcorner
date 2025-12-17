@@ -20,7 +20,7 @@ export default function HeroHeader() {
   )
 
   return (
-    <section className="relative w-full overflow-hidden pb-0 pt-0">
+    <section className="relative w-full overflow-hidden pb-0 pt-0 shadow-lg">
       <Carousel
         plugins={[plugin.current]}
         className="relative h-full w-full"
@@ -63,7 +63,7 @@ export default function HeroHeader() {
                 <Button
                   asChild
                   className={cn(
-                    "rounded-full bg-white px-8 py-6 text-base font-semibold text-pink-950 shadow-xl transition-all hover:scale-105 hover:bg-pink-200 hover:shadow-2xl md:text-lg",
+                    "rounded-full bg-white/80 px-8 py-6 text-base font-semibold text-pink-700 shadow-xl transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:text-lg",
                     "border-0 ring-0" // Removing borders for a cleaner look
                   )}
                 >

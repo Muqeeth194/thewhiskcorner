@@ -11,7 +11,7 @@ export default function HeadingText({
 }: HeadingProps) {
   return (
     <div className={`space-y-2 ${className}`}>
-      <h1 className="font-serif text-3xl font-bold text-primary antialiased drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] lg:text-4xl">
+      <h1 className="font-serif text-3xl font-bold text-pink-950 antialiased drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] lg:text-4xl">
         {children}
       </h1>
       {subtext && (

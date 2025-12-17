@@ -36,7 +36,7 @@ export default function FeatureCards() {
                   <div
                     className={`z-10 flex w-full flex-col gap-2 px-12 ${isEven ? "items-start text-left" : "items-end text-right"}`}
                   >
-                    <CardTitle className="font-sans font-serif text-3xl transition-all duration-500 group-hover:scale-110 md:text-3xl">
+                    <CardTitle className="font-sans font-serif text-3xl text-pink-950 transition-all duration-500 group-hover:scale-110 md:text-3xl">
                       {cards.text}
                     </CardTitle>
                     <CardDescription className="pb-4 font-sans font-light text-muted-foreground text-pink-600 transition-colors duration-300 group-hover:text-slate-500 md:text-lg">

@@ -19,7 +19,7 @@ export default function Navbar() {
   }, [pathname])
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-pink-300 bg-pink-200/70 px-12 backdrop-blur-md supports-[backdrop-filter]:bg-pink-200/70">
+    <header className="sticky top-0 z-50 w-full bg-pink-200/70 px-12 shadow-md backdrop-blur-md supports-[backdrop-filter]:bg-pink-200/70">
       <div className="container flex h-16 items-center justify-between">
         {/* 1. LOGO SECTION */}
         <div className="flex items-center gap-2">
@@ -55,9 +55,9 @@ export default function Navbar() {
           <Button
             asChild
             variant="outline"
-            className="rounded-full border-pink-200 bg-white text-base text-pink-900 hover:bg-pink-100 hover:text-pink-950"
+            className="rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white"
           >
-            <Link href="/contact">Order Now</Link>
+            <Link href="/gallery">Order Now</Link>
           </Button>
         </div>
 
@@ -97,9 +97,9 @@ export default function Navbar() {
             <div className="mt-4">
               <Button
                 asChild
-                className="w-full rounded-full bg-pink-900 text-white hover:bg-pink-800"
+                className="w-full rounded-full bg-pink-700 text-white hover:bg-pink-800 "
               >
-                <Link href="/contact">Order Now</Link>
+                <Link href="/gallery">Order Now</Link>
               </Button>
             </div>
           </nav>

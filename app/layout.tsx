@@ -6,6 +6,7 @@ import Footer from "@/components/layout/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { settings } from "@/config/settings"
 import { Playfair_Display, Lato } from "next/font/google"
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -84,12 +85,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
         {settings.themeToggleEnabled ? (
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Navbar />
+            <Toaster />
             {children}
             <Footer />
           </ThemeProvider>
         ) : (
           <ThemeProvider attribute="class" forcedTheme="light" enableSystem>
             <Navbar />
+            <Toaster />
             {children}
             <Footer />
           </ThemeProvider>
