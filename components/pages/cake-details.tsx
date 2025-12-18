@@ -1,6 +1,6 @@
 "use client"
 
-import { Cake, cakeIdParams } from "@/types/contents"
+import { Cake } from "@/types/contents"
 import { useSearchParams } from "next/navigation"
 import React, { useEffect, useState } from "react"
 import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"
@@ -34,30 +34,32 @@ export default function CakeDetailsPage() {
   const searchId = searchParams.get("id")
   //   console.log("param id: ", searchId)
 
-  const fetchData = async () => {
-    if (!searchId) return //Dont fetch anything if no ID exists
-    try {
-      const idResponse = await fetch(`/api/cakes/${searchId}`)
-      const cakeData = await idResponse.json()
-      setCake(cakeData)
-
-      if (cakeData?.category) {
-        const categoryResponse = await fetch(
-          `/api/cakes?category=${cakeData.category}`
-        )
-        const categoryData = await categoryResponse.json()
-        setCategoryCakes(categoryData)
-      }
-    } catch (error) {
-      console.error("failed to fetch the cakes", error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   useEffect(() => {
+    // FIXED: Defined fetchData inside useEffect to prevent build errors
+    const fetchData = async () => {
+      if (!searchId) return // Dont fetch anything if no ID exists
+
+      try {
+        const idResponse = await fetch(`/api/cakes/${searchId}`)
+        const cakeData = await idResponse.json()
+        setCake(cakeData)
+
+        if (cakeData?.category) {
+          const categoryResponse = await fetch(
+            `/api/cakes?category=${cakeData.category}`
+          )
+          const categoryData = await categoryResponse.json()
+          setCategoryCakes(categoryData)
+        }
+      } catch (error) {
+        console.error("failed to fetch the cakes", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
     fetchData()
-  }, [searchId])
+  }, [searchId]) // Now only depends on searchId
 
   if (isLoading) {
     return <div className="py-10 text-center">Loading the cakes ...</div>

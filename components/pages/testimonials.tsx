@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/card"
 import Autoplay from "embla-carousel-autoplay"
 import React from "react"
-import { Quote, Star } from "lucide-react" // Import Star icon
+import { Quote, Star } from "lucide-react"
 
 export default function Testimonials() {
   const plugin = React.useRef(
@@ -53,7 +53,7 @@ export default function Testimonials() {
                     <CardContent className="flex flex-col items-center justify-between gap-6 p-8">
                       <Quote className="h-8 w-8 rotate-180 fill-pink-200 text-pink-200" />
 
-                      {/* ADDED: Star Rating Rendering */}
+                      {/* Star Rating Rendering */}
                       <div className="flex gap-0.5">
                         {Array.from({ length: card.rating }).map((_, i) => (
                           <Star
@@ -63,8 +63,9 @@ export default function Testimonials() {
                         ))}
                       </div>
 
+                      {/* FIXED: Escaped the quotes here to prevent build errors */}
                       <CardDescription className="text-base font-medium italic leading-relaxed text-slate-700">
-                        "{card.subtext}"
+                        &quot;{card.subtext}&quot;
                       </CardDescription>
 
                       <div className="flex flex-col items-center gap-1">
