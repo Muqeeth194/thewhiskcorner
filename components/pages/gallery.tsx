@@ -85,7 +85,8 @@ export default function GalleryPage() {
   return (
     <main className="container flex flex-col items-center">
       {/* Filter section */}
-      <div className="flex flex-row items-center gap-5 space-x-2 pb-10 text-center">
+      {/* UPDATED: Added flex-wrap for mobile, changed gap/padding for responsiveness */}
+      <div className="flex flex-wrap items-center justify-center gap-3 pb-6 text-center md:gap-5 md:pb-10">
         {cakeFilterSection.content.map((filter) => {
           const isActive = currentFilter === filter.name
           return (
@@ -94,7 +95,8 @@ export default function GalleryPage() {
               href={`?filter=${filter.name}&page=1`}
               className={cn(
                 buttonVariants({ variant: "outline", size: "lg" }),
-                "rounded-full px-6 font-serif text-base font-medium antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.1)] transition-all duration-200",
+                // UPDATED: px-4 text-sm for mobile -> px-6 text-base for desktop
+                "rounded-full px-4 font-serif text-sm font-medium antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.1)] transition-all duration-200 md:px-6 md:text-base",
 
                 isActive
                   ? "border-pink-700 bg-pink-700 text-white shadow-md hover:bg-pink-800 hover:text-white"
@@ -108,7 +110,8 @@ export default function GalleryPage() {
       </div>
 
       {/* GALLERY GRID */}
-      <div className="mt-8 grid w-full grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
+      {/* UPDATED: gap-3 for mobile -> gap-6/8 for desktop. Added mt-6 for mobile spacing */}
+      <div className="mt-6 grid w-full grid-cols-2 gap-3 sm:gap-6 md:mt-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
         {isLoading ? (
           // SKELETON LOADER (Modern Loading State)
           Array.from({ length: 8 }).map((_, i) => (
@@ -127,6 +130,7 @@ export default function GalleryPage() {
               <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
                 {/* Image Container with Zoom Effect */}
                 <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={cake.image}
                     alt={cake.name}
@@ -137,10 +141,10 @@ export default function GalleryPage() {
                 </CardContent>
 
                 <CardFooter className="flex flex-col items-start px-1 py-4">
-                  <CardTitle className="line-clamp-1 font-serif text-lg font-semibold tracking-tight text-slate-800 group-hover:text-pink-700 dark:text-slate-200">
+                  <CardTitle className="line-clamp-1 font-serif text-base font-semibold tracking-tight text-slate-800 group-hover:text-pink-700 dark:text-slate-200 md:text-lg">
                     {cake.name}
                   </CardTitle>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground md:text-sm">
                     {cake.category}
                   </p>
                 </CardFooter>

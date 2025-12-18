@@ -19,13 +19,14 @@ export default function Navbar() {
   }, [pathname])
 
   return (
-    <header className="sticky top-0 z-50 w-full bg-pink-200/70 px-12 shadow-md backdrop-blur-md supports-[backdrop-filter]:bg-pink-200/70">
+    // UPDATED: px-6 for mobile, md:px-12 for desktop
+    <header className="sticky top-0 z-50 w-full bg-pink-200/70 px-6 shadow-md backdrop-blur-md supports-[backdrop-filter]:bg-pink-200/70 md:px-12">
       <div className="container flex h-16 items-center justify-between">
         {/* 1. LOGO SECTION */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2">
             {/* Optional: Add a small logo icon here*/}
-            <span className="font-serif text-2xl font-bold tracking-tight text-pink-950 transition-colors hover:text-pink-700">
+            <span className="font-serif text-xl font-bold tracking-tight text-pink-950 transition-colors hover:text-pink-700 md:text-2xl">
               {siteConfig.name}
             </span>
           </Link>

@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import * as React from "react"
-import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { carouselSection, heroHeader } from "@/config/contents"
 import {
@@ -51,10 +50,10 @@ export default function HeroHeader() {
           <div className="container px-6 md:px-28">
             <div className="flex max-w-xl flex-col gap-6 text-center lg:text-left">
               <div className="space-y-4">
-                <h1 className="font-serif text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-4xl lg:text-5xl">
+                <h1 className="font-serif text-3xl font-bold leading-tight tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-4xl lg:text-5xl">
                   {heroHeader.header}
                 </h1>
-                <h2 className="font-sans text-lg font-light italic leading-relaxed text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] md:text-xl lg:text-xl">
+                <h2 className="font-sans text-base font-light italic leading-relaxed text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] sm:text-lg md:text-xl lg:text-xl">
                   {heroHeader.subheader}
                 </h2>
               </div>
@@ -63,7 +62,7 @@ export default function HeroHeader() {
                 <Button
                   asChild
                   className={cn(
-                    "rounded-full bg-white/80 px-8 py-6 text-base font-semibold text-pink-700 shadow-xl transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:text-lg",
+                    "rounded-full bg-white/80 px-6 py-4 text-sm font-semibold text-pink-700 shadow-xl transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl sm:px-8 sm:py-6 sm:text-base md:text-lg",
                     "border-0 ring-0" // Removing borders for a cleaner look
                   )}
                 >
