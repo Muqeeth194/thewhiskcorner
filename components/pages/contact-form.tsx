@@ -91,11 +91,9 @@ export default function ContactForm() {
   return (
     <div className="mx-auto max-w-lg space-y-8 rounded-3xl border border-pink-100 bg-white p-8 shadow-xl md:p-12">
       <div className="space-y-2 text-center">
-        <HeadingText
-          subtext="Fill out the details below and we will call you to discuss your dream
-          cake."
-        >
-          Let's Talk Cake
+        <HeadingText subtext="Fill out the details below and we will call you to discuss your dream cake.">
+          {/* FIXED: Escaped the quote here */}
+          Let&apos;s Talk Cake
         </HeadingText>
       </div>
 
@@ -135,7 +133,8 @@ export default function ContactForm() {
         {/* Cake Type Selection */}
         <div className="space-y-2">
           <Label htmlFor="type" className="text-slate-600">
-            I'm interested in...
+            {/* FIXED: Escaped the quote here */}
+            I&apos;m interested in...
           </Label>
           <select
             id="type"
