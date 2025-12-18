@@ -30,10 +30,12 @@ export default function AboutPage() {
             </Badge>
           </div>
 
-          <h1 className="font-serif text-5xl font-bold leading-tight text-slate-900 md:text-7xl">
+          {/* UPDATED: text-4xl for mobile, md:text-7xl for desktop */}
+          <h1 className="font-serif text-4xl font-bold leading-tight text-slate-900 md:text-7xl">
             The Whisk Corner
           </h1>
-          <p className="mt-4 font-serif text-2xl italic text-pink-600 md:text-3xl">
+          {/* UPDATED: text-xl for mobile, md:text-3xl for desktop */}
+          <p className="mt-4 font-serif text-xl italic text-pink-600 md:text-3xl">
             &quot;Don&apos;t be afraid to take whisks.&quot;
           </p>
 
@@ -42,21 +44,29 @@ export default function AboutPage() {
             sisters Mahreen, and Taniya.
           </p>
 
-          <div className="mt-8 flex items-center gap-2 text-sm font-medium text-slate-500">
-            <Clock className="h-4 w-4" />
-            <span>By Appointment Only</span>
-            <span className="mx-2 text-slate-300">|</span>
-            <MapPin className="h-4 w-4" />
-            <span>Hyderabad, India</span>
+          {/* UPDATED: flex-col for mobile (stacked), md:flex-row for desktop */}
+          <div className="mt-8 flex flex-col items-center gap-2 text-sm font-medium text-slate-500 md:flex-row">
+            <div className="flex items-center gap-2">
+              <Clock className="h-4 w-4" />
+              <span>By Appointment Only</span>
+            </div>
+            <span className="mx-2 hidden text-slate-300 md:block">|</span>
+            <div className="flex items-center gap-2">
+              <MapPin className="h-4 w-4" />
+              <span>Hyderabad, India</span>
+            </div>
           </div>
         </div>
       </section>
 
       {/* 2. OUR STORY SECTION */}
-      <section className="container py-20 lg:py-32">
-        <div className="grid gap-16 lg:grid-cols-2 lg:items-center">
+      {/* UPDATED: py-12 for mobile, lg:py-32 for desktop */}
+      <section className="container py-12 lg:py-32">
+        {/* UPDATED: gap-10 for mobile, gap-16 for desktop */}
+        <div className="grid gap-10 lg:grid-cols-2 lg:items-center lg:gap-16">
           {/* Image Composition */}
-          <div className="relative mx-auto w-3/4 max-w-sm lg:max-w-md">
+          {/* UPDATED: w-full for mobile (better visibility), lg:w-3/4 for desktop */}
+          <div className="relative mx-auto w-full max-w-sm lg:w-3/4 lg:max-w-md">
             <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-slate-200 shadow-2xl transition-all duration-500">
               <Image
                 src="/twc.png"
@@ -85,7 +95,8 @@ export default function AboutPage() {
 
           {/* Text Content */}
           <div className="flex flex-col gap-6 text-left">
-            <h2 className="font-serif text-4xl font-bold text-slate-900 lg:text-5xl">
+            {/* UPDATED: text-3xl for mobile, lg:text-5xl for desktop */}
+            <h2 className="font-serif text-3xl font-bold text-slate-900 lg:text-5xl">
               Strictly Homemade. <br />
               <span className="text-pink-600">Unapologetically Premium.</span>
             </h2>
@@ -106,7 +117,8 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-6">
+            {/* UPDATED: stack vertically on very small screens, grid on slightly larger */}
+            <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div className="rounded-xl border border-pink-100 bg-white p-6 shadow-sm">
                 <Heart className="mb-3 h-8 w-8 text-pink-400" />
                 <h3 className="font-bold text-slate-900">Made with Love</h3>
@@ -128,13 +140,15 @@ export default function AboutPage() {
 
       {/* 3. SIGNATURE OBSESSIONS (Updated from Reviews) */}
       {/* Changed bg-slate-900 to bg-pink-950 (Deep Burgundy/Chocolate) */}
-      <section className="bg-pink-200 py-24 text-white">
+      {/* UPDATED: py-12 for mobile, py-24 for desktop */}
+      <section className="bg-pink-200 py-12 text-white md:py-24">
         <div className="container text-center">
-          <h2 className="mb-4 font-serif text-4xl font-bold tracking-wide text-black lg:text-5xl">
+          {/* UPDATED: text-3xl for mobile, lg:text-5xl for desktop */}
+          <h2 className="mb-4 font-serif text-3xl font-bold tracking-wide text-black lg:text-5xl">
             The Crowd Favorites
           </h2>
           {/* Changed text-slate-400 to text-pink-200/80 for better color harmony */}
-          <p className="mb-16 text-pink-600">
+          <p className="mb-10 text-pink-600 md:mb-16">
             Rated &quot;Best Baker&quot; by our loyal customers on Wanderlog.
           </p>
 
@@ -175,9 +189,11 @@ export default function AboutPage() {
       </section>
 
       {/* 4. FOOTER CTA */}
-      <section className="container py-24 text-center">
-        <div className="mx-auto max-w-2xl space-y-8 rounded-[3rem] bg-pink-100 px-8 py-16 text-pink-900">
-          <h2 className="font-serif text-4xl font-bold">
+      {/* UPDATED: py-12 for mobile, py-24 for desktop */}
+      <section className="container py-12 text-center md:py-24">
+        {/* UPDATED: reduced padding and rounded corners slightly for mobile */}
+        <div className="mx-auto max-w-2xl space-y-8 rounded-[2rem] bg-pink-100 px-6 py-10 text-pink-900 md:rounded-[3rem] md:px-8 md:py-16">
+          <h2 className="font-serif text-3xl font-bold md:text-4xl">
             Plan Your Celebration
           </h2>
           <p className="text-lg">

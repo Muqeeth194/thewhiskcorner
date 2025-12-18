@@ -84,9 +84,11 @@ export default function CakeDetailsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      <div className="item-center flex w-full justify-between gap-8 py-3">
+      {/* UPDATED: flex-col for mobile (stacking), lg:flex-row for desktop (side-by-side) */}
+      <div className="item-center flex w-full flex-col justify-between gap-8 py-3 lg:flex-row">
         {/* COVER IMAGE */}
-        <div className="flex w-1/2 items-center justify-center p-3">
+        {/* UPDATED: w-full for mobile, lg:w-1/2 for desktop */}
+        <div className="flex w-full items-center justify-center p-3 lg:w-1/2">
           {cake && (
             <img
               src={cake.image}
@@ -97,7 +99,8 @@ export default function CakeDetailsPage() {
         </div>
 
         {/* 0. DETAILS SECTION */}
-        <div className="flex w-full flex-col justify-center p-8 lg:w-1/2 lg:p-3">
+        {/* UPDATED: p-4 for mobile, md:p-8 for tablet, lg:w-1/2 for desktop */}
+        <div className="flex w-full flex-col justify-center p-4 md:p-8 lg:w-1/2 lg:p-3">
           {cake && (
             <div className="flex flex-col items-start gap-8 text-left">
               {/* 1. HEADER SECTION */}
@@ -163,7 +166,8 @@ export default function CakeDetailsPage() {
               {categoryCakes.map((cake) => (
                 <CarouselItem
                   key={cake.id}
-                  className="pl-1 md:basis-1/2 lg:basis-1/5"
+                  // UPDATED: basis-[70%] for mobile peek effect, md:basis-1/2 for tablet, lg:basis-1/5 for desktop
+                  className="basis-[70%] pl-1 md:basis-1/2 lg:basis-1/5"
                 >
                   <div className="p-2">
                     <Link
