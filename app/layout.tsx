@@ -5,6 +5,8 @@ import Navbar from "@/components/layout/navbar"
 import Footer from "@/components/layout/footer"
 import { ThemeProvider } from "@/components/theme-provider"
 import { settings } from "@/config/settings"
+import { Playfair_Display, Lato } from "next/font/google"
+import { Toaster } from "@/components/ui/sonner"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -58,6 +60,18 @@ export const viewport = {
   ],
 }
 
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  variable: "--font-serif", // We map this to Tailwind's 'font-serif'
+  weight: ["400", "700"],
+})
+
+const lato = Lato({
+  subsets: ["latin"],
+  variable: "--font-sans", // We map this to Tailwind's 'font-sans'
+  weight: ["400", "700"],
+})
+
 interface RootLayoutProps {
   children: React.ReactNode
 }
@@ -66,17 +80,19 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} flex min-h-screen flex-col bg-background text-primary`}
+        className={`${inter.className} flex min-h-screen flex-col bg-background bg-body text-primary ${playfair.variable} ${lato.variable} font-sans`}
       >
         {settings.themeToggleEnabled ? (
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
             <Navbar />
+            <Toaster />
             {children}
             <Footer />
           </ThemeProvider>
         ) : (
           <ThemeProvider attribute="class" forcedTheme="light" enableSystem>
             <Navbar />
+            <Toaster />
             {children}
             <Footer />
           </ThemeProvider>

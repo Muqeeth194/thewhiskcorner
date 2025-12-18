@@ -1,12 +1,14 @@
+const { fontFamily } = require("tailwindcss/defaultTheme")
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -16,7 +18,14 @@ module.exports = {
       },
     },
     extend: {
+      // 1. ADDED: Font Family Configuration
+      fontFamily: {
+        sans: ["var(--font-sans)", ...fontFamily.sans],
+        serif: ["var(--font-serif)", ...fontFamily.serif],
+      },
       colors: {
+        navbar: "#f199b3",
+        body: "#fdeff3",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

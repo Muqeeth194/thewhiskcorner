@@ -1,17 +1,14 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
 import * as React from "react"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { carouselSection, featureCards, heroHeader } from "@/config/contents"
+import { carouselSection, heroHeader } from "@/config/contents"
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel"
 import { Card, CardContent } from "@/components/ui/card"
 import Autoplay from "embla-carousel-autoplay"
@@ -19,54 +16,64 @@ import { Button } from "@/components/ui/button"
 
 export default function HeroHeader() {
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: false })
+    Autoplay({ delay: 4000, stopOnInteraction: false }) // Slowed down for a calmer feel
   )
+
   return (
-    <section className="container flex flex-col gap-4 pb-12 pt-0 text-center lg:items-center lg:gap-8 lg:pb-8">
-      <div className="w-screen">
-        <Carousel
-          plugins={[plugin.current]}
-          className="relative left-1/2 right-1/2 -ml-[50vw] -mr-[50vw] w-full"
-          onMouseEnter={plugin.current.stop}
-          onMouseLeave={plugin.current.reset}
-        >
-          <CarouselContent>
-            {carouselSection.content.map((cards, index) => (
-              <CarouselItem key={index} className="pl-0">
-                <div>
-                  <Card className="rounded-none border-0 bg-transparent shadow-none">
-                    <CardContent className="flex h-[60vh] w-full items-center justify-center p-0">
-                      <img
-                        src={cards.image}
-                        alt="Card image"
-                        className="h-full w-full object-cover"
-                      />
-                    </CardContent>
-                  </Card>
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          {/* <CarouselPrevious />
-          <CarouselNext /> */}
-        </Carousel>
-      </div>
+    <section className="relative w-full overflow-hidden pb-0 pt-0 shadow-lg">
+      <Carousel
+        plugins={[plugin.current]}
+        className="relative h-full w-full"
+        opts={{ loop: true }}
+      >
+        <CarouselContent className="h-[60vh] md:h-[70vh] lg:h-[75vh]">
+          {carouselSection.content.map((card, index) => (
+            <CarouselItem key={index} className="h-full w-full pl-0">
+              <Card className="h-full w-full border-0 bg-transparent shadow-none">
+                <CardContent className="relative flex h-full w-full items-center justify-center p-0">
+                  {/* Image */}
+                  <img
+                    src={card.image}
+                    alt="Cake showcase"
+                    className="h-full w-full object-cover"
+                  />
 
-      <div className="flex w-full flex-1 flex-col items-center gap-4 text-center lg:gap-8">
-        <div className="space-y-4">
-          <h1 className="text-4xl font-bold lg:text-5xl">
-            {heroHeader.header}
-          </h1>
-          <h2 className="text-lg font-light text-muted-foreground lg:text-2xl">
-            {heroHeader.subheader}
-          </h2>
+                  {/* Modern Gradient Overlay: Ensures text is readable on ANY image */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent lg:from-black/70 lg:via-transparent" />
+                </CardContent>
+              </Card>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+
+        {/* Floating Text Content */}
+        <div className="absolute inset-0 flex items-center justify-center lg:justify-start">
+          <div className="container px-6 md:px-28">
+            <div className="flex max-w-xl flex-col gap-6 text-center lg:text-left">
+              <div className="space-y-4">
+                <h1 className="font-serif text-4xl font-bold leading-tight tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)] sm:text-4xl lg:text-5xl">
+                  {heroHeader.header}
+                </h1>
+                <h2 className="font-sans text-lg font-light italic leading-relaxed text-white/90 drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] md:text-xl lg:text-xl">
+                  {heroHeader.subheader}
+                </h2>
+              </div>
+
+              <div className="flex justify-center lg:justify-start">
+                <Button
+                  asChild
+                  className={cn(
+                    "rounded-full bg-white/80 px-8 py-6 text-base font-semibold text-pink-700 shadow-xl transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:text-lg",
+                    "border-0 ring-0" // Removing borders for a cleaner look
+                  )}
+                >
+                  <Link href="/gallery">Order Now</Link>
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <div className="hidden items-center justify-center gap-2 md:block md:flex">
-        <Button size="lg">Order Cake</Button>
-        <Button size="lg">View Gallery</Button>
-      </div>
+      </Carousel>
     </section>
   )
 }

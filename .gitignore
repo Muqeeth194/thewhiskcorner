@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
@@ -33,6 +34,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+=======
+>>>>>>> 7a2c011f59a1e3f9a845aa7fd1761b92454d570f
 # Logs
 logs
 *.log
@@ -116,7 +119,10 @@ out
 # Nuxt.js build / generate output
 .nuxt
 dist
+<<<<<<< HEAD
 .output
+=======
+>>>>>>> 7a2c011f59a1e3f9a845aa7fd1761b92454d570f
 
 # Gatsby files
 .cache/
@@ -170,7 +176,13 @@ dist
 !.yarn/sdks
 !.yarn/versions
 
+<<<<<<< HEAD
 # Vite files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+=======
+# Vite logs files
+vite.config.js.timestamp-*
+vite.config.ts.timestamp-*
+>>>>>>> 7a2c011f59a1e3f9a845aa7fd1761b92454d570f

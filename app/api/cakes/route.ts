@@ -53,41 +53,51 @@ const cakesData = [
     id: "9",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
   },
   {
     id: "10",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
   },
   {
     id: "11",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
   },
   {
     id: "12",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
   },
   {
     id: "13",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
   },
   {
     id: "14",
     name: "Berry Blast",
     image: "/cake.png",
-    category: "Deserts",
+    category: "Desserts",
   },
   // ... add your other cakes here
 ]
 
-export async function GET() {
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url)
+  const category = searchParams.get("category")
+
+  if (category) {
+    const categoryCakes = cakesData.filter(
+      (cake) => cake.category.toLowerCase() === category.toLowerCase()
+    )
+    return NextResponse.json(categoryCakes)
+  }
+
   return NextResponse.json(cakesData)
 }

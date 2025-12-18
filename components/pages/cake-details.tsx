@@ -1,0 +1,205 @@
+"use client"
+
+import { Cake, cakeIdParams } from "@/types/contents"
+import { useSearchParams } from "next/navigation"
+import React, { useEffect, useState } from "react"
+import { Card, CardContent, CardFooter, CardTitle } from "@/components/ui/card"
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
+import { Button, buttonVariants } from "../ui/button"
+import Link from "next/link"
+import HeadingText from "../heading-text"
+import { cn } from "@/lib/utils"
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb"
+
+export default function CakeDetailsPage() {
+  const [cake, setCake] = useState<Cake | null>(null)
+  const [categoryCakes, setCategoryCakes] = useState<Cake[]>([])
+
+  const [isLoading, setIsLoading] = useState(true)
+
+  const searchParams = useSearchParams()
+  const searchId = searchParams.get("id")
+  //   console.log("param id: ", searchId)
+
+  const fetchData = async () => {
+    if (!searchId) return //Dont fetch anything if no ID exists
+    try {
+      const idResponse = await fetch(`/api/cakes/${searchId}`)
+      const cakeData = await idResponse.json()
+      setCake(cakeData)
+
+      if (cakeData?.category) {
+        const categoryResponse = await fetch(
+          `/api/cakes?category=${cakeData.category}`
+        )
+        const categoryData = await categoryResponse.json()
+        setCategoryCakes(categoryData)
+      }
+    } catch (error) {
+      console.error("failed to fetch the cakes", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [searchId])
+
+  if (isLoading) {
+    return <div className="py-10 text-center">Loading the cakes ...</div>
+  }
+
+  return (
+    <main className="items-left container flex flex-col py-6">
+      {/* BREADCRUMBS */}
+      <Breadcrumb className="px-5">
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/">Home</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/gallery">Gallery</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Cake Details</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      <div className="item-center flex w-full justify-between gap-8 py-3">
+        {/* COVER IMAGE */}
+        <div className="flex w-1/2 items-center justify-center p-3">
+          {cake && (
+            <img
+              src={cake.image}
+              alt={cake.name}
+              className="aspect-square h-auto w-full max-w-[480px] rounded-xl object-cover drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]"
+            />
+          )}
+        </div>
+
+        {/* 0. DETAILS SECTION */}
+        <div className="flex w-full flex-col justify-center p-8 lg:w-1/2 lg:p-3">
+          {cake && (
+            <div className="flex flex-col items-start gap-8 text-left">
+              {/* 1. HEADER SECTION */}
+              <div className="space-y-4">
+                {/* Category Badge */}
+                <span className="inline-block rounded-full bg-pink-200 px-4 py-1.5 text-sm font-semibold tracking-wide text-pink-800 antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.2)]">
+                  {cake.category}
+                </span>
+
+                {/* Category Title */}
+                <HeadingText className="tracking-tight text-slate-900">
+                  {cake.name}
+                </HeadingText>
+              </div>
+
+              {/* 2. DESCRIPTION SECTION */}
+              <div className="space-y-2 rounded-xl bg-pink-200 p-3 antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.2)]">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-slate-800">
+                  Description
+                </h3>
+                <p className="text-sm leading-relaxed text-slate-700">
+                  {cake.description}
+                </p>
+              </div>
+
+              {/* 3. DETAILS SECTION */}
+              <div className="space-y-2 rounded-xl bg-pink-200 p-3 antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.2)]">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-slate-800">
+                  Details
+                </h3>
+                <div className="pl-4 text-sm leading-relaxed text-slate-700">
+                  <li>Serves: 80-100 people</li>
+                  <li>Tiers: 3</li>
+                  <li>Popular flavors: Vanilla, Chocolate, Red Velvet</li>
+                  <li>Lead time: 2 weeks</li>
+                </div>
+              </div>
+
+              {/* 4. ACTION BUTTON */}
+              <div className="pt-0">
+                <Button
+                  className={cn(
+                    buttonVariants({
+                      variant: "outline",
+                      size: "lg",
+                    }),
+                    "hover:bg-black-300 w-fit rounded-full border-2 border-pink-800 bg-pink-700 px-6 py-4 font-sans text-lg font-semibold tracking-wider text-white shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-lg"
+                  )}
+                >
+                  Request Quote
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* SIMILAR CAKES CAROUSEL */}
+      {categoryCakes.length > 0 && (
+        <div className="item-center flex h-full w-full justify-center pt-10">
+          <Carousel className="h-full w-full max-w-6xl">
+            <CarouselContent className="-ml-1">
+              {categoryCakes.map((cake) => (
+                <CarouselItem
+                  key={cake.id}
+                  className="pl-1 md:basis-1/2 lg:basis-1/5"
+                >
+                  <div className="p-2">
+                    <Link
+                      key={cake.id}
+                      href={`cake?id=${cake.id}`}
+                      className="group mx-auto block h-full w-full max-w-[200px]"
+                    >
+                      <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
+                        {/* Image Container with Zoom Effect */}
+                        <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+                          <img
+                            src={cake.image}
+                            alt={cake.name}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                          />
+                          {/* Subtle gradient overlay on hover */}
+                          <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5" />
+                        </CardContent>
+
+                        <CardFooter className="flex flex-col items-start px-1 py-4">
+                          <CardTitle className="line-clamp-1 font-serif text-lg font-semibold tracking-tight text-slate-800 group-hover:text-pink-700 dark:text-slate-200">
+                            {cake.name}
+                          </CardTitle>
+                          <p className="text-sm text-muted-foreground">
+                            {cake.category}
+                          </p>
+                        </CardFooter>
+                      </Card>
+                    </Link>
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious />
+            <CarouselNext />
+          </Carousel>
+        </div>
+      )}
+    </main>
+  )
+}
