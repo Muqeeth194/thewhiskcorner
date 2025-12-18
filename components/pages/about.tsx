@@ -34,7 +34,7 @@ export default function AboutPage() {
             The Whisk Corner
           </h1>
           <p className="mt-4 font-serif text-2xl italic text-pink-600 md:text-3xl">
-            "Don't be afraid to take whisks."
+            &quot;Don&apos;t be afraid to take whisks.&quot;
           </p>
 
           <p className="mt-8 max-w-xl font-sans text-lg text-slate-600 md:text-xl">
@@ -93,13 +93,14 @@ export default function AboutPage() {
               <p>
                 In a city of mass-produced bakeries, we chose to stay small,
                 intimate, and <strong>exclusive</strong>. Founded in 2018, The
-                Whisk Corner isn't just a bakery—it's a home studio where we
-                work on <em>your</em> specific order for the entire week.
+                Whisk Corner isn&apos;t just a bakery it&apos;s a home studio
+                where we work on <em>your</em> specific order for the entire
+                week.
               </p>
               <p>
-                We don't have "zillions" of orders or factory machines. We do
-                the sourcing, baking, decorating, and photography ourselves.
-                That means when you take a bite of our{" "}
+                We don&apos;t have &quot;zillions&quot; of orders or factory
+                machines. We do the sourcing, baking, decorating, and
+                photography ourselves. That means when you take a bite of our{" "}
                 <strong>Chocolate Hazelnut Praline</strong>, you are tasting
                 hours of dedicated craftsmanship.
               </p>
@@ -134,7 +135,7 @@ export default function AboutPage() {
           </h2>
           {/* Changed text-slate-400 to text-pink-200/80 for better color harmony */}
           <p className="mb-16 text-pink-600">
-            Rated "Best Baker" by our loyal customers on Wanderlog.
+            Rated &quot;Best Baker&quot; by our loyal customers on Wanderlog.
           </p>
 
           <div className="grid w-full gap-6 md:grid-cols-3">
