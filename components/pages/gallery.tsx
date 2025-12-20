@@ -85,7 +85,6 @@ export default function GalleryPage() {
   return (
     <main className="container flex flex-col items-center">
       {/* Filter section */}
-      {/* UPDATED: Added flex-wrap for mobile, changed gap/padding for responsiveness */}
       <div className="flex flex-wrap items-center justify-center gap-3 pb-6 text-center md:gap-5 md:pb-10">
         {cakeFilterSection.content.map((filter) => {
           const isActive = currentFilter === filter.name
@@ -110,7 +109,6 @@ export default function GalleryPage() {
       </div>
 
       {/* GALLERY GRID */}
-      {/* UPDATED: gap-3 for mobile -> gap-6/8 for desktop. Added mt-6 for mobile spacing */}
       <div className="mt-6 grid w-full grid-cols-2 gap-3 sm:gap-6 md:mt-8 md:grid-cols-3 lg:grid-cols-4 lg:gap-8">
         {isLoading ? (
           // SKELETON LOADER (Modern Loading State)
@@ -129,7 +127,7 @@ export default function GalleryPage() {
             >
               <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
                 {/* Image Container with Zoom Effect */}
-                <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+                <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-[0_1px_8px_rgba(0,0,0,0.3)] transition-shadow duration-300 group-hover:shadow-xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={cake.image}
