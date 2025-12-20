@@ -53,6 +53,10 @@ export type cakeIdParams = {
 export type Form = {
   name: string
   contact: string // Can be Phone or Email
+  instagram?: string
   type: string // Default selection
+  flavour?: string
   message: string
+  servings?: string
+  budget?: string
 }

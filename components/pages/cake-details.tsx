@@ -68,7 +68,7 @@ export default function CakeDetailsPage() {
   return (
     <main className="items-left container flex flex-col py-6">
       {/* BREADCRUMBS */}
-      <Breadcrumb className="px-5">
+      <Breadcrumb className="px-4 md:p-5">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -85,7 +85,7 @@ export default function CakeDetailsPage() {
       </Breadcrumb>
 
       {/* UPDATED: flex-col for mobile (stacking), lg:flex-row for desktop (side-by-side) */}
-      <div className="item-center flex w-full flex-col justify-between gap-8 py-3 lg:flex-row">
+      <div className="item-center flex w-full flex-col justify-between gap-8 lg:flex-row">
         {/* COVER IMAGE */}
         {/* UPDATED: w-full for mobile, lg:w-1/2 for desktop */}
         <div className="flex w-full items-center justify-center p-3 lg:w-1/2">
@@ -150,7 +150,7 @@ export default function CakeDetailsPage() {
                     "hover:bg-black-300 w-fit rounded-full border-2 border-pink-800 bg-pink-700 px-6 py-4 font-sans text-lg font-semibold tracking-wider text-white shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-lg"
                   )}
                 >
-                  Request Quote
+                  <Link href={`/quote?cakeId=${cake.id}`}>Request Quote</Link>
                 </Button>
               </div>
             </div>
@@ -177,7 +177,7 @@ export default function CakeDetailsPage() {
                     >
                       <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
                         {/* Image Container with Zoom Effect */}
-                        <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-sm transition-shadow duration-300 group-hover:shadow-md">
+                        <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-lg transition-shadow duration-300 group-hover:shadow-xl">
                           <img
                             src={cake.image}
                             alt={cake.name}

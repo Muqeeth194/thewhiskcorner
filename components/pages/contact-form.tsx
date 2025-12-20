@@ -15,7 +15,7 @@ export default function ContactForm() {
   const [success, setSuccess] = useState(false)
 
   // 1. STATE FOR FORM FIELDS
-  const [formData, setFormData] = useState<Form>({
+  const [contactFormData, setContactFormData] = useState<Form>({
     name: "",
     contact: "", // Can be Phone or Email
     type: "Wedding Cake", // Default selection
@@ -38,9 +38,9 @@ export default function ContactForm() {
         body: JSON.stringify({
           // REPLACE THIS WITH YOUR ACTUAL ACCESS KEY FROM WEB3FORMS
           access_key: "YOUR_ACCESS_KEY_HERE",
-          subject: `New Cake Inquiry from ${formData.name}`,
+          subject: `New Cake Inquiry from ${contactFormData.name}`,
           from_name: "The Whisk Corner Website",
-          ...formData,
+          ...contactFormData,
         }),
       })
 
@@ -52,7 +52,7 @@ export default function ContactForm() {
       if (result.success) {
         toast.success(result.message)
         setSuccess(true)
-        setFormData({ name: "", contact: "", type: "", message: "" })
+        setContactFormData({ name: "", contact: "", type: "", message: "" })
       } else {
         toast.error("Something went wrong. Please try again.")
       }
@@ -74,8 +74,8 @@ export default function ContactForm() {
           Message Sent!
         </h3>
         <p className="max-w-xs text-slate-600">
-          Thanks, {formData.name}! We have received your request and will reach
-          out to you at the contact details provided shortly.
+          Thanks, {contactFormData.name}! We have received your request and will
+          reach out to you at the contact details provided shortly.
         </p>
         <Button
           variant="outline"
@@ -108,8 +108,10 @@ export default function ContactForm() {
             id="name"
             placeholder="e.g. Khan"
             className="border-pink-100 bg-pink-50/30"
-            value={formData.name}
-            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            value={contactFormData.name}
+            onChange={(e) =>
+              setContactFormData({ ...contactFormData, name: e.target.value })
+            }
           />
         </div>
 
@@ -123,9 +125,12 @@ export default function ContactForm() {
             id="contact"
             placeholder="e.g. 9876543210"
             className="border-pink-100 bg-pink-50/30"
-            value={formData.contact}
+            value={contactFormData.contact}
             onChange={(e) =>
-              setFormData({ ...formData, contact: e.target.value })
+              setContactFormData({
+                ...contactFormData,
+                contact: e.target.value,
+              })
             }
           />
         </div>
@@ -139,8 +144,10 @@ export default function ContactForm() {
           <select
             id="type"
             className="flex h-10 w-full rounded-md border border-pink-100 bg-pink-50/30 px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pink-100 disabled:cursor-not-allowed disabled:opacity-50"
-            value={formData.type}
-            onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+            value={contactFormData.type}
+            onChange={(e) =>
+              setContactFormData({ ...contactFormData, type: e.target.value })
+            }
           >
             <option>Wedding Cake</option>
             <option>Birthday Cake</option>
@@ -160,9 +167,12 @@ export default function ContactForm() {
             id="message"
             placeholder="I need a 2kg cake for 50 people on Dec 20th..."
             className="min-h-[120px] border-pink-100 bg-pink-50/30"
-            value={formData.message}
+            value={contactFormData.message}
             onChange={(e) =>
-              setFormData({ ...formData, message: e.target.value })
+              setContactFormData({
+                ...contactFormData,
+                message: e.target.value,
+              })
             }
           />
         </div>
