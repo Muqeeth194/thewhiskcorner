@@ -13,7 +13,6 @@ import { Cake } from "@/types/contents"
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -22,6 +21,7 @@ import {
 import { useSearchParams } from "next/navigation"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { getOptimizedUrl } from "@/lib/cloudinary"
 
 export default function GalleryPage() {
   const [cakes, setCakes] = useState<Cake[]>([])
@@ -130,7 +130,7 @@ export default function GalleryPage() {
                 <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-[0_1px_8px_rgba(0,0,0,0.3)] transition-shadow duration-300 group-hover:shadow-xl">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={cake.image}
+                    src={getOptimizedUrl(cake.image, 500)}
                     alt={cake.name}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />

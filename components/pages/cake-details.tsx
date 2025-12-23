@@ -23,6 +23,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { getOptimizedUrl } from "@/lib/cloudinary"
 
 export default function CakeDetailsPage() {
   const [cake, setCake] = useState<Cake | null>(null)
@@ -91,7 +92,7 @@ export default function CakeDetailsPage() {
         <div className="flex w-full items-center justify-center p-3 lg:w-1/2">
           {cake && (
             <img
-              src={cake.image}
+              src={getOptimizedUrl(cake.image, 1000)}
               alt={cake.name}
               className="aspect-square h-auto w-full max-w-[480px] rounded-xl object-cover drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]"
             />
@@ -131,12 +132,26 @@ export default function CakeDetailsPage() {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-slate-800">
                   Details
                 </h3>
-                <div className="pl-4 text-sm leading-relaxed text-slate-700">
-                  <li>Serves: 80-100 people</li>
-                  <li>Tiers: 3</li>
-                  <li>Popular flavors: Vanilla, Chocolate, Red Velvet</li>
-                  <li>Lead time: 2 weeks</li>
-                </div>
+                <ul className="ml-4 list-disc space-y-1 text-sm leading-relaxed text-slate-700">
+                  {cake && cake.details ? (
+                    // CHECK: If details is a string (from DB), parse it. If it's already an object, use it.
+                    Object.entries(
+                      typeof cake.details === "string"
+                        ? JSON.parse(cake.details)
+                        : cake.details
+                    ).map(([key, value], index) => (
+                      <li key={index} className="capitalize">
+                        {/* Formats "leadTime" to "Lead Time" roughly, or just prints the key */}
+                        <span className="font-semibold">
+                          {key.replace(/([A-Z])/g, " $1").trim()}:
+                        </span>{" "}
+                        {String(value)}
+                      </li>
+                    ))
+                  ) : (
+                    <li>No details available</li>
+                  )}
+                </ul>
               </div>
 
               {/* 4. ACTION BUTTON */}
@@ -160,13 +175,16 @@ export default function CakeDetailsPage() {
 
       {/* SIMILAR CAKES CAROUSEL */}
       {categoryCakes.length > 0 && (
-        <div className="item-center flex h-full w-full justify-center pt-10">
-          <Carousel className="h-full w-full max-w-6xl">
-            <CarouselContent className="-ml-1">
+        <div className="mt-10 flex w-full flex-col items-center space-y-6">
+          <h3 className="font-serif text-xl font-bold text-pink-950 antialiased drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] lg:text-2xl">
+            You might also like
+          </h3>
+
+          <Carousel className="w-full max-w-sm px-4 md:max-w-2xl md:px-0 lg:max-w-6xl">
+            <CarouselContent className="-ml-2 md:-ml-4">
               {categoryCakes.map((cake) => (
                 <CarouselItem
                   key={cake.id}
-                  // UPDATED: basis-[70%] for mobile peek effect, md:basis-1/2 for tablet, lg:basis-1/5 for desktop
                   className="basis-[70%] pl-1 md:basis-1/2 lg:basis-1/5"
                 >
                   <div className="p-2">
@@ -179,7 +197,7 @@ export default function CakeDetailsPage() {
                         {/* Image Container with Zoom Effect */}
                         <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-lg transition-shadow duration-300 group-hover:shadow-xl">
                           <img
-                            src={cake.image}
+                            src={getOptimizedUrl(cake.image, 500)}
                             alt={cake.name}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />
