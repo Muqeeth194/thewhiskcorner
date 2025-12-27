@@ -389,23 +389,25 @@ export default function QuoteForm() {
           </div>
 
           {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={loading}
-            className="h-12 w-full gap-2 rounded-full bg-pink-700 text-lg text-white shadow-lg transition-all hover:bg-pink-800 hover:shadow-xl"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Sending Request...
-              </>
-            ) : (
-              <>
-                <Send className="h-5 w-5" />
-                Get My Quote
-              </>
-            )}
-          </Button>
+          <div className="flex w-full justify-center pt-4">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="h-12 w-3/4 gap-2 rounded-full bg-pink-700 text-lg text-white shadow-lg transition-all hover:bg-pink-800 hover:shadow-xl"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Sending Request...
+                </>
+              ) : (
+                <>
+                  <Send className="h-5 w-5" />
+                  Get My Quote
+                </>
+              )}
+            </Button>
+          </div>
 
           <div className="flex items-center justify-center gap-2 text-center text-xs text-slate-400">
             <Info className="h-3 w-3" />

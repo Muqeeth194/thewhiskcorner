@@ -7,6 +7,7 @@ export const cakes = sqliteTable("cakes", {
   category: text("category").notNull(),
   description: text("description").notNull(),
   details: text("details").notNull(),
+  status: text("status").notNull().default("Active"),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
     () => new Date()
   ),

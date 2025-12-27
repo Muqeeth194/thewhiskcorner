@@ -34,12 +34,25 @@ export type CakeFilterSection = {
 }
 
 export type Cake = {
-  id: string
+  id?: string
   name: string
   image: string
   category: string
   description: string
-  details?: string
+  details?: {
+    servings?: number | string
+    flavor?: string
+    leadTime?: string
+  }
+  status?: string
+}
+
+export type CakeTable = {
+  id: string
+  name: string
+  image: string
+  category: string
+  status: "Active" | "Inactive"
 }
 
 // This is for the search route with Cake ID

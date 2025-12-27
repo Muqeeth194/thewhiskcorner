@@ -51,14 +51,14 @@ export default function Navbar() {
           })}
         </nav>
 
-        {/* 3. CTA BUTTON (Hidden on mobile) */}
+        {/* 3. DESKTOP BUTTON (Hidden on mobile) */}
         <div className="hidden md:flex">
           <Button
             asChild
             variant="outline"
             className="rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white"
           >
-            <Link href="/gallery">Order Now</Link>
+            <Link href="/login">Sign In</Link>
           </Button>
         </div>
 
@@ -100,7 +100,7 @@ export default function Navbar() {
                 asChild
                 className="w-full rounded-full bg-pink-700 text-white hover:bg-pink-800 "
               >
-                <Link href="/gallery">Order Now</Link>
+                <Link href="/gallery">Sign In / Join Rewards</Link>
               </Button>
             </div>
           </nav>
