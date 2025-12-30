@@ -1,30 +1,23 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useEffect } from "react"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
-import { CakeTable } from "@/types/contents"
+import { useAppDispatch, useAppSelector } from "../../store/hooks"
+import { fetchCakes } from "../../store/cakesSlice"
+import { Skeleton } from "../ui/skeleton"
 
 export default function AdminConsole() {
-  const [cakes, setCakes] = useState<CakeTable[]>([])
-  const [isLoading, setIsLoading] = useState(true)
+  const dispatch = useAppDispatch()
+  const { data: cakes } = useAppSelector((state) => state.cakes)
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch("/api/cakes")
-        const cakeData = await response.json()
-        setCakes(cakeData)
-      } catch (error) {
-        console.error("Error Fetching the data from the API", error)
-      } finally {
-        setIsLoading(false)
-      }
+    // Only fetches if the data is empty to avoid multiple refetches
+    if (cakes.length === 0) {
+      dispatch(fetchCakes())
     }
-
-    fetchData()
   }, [])
 
   return (
@@ -50,11 +43,7 @@ export default function AdminConsole() {
 
       {/* GALLERY TABLE VIEW */}
       <div className="container mx-auto px-2 py-4">
-        {isLoading ? (
-          <div> Loading Data...</div>
-        ) : (
-          <DataTable columns={columns} data={cakes} />
-        )}
+        <DataTable columns={columns} data={cakes} />
       </div>
     </main>
   )

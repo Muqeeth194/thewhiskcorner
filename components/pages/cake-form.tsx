@@ -21,12 +21,16 @@ import { Button } from "../ui/button"
 import { Info, Loader2, Upload } from "lucide-react"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Skeleton } from "../ui/skeleton"
+import { useAppDispatch } from "@/store/hooks"
+import { fetchCakes } from "@/store/cakesSlice"
 
 export default function CakeForm() {
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const searchId = searchParams.get("id") || null
+  const dispatch = useAppDispatch()
 
   const [cakeFormData, setCakeFormData] = useState<Cake>({
     name: "",
@@ -47,6 +51,8 @@ export default function CakeForm() {
       if (!searchId) return // Dont fetch anything if no ID exists
 
       try {
+        setLoading(true)
+
         const idResponse = await fetch(`/api/cakes/${searchId}`)
         if (!idResponse.ok) throw new Error("Failed to fetch")
         const cakeData = await idResponse.json()
@@ -77,6 +83,7 @@ export default function CakeForm() {
             ...parsedDetails, // Overwrite with parsed data
           },
         }))
+        setLoading(false)
       } catch (error) {
         console.error("failed to fetch the cakes", error)
       } finally {
@@ -110,8 +117,9 @@ export default function CakeForm() {
       if (!res) throw new Error("Failed to save")
 
       toast.success(searchId ? "Cake updated!" : "Cake created!")
+      dispatch(fetchCakes())
+
       router.push("/admin")
-      router.refresh() // Refresh server data
     } catch (error) {
       console.error(error)
       toast.error("Something went wrong.")
@@ -121,7 +129,84 @@ export default function CakeForm() {
   }
 
   if (loading) {
-    return <div className="py-10 text-center">Loading the cake ...</div>
+    return (
+      <main className="container pb-12 pt-2">
+        <div className="mx-4 max-w-3xl space-y-8 rounded-3xl border border-pink-100 bg-white p-6 shadow-xl md:mx-auto md:p-12">
+          {/* HEADER */}
+          <div className="flex justify-center space-y-2 text-center">
+            <Skeleton className="h-10 w-48 rounded-lg bg-pink-200/60" />
+          </div>
+
+          <div className="space-y-7">
+            <div className="grid gap-4 md:grid-cols-2">
+              {/* CAKE NAME */}
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-20 bg-pink-200/60" /> {/* Label */}
+                <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />{" "}
+                {/* Input */}
+              </div>
+
+              {/* STATUS */}
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-16 bg-pink-200/60" />
+                <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />
+              </div>
+
+              {/* CATEGORY */}
+              <div className="space-y-2">
+                <Skeleton className="h-4 w-20 bg-pink-200/60" />
+                <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />
+              </div>
+            </div>
+
+            <hr className="w-full border-pink-100" />
+
+            {/* DESCRIPTION FIELD */}
+            <div className="space-y-2">
+              <Skeleton className="h-4 w-40 bg-pink-200/60" /> {/* Label */}
+              <Skeleton className="h-[100px] w-full rounded-md bg-pink-200/60" />{" "}
+              {/* Textarea */}
+            </div>
+
+            {/* PRODUCT DETAILS BOX */}
+            <div className="flex flex-col space-y-4 rounded-xl bg-gray-100/30 p-4">
+              <Skeleton className="h-5 w-32 bg-pink-200/60" /> {/* Heading */}
+              <div className="mx-auto w-full max-w-xs space-y-4">
+                {/* SERVINGS */}
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-4 w-20 bg-pink-200/60" /> {/* Label */}
+                  <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />{" "}
+                  {/* Input */}
+                </div>
+
+                {/* FLAVOR */}
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-4 w-20 bg-pink-200/60" />
+                  <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />
+                </div>
+
+                {/* LEAD TIME */}
+                <div className="flex items-center gap-4">
+                  <Skeleton className="h-4 w-20 bg-pink-200/60" />
+                  <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />
+                </div>
+              </div>
+            </div>
+
+            {/* SUBMIT BUTTON */}
+            <div className="flex w-full justify-center pt-4">
+              <Skeleton className="h-12 w-3/4 rounded-full bg-pink-200/60" />
+            </div>
+
+            {/* FOOTER INFO */}
+            <div className="flex justify-center gap-2">
+              <Skeleton className="h-3 w-3 rounded-full bg-pink-200/60" />
+              <Skeleton className="h-3 w-64 rounded-full bg-pink-200/60" />
+            </div>
+          </div>
+        </div>
+      </main>
+    )
   }
 
   return (
@@ -186,12 +271,12 @@ export default function CakeForm() {
                 <SelectContent>
                   <SelectGroup>
                     <SelectLabel>Category</SelectLabel>
-                    <SelectItem value="Wedding Cake">Wedding Cake</SelectItem>
-                    <SelectItem value="Celebration Cake">
-                      Celebration Cake
+                    <SelectItem value="Wedding Cakes">Wedding Cakes</SelectItem>
+                    <SelectItem value="Celebration Cakes">
+                      Celebration Cakes
                     </SelectItem>
-                    <SelectItem value="Anniversary Cake">
-                      Anniversary Cake
+                    <SelectItem value="Anniversary Cakes">
+                      Anniversary Cakes
                     </SelectItem>
                     <SelectItem value="Deserts">Deserts</SelectItem>
                   </SelectGroup>

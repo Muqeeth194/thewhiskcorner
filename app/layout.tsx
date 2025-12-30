@@ -4,6 +4,7 @@ import { Inter, Playfair_Display, Lato } from "next/font/google"
 import Navbar from "@/components/layout/navbar"
 import Footer from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
+import ReduxProvider from "./StoreProvider"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -76,10 +77,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={`${inter.className} flex min-h-screen flex-col bg-background bg-body text-primary ${playfair.variable} ${lato.variable} font-sans`}
       >
-        <Navbar />
-        <Toaster />
-        {children}
-        <Footer />
+        <ReduxProvider>
+          <Navbar />
+          <Toaster position="top-center" richColors />
+          {children}
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   )

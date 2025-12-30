@@ -55,6 +55,12 @@ export type CakeTable = {
   status: "Active" | "Inactive"
 }
 
+export type CakesState = {
+  data: CakeTable[]
+  isLoading: boolean
+  error: string | undefined
+}
+
 // This is for the search route with Cake ID
 export type cakeIdParams = {
   params: {

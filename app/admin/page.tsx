@@ -4,12 +4,7 @@ import AdminConsole from "@/components/pages/admin-console"
 
 const page = () => {
   return (
-    <main className="container flex flex-col items-center">
-      <div className="flex flex-col items-center space-y-2 py-12 text-center">
-        <HeadingText subtext="Manage your gallery and orders">
-          Admin Console
-        </HeadingText>
-      </div>
+    <main className="container flex flex-col items-center py-10">
       <AdminConsole />
     </main>
   )

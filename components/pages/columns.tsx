@@ -23,7 +23,7 @@ export const columns: ColumnDef<CakeTable>[] = [
     // Render the image thumbnail
     cell: ({ row }) => {
       return (
-        <div className="h-10 w-10 overflow-hidden rounded-md">
+        <div className="h-9 w-9 overflow-hidden rounded-md">
           <img
             src={row.getValue("image")}
             alt={row.getValue("name")}
@@ -51,6 +51,16 @@ export const columns: ColumnDef<CakeTable>[] = [
         </Button>
       )
     },
+    // It checks if the row's category is included in the array of selected categories.
+    filterFn: (row, columnId, filterValue) => {
+      // check if the filter is set and shows all rows
+      if (!filterValue || filterValue.length === 0) return true
+
+      // check if the row's category is in the selected category array
+      // Get that row value under that columnId on which the filter is applied
+      const rowValue = row.getValue(columnId) as string
+      return filterValue.includes(rowValue)
+    },
   },
   {
     accessorKey: "status",
@@ -65,6 +75,15 @@ export const columns: ColumnDef<CakeTable>[] = [
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       )
+    },
+    filterFn: (row, columnId, filterValue) => {
+      // check if the filter is set and shows all rows
+      if (!filterValue || filterValue.length === 0) return true
+
+      // check if the row's category is in the selected category array
+      // Get that row value under that columnId on which the filter is applied
+      const rowValue = row.getValue(columnId) as string
+      return filterValue.includes(rowValue)
     },
   },
   {
@@ -91,14 +110,15 @@ export const columns: ColumnDef<CakeTable>[] = [
 
               <DropdownMenuItem
                 onClick={() => router.push(`/admin/cakes/editor?id=${cake.id}`)}
+                className="cursor-pointer"
               >
-                <Pencil className="mr-2 h-4 w-4" />
+                <Pencil className="mr-2 h-4 w-4 " />
                 Edit Details
               </DropdownMenuItem>
               <DropdownMenuSeparator />
 
               <DropdownMenuItem
-                className="text-red-600 focus:text-red-600"
+                className="cursor-pointer text-red-600 focus:text-red-600"
                 onClick={() => console.log("Delete", cake.id)}
               >
                 <Trash className="mr-2 h-4 w-4" />
