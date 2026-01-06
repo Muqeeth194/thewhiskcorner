@@ -1,4 +1,4 @@
-import LoginForm from "@/components/pages/login-form"
+import SignupForm from "@/components/pages/signup-form"
 import { cookies } from "next/headers"
 import { redirect } from "next/navigation"
 
@@ -12,7 +12,7 @@ export default function LoginPage() {
     <div className="min-h-svh grid lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="mx-auto w-full max-w-md">
-          <LoginForm />
+          <SignupForm />
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">

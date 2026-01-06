@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { db } from "@/db/db"
+import { db } from "@/db/dbConfig"
 import { cakes } from "@/db/schema/cakes"
 
 export async function GET(request: Request) {

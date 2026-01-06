@@ -80,3 +80,12 @@ export type Form = {
   servings?: string
   budget?: string
 }
+
+export type SendEmailParams = {
+  to: string
+  name?: string
+  subject: string
+  html: string
+  emailType?: string
+  userId: integer
+}

@@ -8,10 +8,35 @@ import { navLinks } from "@/lib/links"
 import { cn } from "@/lib/utils"
 import { Menu, X } from "lucide-react" // Icons for mobile menu
 import { Button } from "@/components/ui/button"
+import LogoutButton from "../pages/logout-button"
+import { useAppSelector } from "@/store/hooks"
+import Cookies from "js-cookie"
 
+// Since Navbar has use client at the top (maybe for a mobile hamburger menu), we cannot use cookies() directly inside it.
 export default function Navbar() {
+  const { isLoggedIn } = useAppSelector((state) => state.auth)
+
+  // console.log("Login status:", isLoggedIn)
+
   const pathname = usePathname()
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
+
+  // Use actual cookie state, not Redux during auth pages
+  const isOnAuthPage = pathname === "/login" || pathname === "/register"
+  const actualToken = Cookies.get("session_token")
+  const displayLoggedIn = isOnAuthPage ? !!actualToken : isLoggedIn
+
+  console.log(
+    "🟡 Navbar render - Redux:",
+    isLoggedIn,
+    "Cookie:",
+    !!actualToken,
+    "Display:",
+    displayLoggedIn,
+    "Path:",
+    pathname
+  )
 
   // Close mobile menu when route changes
   React.useEffect(() => {
@@ -19,7 +44,6 @@ export default function Navbar() {
   }, [pathname])
 
   return (
-    // UPDATED: px-6 for mobile, md:px-12 for desktop
     <header className="sticky top-0 z-50 w-full bg-pink-200/70 px-6 shadow-md backdrop-blur-md supports-[backdrop-filter]:bg-pink-200/70 md:px-12">
       <div className="container flex h-16 items-center justify-between">
         {/* 1. LOGO SECTION */}
@@ -53,13 +77,17 @@ export default function Navbar() {
 
         {/* 3. DESKTOP BUTTON (Hidden on mobile) */}
         <div className="hidden md:flex">
-          <Button
-            asChild
-            variant="outline"
-            className="rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white"
-          >
-            <Link href="/login">Sign In</Link>
-          </Button>
+          {displayLoggedIn ? (
+            <LogoutButton />
+          ) : (
+            <Button
+              asChild
+              variant="outline"
+              className="rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white"
+            >
+              <Link href="/login">Sign In</Link>
+            </Button>
+          )}
         </div>
 
         {/* 4. MOBILE MENU TOGGLE */}
@@ -96,12 +124,16 @@ export default function Navbar() {
               )
             })}
             <div className="mt-4">
-              <Button
-                asChild
-                className="w-full rounded-full bg-pink-700 text-white hover:bg-pink-800 "
-              >
-                <Link href="/gallery">Sign In / Join Rewards</Link>
-              </Button>
+              {displayLoggedIn ? (
+                <LogoutButton />
+              ) : (
+                <Button
+                  asChild
+                  className="w-full rounded-full bg-pink-700 text-white hover:bg-pink-800 "
+                >
+                  <Link href="/gallery">Sign In / Join Rewards</Link>
+                </Button>
+              )}
             </div>
           </nav>
         </div>

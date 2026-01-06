@@ -5,6 +5,7 @@ import Navbar from "@/components/layout/navbar"
 import Footer from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
 import ReduxProvider from "./StoreProvider"
+import { cookies } from "next/headers"
 
 const inter = Inter({ subsets: ["latin"] })
 

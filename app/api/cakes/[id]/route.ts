@@ -1,5 +1,5 @@
 import { cakeIdParams } from "@/types/contents"
-import { db } from "@/db/db"
+import { db } from "@/db/dbConfig"
 import { cakes } from "@/db/schema/cakes"
 import { NextResponse } from "next/server"
 import { eq } from "drizzle-orm"

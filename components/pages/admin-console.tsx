@@ -7,7 +7,6 @@ import { columns } from "./columns"
 import { DataTable } from "./data-table"
 import { useAppDispatch, useAppSelector } from "../../store/hooks"
 import { fetchCakes } from "../../store/cakesSlice"
-import { Skeleton } from "../ui/skeleton"
 
 export default function AdminConsole() {
   const dispatch = useAppDispatch()

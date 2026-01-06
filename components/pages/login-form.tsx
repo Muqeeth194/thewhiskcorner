@@ -1,45 +1,49 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Lock, Mail, Loader2, LogIn } from "lucide-react" // Updated icons
+import { Lock, Mail, Loader2, LogIn } from "lucide-react"
 import { toast } from "sonner"
 import HeadingText from "../heading-text"
 import { useRouter } from "next/navigation"
+import Link from "next/link" // Import Link
+import axios from "axios"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
+import { setAuth } from "@/store/authSlice"
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false)
+  const dispatch = useAppDispatch()
+
   const router = useRouter()
 
-  // 1. STATE FOR LOGIN
+  // STATE FOR LOGIN
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   })
 
-  // 2. HANDLE LOGIN
+  // HANDLE LOGIN
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
     try {
-      // TODO: Replace this with your actual NextAuth / Backend logic
-      // Example: const result = await signIn("credentials", { ...loginData })
+      const response = await axios.post("/api/login", loginData)
+      if (!response) throw new Error("Failed to login user")
 
-      console.log("Logging in with:", loginData)
+      // Update the login status in the redux store
+      dispatch(
+        setAuth({
+          isLoggedIn: true,
+          user: response.data?.user,
+        })
+      )
 
-      // SIMULATING A LOGIN DELAY FOR DEMO
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
-      // MOCK SUCCESS
-      if (loginData.email && loginData.password) {
-        toast.success("Welcome back, Admin!")
-        router.push("/admin/dashboard") // Redirect to admin panel
-      } else {
-        throw new Error("Invalid credentials")
-      }
+      toast.success("Account logged in successfully!")
+      router.push("/")
     } catch (error) {
       console.error("Login failed", error)
       toast.error("Invalid email or password.")
@@ -50,7 +54,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex min-h-[60vh] items-center justify-center">
-      <div className="w-full max-w-md space-y-6 rounded-3xl border border-pink-100 bg-white p-8 shadow-xl md:p-10">
+      <div className="w-full max-w-md space-y-6 rounded-3xl border border-pink-100 bg-white p-8 shadow-xl md:p-9">
         {/* HEADER */}
         <div className="space-y-2 text-center">
           <HeadingText h3="Login to your account" subtext="" />
@@ -72,7 +76,7 @@ export default function LoginForm() {
                 type="email"
                 id="email"
                 placeholder="admin@thewhiskcorner.com"
-                className="border-pink-100 bg-pink-50/30 pl-10" // pl-10 makes room for the icon
+                className="border-pink-100 bg-pink-50/30 pl-10"
                 value={loginData.email}
                 onChange={(e) =>
                   setLoginData({ ...loginData, email: e.target.value })
@@ -82,10 +86,19 @@ export default function LoginForm() {
           </div>
 
           {/* Password Field */}
-          <div className="space-y-2">
-            <Label htmlFor="password" className="text-slate-600">
-              Password
-            </Label>
+          <div className="space-y-2 pb-2">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="password" className="text-slate-600">
+                Password
+              </Label>
+              {/* FORGOT PASSWORD LINK */}
+              <Link
+                href="/forgot-password"
+                className="text-xs font-medium text-pink-600 hover:text-pink-700 hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
             <div className="relative">
               <Lock className="absolute left-3 top-2.5 h-5 w-5 text-slate-400" />
               <Input
@@ -120,6 +133,17 @@ export default function LoginForm() {
               </>
             )}
           </Button>
+
+          {/* REGISTER LINK */}
+          <div className="mt-4 text-center text-sm text-slate-500">
+            Don&apos;t have an account?{" "}
+            <Link
+              href="/register"
+              className="font-semibold text-pink-600 hover:text-pink-700 hover:underline"
+            >
+              Sign up
+            </Link>
+          </div>
         </form>
       </div>
     </div>
