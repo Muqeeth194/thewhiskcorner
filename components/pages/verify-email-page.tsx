@@ -33,7 +33,9 @@ export default function VerifyEmailPage() {
         // calling the verify server action
         const result = await verifyUser(token)
 
-        if (result.success) {
+        // console.log("Result response: ", result.user)
+
+        if (result.user && result.success) {
           setStatus("SUCCESS")
           setMessage(result.message || "Email verified successfully!")
         } else {

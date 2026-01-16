@@ -52,11 +52,18 @@ export type CakeTable = {
   name: string
   image: string
   category: string
+  description: string
+  details?: {
+    servings?: number | string
+    flavor?: string
+    leadTime?: string
+  }
   status: "Active" | "Inactive"
 }
 
 export type CakesState = {
   data: CakeTable[]
+  selectedCake: any | null
   isLoading: boolean
   error: string | undefined
 }
@@ -88,4 +95,9 @@ export type SendEmailParams = {
   html: string
   emailType?: string
   userId: integer
+}
+
+export type User = {
+  id: string
+  isAdmin?: boolean
 }

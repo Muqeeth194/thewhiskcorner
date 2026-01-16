@@ -35,6 +35,14 @@ export async function POST(request: Request) {
       )
     }
 
+    // Check if the user is verified
+    if (!user.isVerified) {
+      return NextResponse.json(
+        { error: "Please verify your email before logging in" },
+        { status: 403 }
+      )
+    }
+
     // Validate the password
     const isPasswordValid = await compare(password, user.password)
 
@@ -46,7 +54,9 @@ export async function POST(request: Request) {
     const secret = new TextEncoder().encode(process.env.JWT_SECRET)
     const token = await new SignJWT({
       userId: user.id,
-      role: user.isAdmin ? "admin" : "user",
+      userName: user.name,
+      isAdmin: user.isAdmin ? true : false,
+      email: user.email,
     })
       .setProtectedHeader({ alg: "HS256" })
       .setExpirationTime("24h")
@@ -68,5 +78,11 @@ export async function POST(request: Request) {
       message: "Login successful",
       user: userWithoutPassword,
     })
-  } catch (error) {}
+  } catch (error) {
+    console.error("Login error:", error)
+    return NextResponse.json(
+      { error: "An error occurred during login" },
+      { status: 500 }
+    )
+  }
 }

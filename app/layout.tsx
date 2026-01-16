@@ -6,6 +6,10 @@ import Footer from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
 import ReduxProvider from "./StoreProvider"
 import { cookies } from "next/headers"
+import { getSessionUser } from "@/lib/auth"
+import { AuthProvider } from "@/context/AuthContext"
+import { User } from "@/types/contents"
+import Providers from "./providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -72,18 +76,35 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  // Check the cookie on the server (Server can always see httpOnly cookies)
+  const cookieStore = cookies()
+  const token = cookieStore.get("session_token")?.value
+
+  // Verify it on the Server
+  const user = await getSessionUser(token)
+
+  console.log("layout user", user)
+
+  const isLoggedIn = !!user
+
+  // console.log("initial login status in layout", isLoggedIn)
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.className} flex min-h-screen flex-col bg-background bg-body text-primary ${playfair.variable} ${lato.variable} font-sans`}
       >
-        <ReduxProvider>
-          <Navbar />
-          <Toaster position="top-center" richColors />
-          {children}
-          <Footer />
-        </ReduxProvider>
+        <AuthProvider initialUser={user as User}>
+          <ReduxProvider initialLoggedIn={isLoggedIn}>
+            <Providers>
+              <Navbar />
+              <Toaster position="top-center" richColors />
+              <main className="pt-16">{children}</main>
+              <Footer />
+            </Providers>
+          </ReduxProvider>
+        </AuthProvider>
       </body>
     </html>
   )

@@ -23,44 +23,62 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { getOptimizedUrl } from "@/lib/cloudinary"
+import { getOptimizedUrl } from "@/lib/cloudinary/optimizer"
+import { useAppDispatch, useAppSelector } from "@/store/hooks"
+import {
+  clearSelectedCake,
+  fetchCakeById,
+  fetchCakes,
+} from "@/store/cakesSlice"
 
 export default function CakeDetailsPage() {
-  const [cake, setCake] = useState<Cake | null>(null)
+  const dispatch = useAppDispatch()
+  const {
+    data: cakes,
+    selectedCake: cake,
+    isLoading,
+  } = useAppSelector((state) => state.cakes)
   const [categoryCakes, setCategoryCakes] = useState<Cake[]>([])
-
-  const [isLoading, setIsLoading] = useState(true)
 
   const searchParams = useSearchParams()
   const searchId = searchParams.get("id")
-  //   console.log("param id: ", searchId)
 
   useEffect(() => {
-    // FIXED: Defined fetchData inside useEffect to prevent build errors
-    const fetchData = async () => {
-      if (!searchId) return // Dont fetch anything if no ID exists
-
-      try {
-        const idResponse = await fetch(`/api/cakes/${searchId}`)
-        const cakeData = await idResponse.json()
-        setCake(cakeData)
-
-        if (cakeData?.category) {
-          const categoryResponse = await fetch(
-            `/api/cakes?category=${cakeData.category}`
-          )
-          const categoryData = await categoryResponse.json()
-          setCategoryCakes(categoryData)
-        }
-      } catch (error) {
-        console.error("failed to fetch the cakes", error)
-      } finally {
-        setIsLoading(false)
-      }
+    // If we don't have the full list yet, fetch it!
+    if (cakes.length === 0) {
+      dispatch(fetchCakes())
     }
+  }, [dispatch, cakes.length])
 
-    fetchData()
-  }, [searchId]) // Now only depends on searchId
+  useEffect(() => {
+    try {
+      dispatch(fetchCakeById(Number(searchId)))
+
+      return () => {
+        dispatch(clearSelectedCake())
+      }
+    } catch (error) {
+      console.error("Unable to fetch the cake from the redux store", error)
+    }
+  }, [dispatch, searchId])
+
+  useEffect(() => {
+    try {
+      if (cake && cake.category && cakes.length > 0) {
+        const catCakes = cakes.filter(
+          (c) =>
+            c.category.toLowerCase() === cake.category.toLowerCase() &&
+            c.id !== cake.id
+        )
+
+        setCategoryCakes(catCakes)
+      }
+    } catch (error) {
+      console.error("Unable to fetch the categories", error)
+    }
+  }, [cake, cakes])
+
+  console.log("Fetched cake", cake)
 
   if (isLoading) {
     return <div className="py-10 text-center">Loading the cakes ...</div>

@@ -7,17 +7,20 @@ import { useAppDispatch } from "@/store/hooks"
 import { logout } from "@/store/authSlice"
 import { useRouter } from "next/navigation"
 import { toast } from "sonner"
+import { useAuth } from "@/context/AuthContext"
 
 export default function LogoutButton() {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  // const dispatch = useAppDispatch()
+  // const router = useRouter()
+  const { logout } = useAuth()
 
   const handleLogout = async () => {
     try {
-      await logoutUser() // Server action to clear cookies
-      dispatch(logout()) // ✅ Clear Redux state
+      // await logoutUser() // Server action to clear cookies
+      // dispatch(logout()) // ✅ Clear Redux state
+
+      await logout()
       toast.success("Logged out successfully!")
-      router.push("/")
     } catch (error) {
       console.error("Logout failed", error)
       toast.error("Failed to logout. Please try again.")

@@ -23,6 +23,13 @@ export default function SignupForm() {
     confirmPassword: "",
   })
 
+  // 🆕 NEW: Validation Logic
+  const isFormValid =
+    (signupData.name || "").trim() !== "" &&
+    (signupData.email || "").trim() !== "" &&
+    (signupData.password || "").trim() !== "" &&
+    (signupData.confirmPassword || "").trim() !== ""
+
   // 2. HANDLE SIGNUP
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -152,7 +159,7 @@ export default function SignupForm() {
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={loading}
+            disabled={!isFormValid}
             className="mt-6 h-12 w-full gap-2 rounded-full bg-pink-700 text-lg text-white shadow-lg transition-all hover:bg-pink-800 hover:shadow-xl"
           >
             {loading ? (

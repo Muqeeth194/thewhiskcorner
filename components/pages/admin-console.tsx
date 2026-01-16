@@ -1,32 +1,47 @@
 "use client"
 
-import React, { useEffect } from "react"
+import React from "react"
 import { Button } from "../ui/button"
 import Link from "next/link"
 import { columns } from "./columns"
 import { DataTable } from "./data-table"
-import { useAppDispatch, useAppSelector } from "../../store/hooks"
-import { fetchCakes } from "../../store/cakesSlice"
+import { useQuery } from "@tanstack/react-query"
+import { Loader2 } from "lucide-react"
+
+// 1. Define the fetcher function
+async function fetchAllCakes() {
+  // We request a higher limit (e.g., 100) to populate the admin table
+  // so client-side searching/filtering works well.
+  const response = await fetch("/api/cakes?limit=100")
+  if (!response.ok) {
+    throw new Error("Failed to fetch cakes")
+  }
+  return response.json()
+}
 
 export default function AdminConsole() {
-  const dispatch = useAppDispatch()
-  const { data: cakes } = useAppSelector((state) => state.cakes)
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["admin-cakes"], // Unique key for caching
+    queryFn: fetchAllCakes,
+  })
 
-  useEffect(() => {
-    // Only fetches if the data is empty to avoid multiple refetches
-    if (cakes.length === 0) {
-      dispatch(fetchCakes())
-    }
-  }, [])
+  const cakes = data?.cakes || []
+
+  if (isError) {
+    return (
+      <div className="p-10 text-center text-red-500">
+        Failed to load admin data.
+      </div>
+    )
+  }
 
   return (
-    <main className="container">
-      {/* NEW CAKE BUTTON */}
-      <div className="w-full space-x-3 p-1">
+    <main className="container mx-auto px-4 py-6">
+      <div className="flex w-full flex-col gap-3 pb-6 sm:flex-row sm:items-center">
         <Button
           asChild
           variant="outline"
-          className="rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white"
+          className="w-full rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white sm:w-auto"
         >
           <Link href="/admin/cakes/new">+ Add New Cake</Link>
         </Button>
@@ -34,15 +49,17 @@ export default function AdminConsole() {
         <Button
           asChild
           variant="outline"
-          className="rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white"
+          className="w-full rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white sm:w-auto"
         >
           <Link href="/#">View Quote Requests</Link>
         </Button>
       </div>
 
       {/* GALLERY TABLE VIEW */}
-      <div className="container mx-auto px-2 py-4">
-        <DataTable columns={columns} data={cakes} />
+      <div className="w-full overflow-hidden rounded-lg border border-pink-100 p-4 shadow-sm">
+        <div className="overflow-x-auto">
+          <DataTable columns={columns} data={cakes} />
+        </div>
       </div>
     </main>
   )

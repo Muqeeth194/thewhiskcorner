@@ -21,20 +21,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import { Button } from "../ui/button"
 import { Input } from "@/components/ui/input"
-import { ChevronsUpDown, SearchIcon } from "lucide-react"
-import { Checkbox } from "@/components/ui/checkbox"
-import { Label } from "../ui/label"
+import { Loader2, SearchIcon } from "lucide-react"
+import CategoryFilter from "../filters/category-filter"
+import StatusFilter from "../filters/status-filter"
+import FlavorFilter from "../filters/flavor-filter"
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
+  columns: ColumnDef<TData, any>[]
   data: TData[]
+  isLoading?: boolean
+  isError?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -45,11 +43,12 @@ export function DataTable<TData, TValue>({
   const [isCategoryOpen, setIsCategoryOpen] = React.useState(false)
   const [selectedCategories, setSelectedCategories] = React.useState<string[]>(
     []
-  ) // used [] for mutiple categories
-
-  const [selectedStatus, setSelectedStatus] = React.useState<string[]>([]) // used [] for status
-
+  )
+  const [selectedStatus, setSelectedStatus] = React.useState<string[]>([])
   const [isStatusOpen, setIsStatusOpen] = React.useState(false)
+  const [selectedFlavors, setSelectedFlavors] = React.useState<string[]>([])
+  const [isFlavorOpen, setIsFlavorOpen] = React.useState(false)
+
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   )
@@ -84,246 +83,37 @@ export function DataTable<TData, TValue>({
   }, [selectedStatus])
 
   return (
-    <div className="container flex px-0 pt-4">
-      <div className="w-1/4 space-y-4">
+    <div className="container flex flex-col gap-6 px-4 pt-4 lg:flex-row lg:px-0">
+      {/* SIDEBAR FILTERS */}
+      <div className="max-h-[calc(100vh-150px)] w-full space-y-4 overflow-y-auto pr-2 lg:w-1/4">
         {/* CATEGORY FILTER */}
-        <Collapsible
-          open={isCategoryOpen}
-          onOpenChange={setIsCategoryOpen}
-          className="flex w-full flex-col gap-2"
-        >
-          {/* Header */}
-          <CollapsibleTrigger asChild>
-            <div className="flex cursor-pointer items-center justify-between px-2">
-              <h4 className="text-sm font-semibold text-slate-600 hover:text-pink-600">
-                Category
-              </h4>
-
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 text-slate-400 hover:bg-pink-50 hover:text-pink-600"
-              >
-                <ChevronsUpDown className="h-4 w-4" />
-                <span className="sr-only">Toggle</span>
-              </Button>
-            </div>
-          </CollapsibleTrigger>
-
-          <CollapsibleContent className="space-y-0 rounded-md border border-pink-200 pt-0">
-            {/* Item 1 */}
-            <Label
-              htmlFor="wedding-cakes"
-              className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-all hover:bg-pink-50"
-            >
-              <Checkbox
-                id="wedding-cakes"
-                className="  border-2 border-slate-300 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600"
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedCategories([
-                      ...selectedCategories,
-                      "Wedding Cakes",
-                    ])
-                  } else {
-                    setSelectedCategories(
-                      selectedCategories.filter(
-                        (cat) => cat !== "Wedding Cakes"
-                      )
-                    )
-                  }
-                }}
-              />
-              <span className="text-sm text-slate-600 group-hover:text-pink-700">
-                Wedding Cakes
-              </span>
-            </Label>
-            <hr className="w-full border-pink-200" />
-
-            {/* Item 2 */}
-            <Label
-              htmlFor="anniversary-cakes"
-              className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-all hover:bg-pink-50"
-            >
-              <Checkbox
-                id="anniversary-cakes"
-                className="border-slate-300 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600"
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedCategories([
-                      ...selectedCategories,
-                      "Anniversary Cakes",
-                    ])
-                  } else {
-                    setSelectedCategories(
-                      selectedCategories.filter(
-                        (cat) => cat !== "Anniversary Cakes"
-                      )
-                    )
-                  }
-                }}
-              />
-              <span className="text-sm text-slate-600 group-hover:text-pink-700">
-                Anniversary Cakes
-              </span>
-            </Label>
-            <hr className="w-full border-pink-200" />
-
-            {/* Item 3 */}
-            <Label
-              htmlFor="celebration-cakes"
-              className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-all hover:bg-pink-50"
-            >
-              <Checkbox
-                id="celebration-cakes"
-                className="border-slate-300 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600"
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedCategories([
-                      ...selectedCategories,
-                      "Celebration Cakes",
-                    ])
-                  } else {
-                    setSelectedCategories(
-                      selectedCategories.filter(
-                        (cat) => cat !== "Celebration Cakes"
-                      )
-                    )
-                  }
-                }}
-              />
-              <span className="text-sm text-slate-600 group-hover:text-pink-700">
-                Celebration Cakes
-              </span>
-            </Label>
-            <hr className="w-full border-pink-200" />
-
-            {/* Item 4 */}
-            <Label
-              htmlFor="deserts"
-              className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-all hover:bg-pink-50"
-            >
-              <Checkbox
-                id="deserts"
-                className="border-slate-300 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600"
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedCategories([...selectedCategories, "Deserts"])
-                  } else {
-                    setSelectedCategories(
-                      selectedCategories.filter((cat) => cat !== "Deserts")
-                    )
-                  }
-                }}
-              />
-              <span className="text-sm text-slate-600 group-hover:text-pink-700">
-                Deserts
-              </span>
-            </Label>
-          </CollapsibleContent>
-        </Collapsible>
+        <CategoryFilter
+          isCategoryOpen={isCategoryOpen}
+          setIsCategoryOpen={setIsCategoryOpen}
+          selectedCategories={selectedCategories}
+          setSelectedCategories={setSelectedCategories}
+        />
 
         {/* STATUS FILTER */}
-        <Collapsible
-          open={isStatusOpen}
-          onOpenChange={setIsStatusOpen}
-          className="flex w-full flex-col gap-2 "
-        >
-          {/* Header */}
-          <CollapsibleTrigger asChild>
-            <div className="flex cursor-pointer items-center justify-between px-2">
-              <h4 className="text-sm font-semibold text-slate-600 hover:text-pink-600">
-                Status
-              </h4>
+        <StatusFilter
+          isStatusOpen={isStatusOpen}
+          setIsStatusOpen={setIsStatusOpen}
+          selectedStatus={selectedStatus}
+          setSelectedStatus={setSelectedStatus}
+        />
 
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-6 w-6 p-0 text-slate-400 hover:bg-pink-50 hover:text-pink-600"
-              >
-                <ChevronsUpDown className="h-4 w-4" />
-                <span className="sr-only">Toggle</span>
-              </Button>
-            </div>
-          </CollapsibleTrigger>
-
-          <CollapsibleContent className="space-y-0 rounded-md border border-pink-200 pt-0">
-            {/* Item 1 */}
-            <Label
-              htmlFor="active"
-              className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-all hover:bg-pink-50"
-            >
-              <Checkbox
-                id="active"
-                className="border-2 border-slate-300 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600"
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedStatus([...selectedStatus, "Active"])
-                  } else {
-                    setSelectedStatus(
-                      selectedStatus.filter((status) => status !== "Active")
-                    )
-                  }
-                }}
-              />
-              <span className="text-sm text-slate-600 group-hover:text-pink-700">
-                Active
-              </span>
-            </Label>
-            <hr className="w-full border-pink-200" />
-
-            {/* Item 2 */}
-            <Label
-              htmlFor="inactive"
-              className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-all hover:bg-pink-50"
-            >
-              <Checkbox
-                id="inactive"
-                className="border-slate-300 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600"
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedStatus([...selectedStatus, "Inactive"])
-                  } else {
-                    setSelectedStatus(
-                      selectedStatus.filter((status) => status !== "Inactive")
-                    )
-                  }
-                }}
-              />
-              <span className="text-sm text-slate-600 group-hover:text-pink-700">
-                Inactive
-              </span>
-            </Label>
-            <hr className="w-full border-pink-200" />
-
-            {/* Item 3 */}
-            <Label
-              htmlFor="draft"
-              className="group flex cursor-pointer items-center gap-3 rounded-md px-2 py-2 transition-all hover:bg-pink-50 "
-            >
-              <Checkbox
-                id="draft"
-                className="border-slate-300 data-[state=checked]:border-pink-600 data-[state=checked]:bg-pink-600"
-                onCheckedChange={(checked) => {
-                  if (checked) {
-                    setSelectedStatus([...selectedStatus, "Draft"])
-                  } else {
-                    setSelectedStatus(
-                      selectedStatus.filter((status) => status !== "Draft")
-                    )
-                  }
-                }}
-              />
-              <span className="text-sm text-slate-600 group-hover:text-pink-700">
-                Draft
-              </span>
-            </Label>
-          </CollapsibleContent>
-        </Collapsible>
+        {/* FLAVOR FILTER */}
+        <FlavorFilter
+          isFlavorOpen={isFlavorOpen}
+          setIsFlavorOpen={setIsFlavorOpen}
+          selectedFlavors={selectedFlavors}
+          setSelectedFlavors={setSelectedFlavors}
+        />
       </div>
 
-      <div className="ml-2 w-full">
-        {/* FILTER */}
+      {/* 3. MAIN CONTENT AREA */}
+      <div className="w-full">
+        {/* FILTER INPUT */}
         <div className="relative flex items-center pb-3">
           <Input
             placeholder="Filter cakes..."
@@ -336,60 +126,76 @@ export function DataTable<TData, TValue>({
           <SearchIcon className="absolute left-3 h-4 w-4 text-slate-400" />
         </div>
 
-        {/* TABLE */}
-        <div className="rounded-lg border border-pink-200">
-          <Table>
-            <TableHeader className="sticky top-16 z-10 bg-white shadow-md">
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead
-                        key={header.id}
-                        className="first:rounded-tl-lg last:rounded-tr-lg"
+        {/* 4. TABLE WRAPPER FOR SCROLLING */}
+        {data.length === 0 ? (
+          <div className="flex h-64 w-full items-center justify-center rounded-lg border border-dashed border-pink-200 bg-pink-50/50">
+            {/* Improved Empty State/Loader styling */}
+            <Loader2 className="h-8 w-8 animate-spin text-pink-700" />
+          </div>
+        ) : (
+          <div className="w-full overflow-hidden rounded-lg border border-pink-200 bg-white/50 shadow-sm">
+            <div className="w-full overflow-x-auto">
+              <Table>
+                <TableHeader className="bg-pink-300/50 shadow-sm">
+                  {table.getHeaderGroups().map((headerGroup) => (
+                    <TableRow
+                      key={headerGroup.id}
+                      className="border-pink-100 hover:bg-transparent"
+                    >
+                      {headerGroup.headers.map((header) => {
+                        return (
+                          <TableHead
+                            key={header.id}
+                            className="whitespace-nowrap font-bold text-pink-900 first:rounded-tl-lg last:rounded-tr-lg"
+                          >
+                            {header.isPlaceholder
+                              ? null
+                              : flexRender(
+                                  header.column.columnDef.header,
+                                  header.getContext()
+                                )}
+                          </TableHead>
+                        )
+                      })}
+                    </TableRow>
+                  ))}
+                </TableHeader>
+                <TableBody>
+                  {table.getRowModel().rows?.length ? (
+                    table.getRowModel().rows.map((row) => (
+                      <TableRow
+                        key={row.id}
+                        data-state={row.getIsSelected() && "selected"}
+                        className="border-pink-100 hover:bg-pink-50/30"
                       >
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell
+                            key={cell.id}
+                            className="whitespace-nowrap py-3"
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
                             )}
-                      </TableHead>
-                    )
-                  })}
-                </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow>
+                      <TableCell
+                        colSpan={columns.length}
+                        className="h-24 text-center text-slate-500"
+                      >
+                        No results found.
                       </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </div>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        )}
 
         {/* PAGINATION */}
         <div className="flex items-center justify-end space-x-2 py-4">

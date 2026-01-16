@@ -7,23 +7,25 @@ import { Label } from "@/components/ui/label"
 import { Lock, Mail, Loader2, LogIn } from "lucide-react"
 import { toast } from "sonner"
 import HeadingText from "../heading-text"
-import { useRouter } from "next/navigation"
 import Link from "next/link" // Import Link
 import axios from "axios"
-import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import { setAuth } from "@/store/authSlice"
+import { useAuth } from "@/context/AuthContext"
 
 export default function LoginForm() {
   const [loading, setLoading] = useState(false)
-  const dispatch = useAppDispatch()
 
-  const router = useRouter()
+  const { login } = useAuth()
 
   // STATE FOR LOGIN
   const [loginData, setLoginData] = useState({
     email: "",
     password: "",
   })
+
+  // 🆕 NEW: Validation Logic
+  const isFormValid =
+    (loginData.email || "").trim() !== "" &&
+    (loginData.password || "").trim() !== ""
 
   // HANDLE LOGIN
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,16 +36,11 @@ export default function LoginForm() {
       const response = await axios.post("/api/login", loginData)
       if (!response) throw new Error("Failed to login user")
 
-      // Update the login status in the redux store
-      dispatch(
-        setAuth({
-          isLoggedIn: true,
-          user: response.data?.user,
-        })
-      )
+      console.log("Data sent from the login form", response.data.user)
+
+      login(response.data.user)
 
       toast.success("Account logged in successfully!")
-      router.push("/")
     } catch (error) {
       console.error("Login failed", error)
       toast.error("Invalid email or password.")
@@ -118,7 +115,7 @@ export default function LoginForm() {
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={loading}
+            disabled={!isFormValid}
             className="mt-6 h-12 w-full gap-2 rounded-full bg-pink-700 text-lg text-white shadow-lg transition-all hover:bg-pink-800 hover:shadow-xl"
           >
             {loading ? (

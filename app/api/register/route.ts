@@ -21,19 +21,19 @@ export async function POST(request: Request) {
     }
 
     // Check if the user already exists in the database
-    const userExists = await db
-      .select()
-      .from(users)
-      .where(eq(users.email, reqBody.email))
+    // const userExists = await db
+    //   .select()
+    //   .from(users)
+    //   .where(eq(users.email, reqBody.email))
 
-    console.log(userExists.length)
+    // // console.log(userExists.length)
 
-    if (userExists.length != 0) {
-      return NextResponse.json(
-        { error: "User already exists!" },
-        { status: 400 }
-      )
-    }
+    // if (userExists.length != 0) {
+    //   return NextResponse.json(
+    //     { error: "User already exists!" },
+    //     { status: 400 }
+    //   )
+    // }
 
     // Hash the password
     // 10 is the "salt rounds" (cost factor). Higher is safer but slower. 10 is standard.
@@ -67,7 +67,7 @@ export async function POST(request: Request) {
       userId: createdUser[0].id,
     })
 
-    console.log("Email is sent", sentEmail)
+    console.log("Verify Email is sent", sentEmail)
 
     if (!sentEmail.success) {
       return NextResponse.json(
