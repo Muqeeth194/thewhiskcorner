@@ -3,7 +3,7 @@
 import { db } from "@/db/dbConfig"
 import { users } from "@/db/schema/users"
 import { eq } from "drizzle-orm"
-import { hash } from "bcrypt"
+import { hash } from "bcryptjs"
 import { sendEmail } from "@/lib/maileroo" // ✅ Import sendEmail
 
 export async function resetPassword(token: string, password: string) {

@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db/dbConfig"
 import { users } from "@/db/schema/users"
-import { hash } from "bcrypt"
+import { hash } from "bcryptjs"
 import { eq } from "drizzle-orm"
 import { sendEmail } from "@/lib/maileroo"
 

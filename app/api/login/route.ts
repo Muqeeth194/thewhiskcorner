@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db/dbConfig"
 import { users } from "@/db/schema/users"
-import { compare, hash } from "bcrypt"
+import { compare, hash } from "bcryptjs"
 import { eq } from "drizzle-orm"
 // We use jose instead of jsonwebtoken because jose works better in Next.js Edge Runtimes/Middleware
 import { SignJWT } from "jose"
