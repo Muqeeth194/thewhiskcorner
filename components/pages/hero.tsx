@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 
 export default function HeroHeader() {
   const plugin = React.useRef(
-    Autoplay({ delay: 4000, stopOnInteraction: false }) // Slowed down for a calmer feel
+    Autoplay({ delay: 4000, stopOnInteraction: false })
   )
 
   return (
@@ -25,19 +25,36 @@ export default function HeroHeader() {
         className="relative h-full w-full"
         opts={{ loop: true }}
       >
-        <CarouselContent className="h-[60vh] md:h-[70vh] lg:h-[75vh]">
+        <CarouselContent className="h-[60vh] md:h-[70vh] lg:h-[80vh]">
           {carouselSection.content.map((card, index) => (
             <CarouselItem key={index} className="h-full w-full pl-0">
               <Card className="h-full w-full border-0 bg-transparent shadow-none">
                 <CardContent className="relative flex h-full w-full items-center justify-center p-0">
-                  {/* Image */}
-                  <img
-                    src={card.image}
-                    alt="Cake showcase"
-                    className="h-full w-full object-cover"
-                  />
+                  <picture className="h-full w-full">
+                    {/* 1. Ultra-Wide: 21:9 image, anchored center */}
+                    <source
+                      media="(min-width: 1536px)"
+                      srcSet={card.imageWide || card.imageDesktop || card.image}
+                    />
 
-                  {/* Modern Gradient Overlay: Ensures text is readable on ANY image */}
+                    {/* 2. Desktop/Laptop: Use the 3:2 or 16:9 image */}
+                    {/* 👇 CHANGED: Anchor to the RIGHT so the cake never gets cut off */}
+                    <img
+                      src={card.imageDesktop || card.image}
+                      alt={card.altText || "Cake showcase"}
+                      className="hidden h-full w-full object-cover object-center lg:block"
+                    />
+
+                    {/* 3. Mobile/Tablet fallback */}
+                    {/* Keep object-center for mobile as vertical cropping is less risky here */}
+                    <img
+                      src={card.imageMobile || card.image}
+                      alt={card.altText || "Cake showcase"}
+                      className="block h-full w-full object-cover object-center lg:hidden"
+                    />
+                  </picture>
+
+                  {/* Modern Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent lg:from-black/70 lg:via-transparent" />
                 </CardContent>
               </Card>
@@ -63,7 +80,7 @@ export default function HeroHeader() {
                   asChild
                   className={cn(
                     "rounded-full bg-white/80 px-6 py-4 text-sm font-semibold text-pink-700 shadow-xl transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl sm:px-8 sm:py-6 sm:text-base md:text-lg",
-                    "border-0 ring-0" // Removing borders for a cleaner look
+                    "border-0 ring-0"
                   )}
                 >
                   <Link href="/gallery">Order Now</Link>

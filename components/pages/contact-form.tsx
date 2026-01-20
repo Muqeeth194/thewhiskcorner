@@ -29,25 +29,18 @@ export default function ContactForm() {
 
     try {
       // 3. SEND TO WEB3FORMS (The Free Tool)
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          // REPLACE THIS WITH YOUR ACTUAL ACCESS KEY FROM WEB3FORMS
-          access_key: "YOUR_ACCESS_KEY_HERE",
-          subject: `New Cake Inquiry from ${contactFormData.name}`,
-          from_name: "The Whisk Corner Website",
           ...contactFormData,
         }),
       })
 
       const result = await response.json()
-      console.log("api result", result)
-
-      console.log("after api call", success)
 
       if (result.success) {
         toast.success(result.message)

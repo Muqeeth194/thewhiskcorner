@@ -4,7 +4,6 @@ import { Inter, Playfair_Display, Lato } from "next/font/google"
 import Navbar from "@/components/layout/navbar"
 import Footer from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
-import ReduxProvider from "./StoreProvider"
 import { cookies } from "next/headers"
 import { getSessionUser } from "@/lib/auth"
 import { AuthProvider } from "@/context/AuthContext"
@@ -64,7 +63,7 @@ export const metadata = {
     creator: "@_rdev7",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.ico?v=2",
   },
 }
 
@@ -84,7 +83,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   // Verify it on the Server
   const user = await getSessionUser(token)
 
-  console.log("layout user", user)
+  // console.log("layout user", user)
 
   const isLoggedIn = !!user
 
@@ -96,14 +95,12 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         className={`${inter.className} flex min-h-screen flex-col bg-background bg-body text-primary ${playfair.variable} ${lato.variable} font-sans`}
       >
         <AuthProvider initialUser={user as User}>
-          <ReduxProvider initialLoggedIn={isLoggedIn}>
-            <Providers>
-              <Navbar />
-              <Toaster position="top-center" richColors />
-              <main className="pt-16">{children}</main>
-              <Footer />
-            </Providers>
-          </ReduxProvider>
+          <Providers>
+            <Navbar />
+            <main className="pt-16">{children}</main>
+            <Toaster />
+            <Footer />
+          </Providers>
         </AuthProvider>
       </body>
     </html>

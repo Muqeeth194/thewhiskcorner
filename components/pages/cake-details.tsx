@@ -24,63 +24,80 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { getOptimizedUrl } from "@/lib/cloudinary/optimizer"
-import { useAppDispatch, useAppSelector } from "@/store/hooks"
-import {
-  clearSelectedCake,
-  fetchCakeById,
-  fetchCakes,
-} from "@/store/cakesSlice"
+import axios from "axios"
 
 export default function CakeDetailsPage() {
-  const dispatch = useAppDispatch()
-  const {
-    data: cakes,
-    selectedCake: cake,
-    isLoading,
-  } = useAppSelector((state) => state.cakes)
   const [categoryCakes, setCategoryCakes] = useState<Cake[]>([])
+  const [loading, setLoading] = useState(false)
+  const [cake, setCake] = useState<Cake>()
 
   const searchParams = useSearchParams()
   const searchId = searchParams.get("id")
 
   useEffect(() => {
-    // If we don't have the full list yet, fetch it!
-    if (cakes.length === 0) {
-      dispatch(fetchCakes())
-    }
-  }, [dispatch, cakes.length])
+    const fetchData = async () => {
+      if (!searchId) return // Dont fetch anything if no ID exists
 
-  useEffect(() => {
-    try {
-      dispatch(fetchCakeById(Number(searchId)))
+      try {
+        setLoading(true)
+        const idResponse = await fetch(`/api/cakes/${searchId}`)
+        if (!idResponse.ok) throw new Error("Failed to fetch")
+        const cakeData = await idResponse.json()
+        // In order to populate the data of the 'details' object it needs to be in JSON format.
+        // Check if 'details' is a string. If so, parse it to JSON.
+        let parsedDetails = { servings: "", flavor: "", leadTime: "" }
 
-      return () => {
-        dispatch(clearSelectedCake())
+        if (typeof cakeData.details === "string") {
+          try {
+            parsedDetails = JSON.parse(cakeData.details)
+          } catch (e) {
+            console.error("Could not parse details JSON", e)
+          }
+        } else if (
+          typeof cakeData.details === "object" &&
+          cakeData.details !== null
+        ) {
+          // It might already be an object if your DB driver handled it
+          parsedDetails = cakeData.details
+        }
+
+        // Merge parsed details back into the object
+        const finalCake = { ...cakeData, details: parsedDetails }
+        setCake(finalCake)
+
+        // Fetch the Similar cakes
+        if (finalCake.category) {
+          try {
+            const params = new URLSearchParams({
+              category: finalCake.category,
+              limit: "12",
+            })
+
+            const similarResponse = await fetch(`/api/cakes?${params}`)
+            const similarData = await similarResponse.json()
+
+            const similarList = (similarData.cakes || []).filter(
+              (c: Cake) => c.id !== finalCake.id
+            )
+
+            setCategoryCakes(similarList)
+          } catch (error) {
+            console.error("Failed to fetch similar cakes", error)
+          }
+        }
+      } catch (error) {
+        console.error("failed to fetch the cakes", error)
+      } finally {
+        setLoading(false)
       }
-    } catch (error) {
-      console.error("Unable to fetch the cake from the redux store", error)
     }
-  }, [dispatch, searchId])
 
-  useEffect(() => {
-    try {
-      if (cake && cake.category && cakes.length > 0) {
-        const catCakes = cakes.filter(
-          (c) =>
-            c.category.toLowerCase() === cake.category.toLowerCase() &&
-            c.id !== cake.id
-        )
-
-        setCategoryCakes(catCakes)
-      }
-    } catch (error) {
-      console.error("Unable to fetch the categories", error)
-    }
-  }, [cake, cakes])
+    fetchData()
+  }, [searchId])
 
   console.log("Fetched cake", cake)
 
-  if (isLoading) {
+  if (loading) {
     return <div className="py-10 text-center">Loading the cakes ...</div>
   }
 
@@ -183,7 +200,9 @@ export default function CakeDetailsPage() {
                     "hover:bg-black-300 w-fit rounded-full border-2 border-pink-800 bg-pink-700 px-6 py-4 font-sans text-lg font-semibold tracking-wider text-white shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-lg"
                   )}
                 >
-                  <Link href={`/quote?cakeId=${cake.id}`}>Request Quote</Link>
+                  <Link href={`/quote-form?cakeId=${cake.id}`}>
+                    Request Quote
+                  </Link>
                 </Button>
               </div>
             </div>

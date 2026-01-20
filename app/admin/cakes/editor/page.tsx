@@ -1,5 +1,4 @@
 import React from "react"
-import HeadingText from "@/components/heading-text"
 import CakeForm from "@/components/pages/cake-form"
 
 const page = () => {

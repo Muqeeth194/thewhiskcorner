@@ -25,7 +25,7 @@ export default function Navbar() {
 
   // console.log("🟡 Navbar render - isLoggedIn:", isLoggedIn, "path:", pathname)
 
-  console.log(user)
+  // console.log(user)
 
   React.useEffect(() => {
     const controlNavbar = () => {

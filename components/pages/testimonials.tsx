@@ -26,7 +26,7 @@ export default function Testimonials() {
   )
 
   return (
-    <section className="container space-y-8 py-12 lg:py-24" id="testimonials">
+    <section className="lg:py-18 container space-y-8 py-8" id="testimonials">
       {testimonials.header || testimonials.subheader ? (
         <HeadingText subtext={testimonials.subheader} className="text-center">
           {testimonials.header}

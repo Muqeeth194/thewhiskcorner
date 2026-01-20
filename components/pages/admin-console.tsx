@@ -3,8 +3,8 @@
 import React from "react"
 import { Button } from "../ui/button"
 import Link from "next/link"
-import { columns } from "./columns"
-import { DataTable } from "./data-table"
+import { columns } from "../admin/cakes/cake-columns"
+import { DataTable } from "../admin/cakes/cake-table"
 import { useQuery } from "@tanstack/react-query"
 import { Loader2 } from "lucide-react"
 
@@ -36,7 +36,7 @@ export default function AdminConsole() {
   }
 
   return (
-    <main className="container mx-auto px-4 py-6">
+    <main className="container mx-auto px-2 py-0">
       <div className="flex w-full flex-col gap-3 pb-6 sm:flex-row sm:items-center">
         <Button
           asChild
@@ -51,12 +51,12 @@ export default function AdminConsole() {
           variant="outline"
           className="w-full rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white sm:w-auto"
         >
-          <Link href="/#">View Quote Requests</Link>
+          <Link href="/quote-requests">View Quote Requests</Link>
         </Button>
       </div>
 
       {/* GALLERY TABLE VIEW */}
-      <div className="w-full overflow-hidden rounded-lg border border-pink-100 p-4 shadow-sm">
+      <div className="w-full overflow-hidden rounded-lg border border-pink-100 p-2 shadow-sm">
         <div className="overflow-x-auto">
           <DataTable columns={columns} data={cakes} />
         </div>

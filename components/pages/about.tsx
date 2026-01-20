@@ -5,8 +5,10 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Heart, UtensilsCrossed, Clock, MapPin } from "lucide-react"
+import { useRouter } from "next/navigation"
 
 export default function AboutPage() {
+  const router = useRouter()
   return (
     <main className="min-h-screen bg-body text-slate-800">
       {/* 1. HERO SECTION */}
@@ -41,7 +43,7 @@ export default function AboutPage() {
 
           <p className="mt-8 max-w-xl font-sans text-lg text-slate-600 md:text-xl">
             A boutique, <strong>appointment-only</strong> cake studio founded by
-            sisters Mahreen, and Taniya.
+            sisters Mahreen, Taniya and Wajeeha.
           </p>
 
           {/* UPDATED: flex-col for mobile (stacked), md:flex-row for desktop */}
@@ -78,7 +80,7 @@ export default function AboutPage() {
               {/* Text Overlay */}
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-8">
                 <p className="font-serif text-xl font-bold text-white">
-                  Mahreen & Taniya
+                  Mahreen, Taniya & Wajeeha
                 </p>
                 <p className="text-sm text-white/90">Founders</p>
               </div>
@@ -202,6 +204,7 @@ export default function AboutPage() {
           </p>
           <Button
             size="lg"
+            onClick={() => router.push("/contact")}
             className="rounded-full bg-pink-600 px-12 py-6 text-lg font-semibold text-white shadow-xl hover:bg-pink-700"
           >
             Book an Appointment

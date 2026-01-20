@@ -5,37 +5,45 @@ import { NextResponse } from "next/server"
 import { eq } from "drizzle-orm"
 
 export async function GET(request: Request, { params }: cakeIdParams) {
-  //   console.log(params.id)
+  try {
+    //   console.log(params.id)
 
-  const cakeId = params.id
+    const cakeId = params.id
 
-  // Safety check: ensure it's a valid number before querying
-  if (isNaN(cakeId)) {
-    return NextResponse.json({ error: "Invalid ID" }, { status: 400 })
-  }
+    // Safety check: ensure it's a valid number before querying
+    if (isNaN(cakeId)) {
+      return NextResponse.json({ error: "Invalid ID" }, { status: 400 })
+    }
 
-  const result = await db
-    .select()
-    .from(cakes)
-    .where(eq(cakes.id, cakeId))
-    .limit(1)
+    const result = await db
+      .select()
+      .from(cakes)
+      .where(eq(cakes.id, cakeId))
+      .limit(1)
 
-  // select() always resturns an array
-  const cake = result[0]
+    // select() always resturns an array
+    const cake = result[0]
 
-  // console.log(cake)
+    // console.log(cake)
 
-  if (!cake) {
+    if (!cake) {
+      return NextResponse.json(
+        {
+          error: "Cake not found",
+        },
+        {
+          status: 404,
+        }
+      )
+    }
+    return NextResponse.json(cake)
+  } catch (error) {
+    console.error("Error getting the cake:", error)
     return NextResponse.json(
-      {
-        error: "Cake not found",
-      },
-      {
-        status: 404,
-      }
+      { error: "Failed to get the cake" },
+      { status: 500 }
     )
   }
-  return NextResponse.json(cake)
 }
 
 export async function PUT(request: Request, { params }: cakeIdParams) {
@@ -80,6 +88,33 @@ export async function PUT(request: Request, { params }: cakeIdParams) {
     console.error("Error updating cake:", error)
     return NextResponse.json(
       { error: "Failed to update cake" },
+      { status: 500 }
+    )
+  }
+}
+
+export async function DELETE(request: Request, { params }: cakeIdParams) {
+  //   console.log(params.id)
+  try {
+    const cakeId = params.id
+
+    if (!cakeId) {
+      return NextResponse.json(
+        { success: false, message: "Missing cake ID" },
+        { status: 400 }
+      )
+    }
+
+    await db.delete(cakes).where(eq(cakes.id, Number(cakeId)))
+
+    return NextResponse.json({
+      success: true,
+      message: "Cake deleted successfully",
+    })
+  } catch (error) {
+    console.error("Failed to delete cake:", error)
+    return NextResponse.json(
+      { success: false, message: "Failed to delete cake" },
       { status: 500 }
     )
   }

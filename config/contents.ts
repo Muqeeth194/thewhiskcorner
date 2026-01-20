@@ -7,7 +7,7 @@ import {
 
 /* ====================
 [> CUSTOMIZING CONTENT <]
--- Setup image by typing `/image-name.file` (Example: `/header-image.jpg`)
+-- Setup image by typing `/image-name.file` (Example: `/header-image.png`)
 -- Add images by adding files to /public folder
 -- Leave blank `` if you don't want to put texts or images
  ==================== */
@@ -40,20 +40,57 @@ export const cakeFilterSection: CakeFilterSection = {
 
 export const carouselSection: CarouselSection = {
   content: [
+    // SLIDE 1
     {
-      image: "cake.png",
+      // Fallback for very old browsers
+      image: "/images/slide-1/desktop.jpg",
+
+      // 📱 Mobile: 4:5 Portrait (e.g. 800x1000px)
+      imageMobile: "/images/slide-1/mobile.png",
+
+      // 💻 Laptop/Desktop: 23:9 Landscape (e.g. 1200x800px)
+      imageDesktop: "/images/slide-1/desktop.jpg",
+
+      // 🖥️ Ultra-Wide: 23:9 or wider (e.g. 1920x800px) - Optional
+      imageWide: "/images/slide-1/desktop.jpg",
+
+      altText: "Signature Chocolate Truffle Wedding Cake",
     },
+
+    // SLIDE 2
     {
-      image: "cake.png",
+      image: "/images/slide-2/desktop.png",
+      imageMobile: "/images/slide-2/mobile.png",
+      imageDesktop: "/images/slide-2/desktop.png",
+      imageWide: "/images/slide-2/desktop.png",
+      altText: "Elegant Vanilla Bean Anniversary Cake",
     },
+
+    // SLIDE 3
     {
-      image: "cake.png",
+      image: "/images/slide-3/desktop.png",
+      imageMobile: "/images/slide-3/mobile.png",
+      imageDesktop: "/images/slide-3/desktop.png",
+      imageWide: "/images/slide-3/desktop.png",
+      altText: "Custom Birthday Cake with Fresh Flowers",
     },
+
+    // SLIDE 4
     {
-      image: "cake.png",
+      image: "/images/slide-4/desktop.png",
+      imageMobile: "/images/slide-4/mobile.png",
+      imageDesktop: "/images/slide-4/desktop.png",
+      imageWide: "/images/slide-4/desktop.png",
+      altText: "Decadent Red Velvet Celebration Cake",
     },
+
+    // SLIDE 5
     {
-      image: "cake.png",
+      image: "/images/slide-5/desktop.png",
+      imageMobile: "/images/slide-5/mobile.png",
+      imageDesktop: "/images/slide-5/desktop.png",
+      imageWide: "/images/slide-5/desktop.png",
+      altText: "Artisan Lemon & Raspberry Cake",
     },
   ],
 }
@@ -65,22 +102,22 @@ export const featuredCategory: ContentSection = {
     {
       text: `Wedding Cakes`,
       subtext: `The perfect centerpiece for your forever.`,
-      image: "/anniversary_cake.png",
+      image: "/images/label/wedding_cake.png",
     },
     {
       text: `Anniversary Cakes`,
       subtext: `Celebrating your love story, slice by slice.`,
-      image: "/anniversary_cake.png",
+      image: "/images/label/anniversary_cake.png",
     },
     {
       text: `Celebration Cakes`,
       subtext: `Make every milestone unforgettable.`,
-      image: "/anniversary_cake.png",
+      image: "/images/label/birthday_cake.png",
     },
     {
       text: `Desserts`,
       subtext: `Bite-sized bliss for every craving.`,
-      image: "/anniversary_cake.png",
+      image: "/images/label/desert.png",
     },
   ],
 }

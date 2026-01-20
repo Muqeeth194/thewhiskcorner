@@ -25,8 +25,15 @@ export type ContentSection = {
   content: Array<Content>
 }
 
+export type CarouselItem = {
+  image: string // The fallback/default image
+  imageMobile?: string // Optional: 4:5 Portrait
+  imageDesktop?: string // Optional: 3:2 Landscape
+  imageWide?: string // Optional: Ultra-wide
+  altText?: string // Accessibility text
+}
 export type CarouselSection = {
-  content: Array<Image>
+  content: CarouselItem[]
 }
 
 export type CakeFilterSection = {
@@ -88,16 +95,61 @@ export type Form = {
   budget?: string
 }
 
+export interface QuoteEmailData {
+  userName: string
+  userContact: string
+  instagram?: string
+  cakeType: string
+  flavour: string
+  servings: string
+  budget: string
+  message: string
+  selectedCakeName?: string
+  selectedCakeId?: string
+}
+
+export interface ContactEmailData {
+  userName: string
+  userContact: string
+  cakeType: string
+  subject?: string
+  message: string
+}
+
 export type SendEmailParams = {
   to: string
   name?: string
-  subject: string
-  html: string
-  emailType?: string
-  userId: integer
+  subject?: string
+  html?: string
+  emailType:
+    | "VERIFY"
+    | "RESET"
+    | "WELCOME"
+    | "QUOTE"
+    | "CONTACT"
+    | "RESET_SUCCESS"
+  userId?: integer
+  quoteData?: QuoteEmailData
+  contactData?: ContactEmailData
 }
 
 export type User = {
   id: string
   isAdmin?: boolean
+}
+
+export type QuoteRequest = {
+  id: number
+  name: string
+  contact: string
+  instagram?: string | null
+  type: string
+  flavour?: string | null
+  servings?: string | null
+  budget?: string | null
+  message: string
+  selectedCakeId?: string | null
+  selectedCakeName?: string | null
+  isAttended: boolean
+  createdAt: Date
 }

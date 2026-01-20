@@ -15,13 +15,13 @@ export default function FeatureCards() {
           </HeadingText>
         ) : null}
 
-        <div className="grid grid-cols-1 place-items-center gap-16 py-12 md:grid-cols-1 md:gap-44 md:py-20">
+        <div className="grid grid-cols-1 place-items-center gap-16 py-12 md:grid-cols-1 md:gap-40 md:py-20">
           {featuredCategory.content.map((cards, index) => {
             const isEven = index % 2 === 0
             return (
               <Link
                 key={cards.text}
-                href={`gallery?filter=${cards.text}&page=1`}
+                href={`/gallery?category=${encodeURIComponent(cards.text)}`}
                 className="flex w-full justify-center md:max-w-[85vw] lg:max-w-[75vw]"
               >
                 <Card
@@ -65,9 +65,9 @@ export default function FeatureCards() {
                     }`}
                   >
                     <img
-                      src="/anniversary_cake.png"
+                      src={cards.image}
                       alt={cards.text}
-                      className="h-40 w-40 object-contain md:h-96 md:w-96"
+                      className="h-40 w-40 object-contain md:h-[450px] md:w-[450px]"
                     />
                   </div>
                 </Card>

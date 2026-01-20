@@ -1,7 +1,7 @@
 "use client"
 
 import { Cake } from "@/types/contents"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useRef } from "react"
 import HeadingText from "../heading-text"
 import { Label } from "@radix-ui/react-label"
 import { Input } from "../ui/input"
@@ -18,12 +18,19 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Button } from "../ui/button"
-import { ImageIcon, Info, Loader2, Upload, X } from "lucide-react"
+import {
+  ImageIcon,
+  Info,
+  Loader2,
+  Trash,
+  Upload,
+  X,
+  ChevronDown,
+  Check,
+} from "lucide-react"
 import { toast } from "sonner"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Skeleton } from "../ui/skeleton"
-import { useAppDispatch } from "@/store/hooks"
-import { fetchCakes } from "@/store/cakesSlice"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -32,13 +39,43 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { useQueryClient } from "@tanstack/react-query"
+
+// ✅ DEFINED FLAVOR LISTS
+const CHOCOLATE_FLAVORS = [
+  "Classic truffle",
+  "Rich Chocolate and raspberry",
+  "Dulce de leche",
+  "Chocolate and caramel",
+  "Chocolate & Hazelnuts Praline",
+  "Hazelnut praline with french biscuits",
+  "Mocha",
+  "Chocolate Biscoff",
+  "Nutella hazelnut",
+  "Nutella Strawberry (seasonal)",
+  "Hazelnut praline French Biscuit and Caramel",
+]
+
+const VANILLA_FLAVORS = [
+  "Strawberry and cream (seasonal)",
+  "Lemon and raspberry",
+  "Vanilla and caramel",
+  "Caramel & roasted almonds",
+  "Biscoff",
+  "Almond praline",
+  "Vanilla and Milk chocolate",
+]
 
 export default function CakeForm() {
+  const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
   const searchId = searchParams.get("id") || null
-  // const dispatch = useAppDispatch()
+
+  // State for Custom Flavor Dropdown
+  const [isFlavorOpen, setIsFlavorOpen] = useState(false)
+  const flavorDropdownRef = useRef<HTMLDivElement>(null)
 
   const [cakeFormData, setCakeFormData] = useState<Cake>({
     name: "",
@@ -56,7 +93,7 @@ export default function CakeForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>("")
 
-  // 🆕 NEW: Validation Logic
+  // NEW: Validation Logic
   const isFormValid =
     (cakeFormData.name || "").trim() !== "" &&
     (cakeFormData.status || "").trim() !== "" &&
@@ -65,13 +102,49 @@ export default function CakeForm() {
     (cakeFormData.details?.servings || "").toString().trim() !== "" &&
     (cakeFormData.details?.flavor || "").trim() !== "" &&
     (cakeFormData.details?.leadTime || "").trim() !== "" &&
-    previewUrl !== "" // Must have an image (either new or existing)
+    previewUrl !== ""
+
+  // ✅ Helper to parse current selected flavors from string to array
+  const currentFlavors = cakeFormData.details?.flavor
+    ? cakeFormData.details.flavor
+        .split(",")
+        .map((f) => f.trim())
+        .filter(Boolean)
+    : []
+
+  // ✅ Helper to toggle flavors
+  const toggleFlavor = (flavor: string) => {
+    const newFlavors = currentFlavors.includes(flavor)
+      ? currentFlavors.filter((f) => f !== flavor) // Remove
+      : [...currentFlavors, flavor] // Add
+
+    setCakeFormData({
+      ...cakeFormData,
+      details: {
+        ...cakeFormData.details!,
+        flavor: newFlavors.join(", "), // Convert back to string for DB
+      },
+    })
+  }
+
+  // Handle click outside to close flavor dropdown
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        flavorDropdownRef.current &&
+        !flavorDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsFlavorOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   // Load existing cake data if editing
   useEffect(() => {
-    // FIXED: Defined fetchData inside useEffect to prevent build errors
     const fetchData = async () => {
-      if (!searchId) return // Dont fetch anything if no ID exists
+      if (!searchId) return
 
       try {
         setLoading(true)
@@ -79,8 +152,7 @@ export default function CakeForm() {
         const idResponse = await fetch(`/api/cakes/${searchId}`)
         if (!idResponse.ok) throw new Error("Failed to fetch")
         const cakeData = await idResponse.json()
-        // In order to populate the data of the 'details' object it needs to be in JSON format.
-        // Check if 'details' is a string. If so, parse it to JSON.
+
         let parsedDetails = { servings: "", flavor: "", leadTime: "" }
 
         if (typeof cakeData.details === "string") {
@@ -93,21 +165,18 @@ export default function CakeForm() {
           typeof cakeData.details === "object" &&
           cakeData.details !== null
         ) {
-          // It might already be an object if your DB driver handled it
           parsedDetails = cakeData.details
         }
 
-        // Merge into state
         setCakeFormData((prev) => ({
-          ...prev, // keep the default values
+          ...prev,
           ...cakeData,
           details: {
-            ...prev.details, // Keep defaults if keys are missing
-            ...parsedDetails, // Overwrite with parsed data
+            ...prev.details,
+            ...parsedDetails,
           },
         }))
 
-        // Set existing image preview
         if (cakeData.image) {
           setPreviewUrl(cakeData.image)
         }
@@ -121,47 +190,36 @@ export default function CakeForm() {
     }
 
     fetchData()
-  }, [searchId]) // Now only depends on searchId
+  }, [searchId])
 
-  //  Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
 
-    // Validate file type
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file")
       return
     }
 
-    // Validate file size (10MB)
     if (file.size > 10 * 1024 * 1024) {
       toast.error("Image must be less than 10MB")
       return
     }
 
     setSelectedFile(file)
-
-    //  Create local preview URL
     const localPreview = URL.createObjectURL(file)
     setPreviewUrl(localPreview)
   }
 
-  //  Remove selected image
   const handleRemoveImage = () => {
     setSelectedFile(null)
     setPreviewUrl("")
-    // Reset file input
     const fileInput = document.getElementById(
       "image-upload"
     ) as HTMLInputElement
     if (fileInput) fileInput.value = ""
   }
 
-  // console.log("search id updated data", cakeFormData)
-  // console.log("Image preview URL", previewUrl)
-
-  //  Upload image to Cloudinary
   const uploadImageToCloudinary = async (file: File): Promise<string> => {
     const formData = new FormData()
     formData.append("file", file)
@@ -187,19 +245,14 @@ export default function CakeForm() {
     }
   }
 
-  console.log("selected file status:", selectedFile)
-  console.log("preview URL:", previewUrl)
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    // Validate image for new cakes
     if (!searchId && !selectedFile) {
       toast.error("Please select an image")
       return
     }
 
-    // Make sure the image is always selected
     if (!previewUrl) {
       toast.error("Please select an image")
       return
@@ -207,32 +260,27 @@ export default function CakeForm() {
 
     try {
       setLoading(true)
-      let imageUrl = cakeFormData.image // Keep existing image URL if editing
+      let imageUrl = cakeFormData.image
 
-      // ✅ Upload new image ONLY on form submit
       if (selectedFile) {
         toast.info("Uploading image...")
         imageUrl = await uploadImageToCloudinary(selectedFile)
         toast.success("Image uploaded!")
       }
 
-      // Determin if its a edit request or new request
       const url = searchId ? `/api/cakes/${searchId}` : "/api/cakes"
-
-      // Based in the initial data decide the method
       const method = searchId ? "PUT" : "POST"
 
-      // ✅ Include image URL in form data
       const dataToSend = {
         ...cakeFormData,
-        image: imageUrl, // Add the Cloudinary URL
+        image: imageUrl,
       }
 
       const res = await axios({
         method: method,
         url: url,
-        data: dataToSend, // Axios handles JSON.stringify automatically
-        headers: { "Content-Type": "application/json" }, // (Optional) Axios sets this automatically
+        data: dataToSend,
+        headers: { "Content-Type": "application/json" },
       })
 
       if (!res) throw new Error("Failed to save")
@@ -248,42 +296,43 @@ export default function CakeForm() {
     }
   }
 
-  // 1. SKELETON LOADER (Updated layout)
-  if (loading) {
+  const handleDelete = async () => {
+    if (!searchId) return
+
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this cake? This action cannot be undone."
+    )
+    if (!confirmDelete) return
+
+    try {
+      setLoading(true)
+      const response = await axios.delete(`/api/cakes/${searchId}`)
+
+      if (response.status === 200) {
+        toast.success("Cake deleted successfully")
+        router.push("/admin")
+      }
+    } catch (error) {
+      console.error("Delete error:", error)
+      toast.error("Failed to delete cake")
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading && !cakeFormData.name) {
     return (
       <main className="container pb-12 pt-8">
         <div className="mx-auto max-w-3xl px-4 md:px-0">
-          {/* Skeleton for Breadcrumbs */}
           <Skeleton className="mb-6 h-4 w-48 bg-pink-200/60" />
-
           <div className="space-y-8 rounded-3xl border border-pink-100 bg-white p-6 shadow-xl md:p-12">
-            {/* Header Skeleton */}
             <div className="flex justify-center space-y-2 text-center">
               <Skeleton className="h-10 w-48 rounded-lg bg-pink-200/60" />
             </div>
-            {/* Form Skeleton */}
             <div className="space-y-7">
               <div className="grid gap-4 md:grid-cols-2">
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-20 bg-pink-200/60" />
-                  <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />
-                </div>
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-16 bg-pink-200/60" />
-                  <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />
-                </div>
-                <div className="space-y-2">
-                  <Skeleton className="h-4 w-20 bg-pink-200/60" />
-                  <Skeleton className="h-10 w-full rounded-md bg-pink-200/60" />
-                </div>
-              </div>
-              <hr className="w-full border-pink-100" />
-              <div className="space-y-2">
-                <Skeleton className="h-4 w-40 bg-pink-200/60" />
-                <Skeleton className="h-[100px] w-full rounded-md bg-pink-200/60" />
-              </div>
-              <div className="flex w-full justify-center pt-4">
-                <Skeleton className="h-12 w-3/4 rounded-full bg-pink-200/60" />
+                <Skeleton className="h-20 w-full bg-pink-200/60" />
+                <Skeleton className="h-20 w-full bg-pink-200/60" />
               </div>
             </div>
           </div>
@@ -292,14 +341,9 @@ export default function CakeForm() {
     )
   }
 
-  console.log("form valid status:", isFormValid)
-
-  // 2. MAIN RETURN (Updated Layout)
   return (
     <main className="container pb-12 pt-0">
-      {/* Wrapper to align Breadcrumbs and Card */}
       <div className="mx-auto max-w-3xl px-4 md:px-0">
-        {/* ✅ BREADCRUMBS: Moved outside the card & styled */}
         <div className="mb-6 ml-2">
           <Breadcrumb>
             <BreadcrumbList>
@@ -330,9 +374,7 @@ export default function CakeForm() {
           </Breadcrumb>
         </div>
 
-        {/* ✅ WHITE CONTENT CARD */}
         <div className="space-y-8 rounded-3xl border border-pink-100 bg-white p-6 shadow-xl md:p-12">
-          {/* HEADER */}
           <div className="space-y-2 text-center">
             <HeadingText>
               {searchId ? "Edit Cake Details" : "Add a New Cake"}
@@ -395,7 +437,6 @@ export default function CakeForm() {
 
             <hr className="w-full border-pink-100" />
 
-            {/* FORM INPUTS */}
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-slate-600">
@@ -492,7 +533,7 @@ export default function CakeForm() {
                 Product Specifications
               </h4>
 
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-4">
                 <div className="space-y-2">
                   <Label htmlFor="servings" className="text-xs text-slate-500">
                     Servings
@@ -515,34 +556,94 @@ export default function CakeForm() {
                   />
                 </div>
 
-                <div className="space-y-2">
+                {/* ✅ UPDATED: MULTI-SELECT FLAVOR SECTION WITH PILLS */}
+                <div
+                  className="relative space-y-2 sm:col-span-2"
+                  ref={flavorDropdownRef}
+                >
                   <Label htmlFor="flavor" className="text-xs text-slate-500">
-                    Base Flavor
+                    Base Flavor (Multi-Select)
                   </Label>
-                  <Select
-                    value={cakeFormData.details?.flavor || ""}
-                    onValueChange={(value) =>
-                      setCakeFormData({
-                        ...cakeFormData,
-                        details: {
-                          ...cakeFormData.details!,
-                          flavor: value,
-                        },
-                      })
-                    }
+
+                  {/* Custom Trigger behaving like Shadcn Select */}
+                  <div
+                    className="flex h-auto min-h-[2.5rem] w-full cursor-pointer items-center justify-between rounded-md border border-white bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    onClick={() => setIsFlavorOpen(!isFlavorOpen)}
                   >
-                    <SelectTrigger className="w-full border-white bg-white">
-                      <SelectValue placeholder="Select" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectItem value="Chocolate">Chocolate</SelectItem>
-                        <SelectItem value="Vanilla">Vanilla</SelectItem>
-                        <SelectItem value="Red Velvet">Red Velvet</SelectItem>
-                        <SelectItem value="Blueberry">Blueberry</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                    {currentFlavors.length > 0 ? (
+                      <div className="flex flex-wrap gap-1">
+                        {currentFlavors.map((flavor) => (
+                          <span
+                            key={flavor}
+                            className="inline-flex items-center rounded-full bg-pink-100 px-2 py-0.5 text-xs font-medium text-pink-800"
+                            onClick={(e) => {
+                              e.stopPropagation() // Prevent opening/closing dropdown when clicking remove
+                              toggleFlavor(flavor)
+                            }}
+                          >
+                            {flavor}
+                            <X className="ml-1 h-3 w-3 cursor-pointer hover:text-pink-900" />
+                          </span>
+                        ))}
+                      </div>
+                    ) : (
+                      <span className="text-muted-foreground">
+                        Select flavors...
+                      </span>
+                    )}
+                    <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                  </div>
+
+                  {/* Custom Dropdown Content */}
+                  {isFlavorOpen && (
+                    <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-slate-200 bg-white p-1 shadow-md">
+                      {/* Chocolate Section */}
+                      <div className="px-2 py-1.5 text-xs font-semibold text-slate-500">
+                        Chocolate Based
+                      </div>
+                      {CHOCOLATE_FLAVORS.map((flavor) => {
+                        const isSelected = currentFlavors.includes(flavor)
+                        return (
+                          <div
+                            key={flavor}
+                            onClick={() => toggleFlavor(flavor)}
+                            className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-slate-100 hover:text-slate-900"
+                          >
+                            <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                              {isSelected && (
+                                <Check className="h-4 w-4 text-pink-600" />
+                              )}
+                            </span>
+                            <span>{flavor}</span>
+                          </div>
+                        )
+                      })}
+
+                      <div className="my-1 h-px bg-slate-100" />
+
+                      {/* Vanilla Section */}
+                      <div className="px-2 py-1.5 text-xs font-semibold text-slate-500">
+                        Vanilla Based
+                      </div>
+                      {VANILLA_FLAVORS.map((flavor) => {
+                        const isSelected = currentFlavors.includes(flavor)
+                        return (
+                          <div
+                            key={flavor}
+                            onClick={() => toggleFlavor(flavor)}
+                            className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none hover:bg-slate-100 hover:text-slate-900"
+                          >
+                            <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                              {isSelected && (
+                                <Check className="h-4 w-4 text-pink-600" />
+                              )}
+                            </span>
+                            <span>{flavor}</span>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <div className="space-y-2">
@@ -569,8 +670,7 @@ export default function CakeForm() {
               </div>
             </div>
 
-            {/* SUBMIT BUTTON */}
-            <div className="flex w-full justify-center pt-2">
+            <div className="flex w-full flex-col items-center justify-center gap-4 pt-2 sm:flex-row">
               <Button
                 type="submit"
                 disabled={loading || !isFormValid}
@@ -588,6 +688,19 @@ export default function CakeForm() {
                   </>
                 )}
               </Button>
+
+              {searchId && (
+                <Button
+                  type="button"
+                  variant="destructive"
+                  disabled={loading}
+                  onClick={handleDelete}
+                  className="h-12 w-full gap-2 rounded-full shadow-lg sm:w-auto sm:px-6"
+                >
+                  <Trash className="h-5 w-5" />
+                  Delete
+                </Button>
+              )}
             </div>
 
             <div className="flex items-center justify-center gap-2 text-center text-xs text-slate-400">

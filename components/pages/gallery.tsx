@@ -8,6 +8,7 @@ import { Loader2 } from "lucide-react"
 import CategoryFilter from "../filters/category-filter"
 import FlavorFilter from "../filters/flavor-filter"
 import { useInfiniteQuery } from "@tanstack/react-query"
+import { useSearchParams } from "next/navigation"
 
 async function fetchCakesAPI({ pageParam = 1, category, flavor }: any) {
   const params = new URLSearchParams({
@@ -22,15 +23,21 @@ async function fetchCakesAPI({ pageParam = 1, category, flavor }: any) {
 }
 
 export default function GalleryPage() {
+  const searchParams = useSearchParams()
+  const categoryFromURL = searchParams.get("category")
+
   // Filters
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(
+    categoryFromURL ? [categoryFromURL] : []
+  )
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([])
   const [isFlavorOpen, setIsFlavorOpen] = useState(false)
 
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
-  // ✅ Infinite query with React Query
+  // Infinite query with React Query
+  // Whenever the user changes a filter (or when the page loads with the initial URL filter), React Query automatically detects the change in the key and triggers fetchCakesAPI.
   const {
     data,
     fetchNextPage,
@@ -53,7 +60,7 @@ export default function GalleryPage() {
     initialPageParam: 1,
   })
 
-  // ✅ Intersection Observer for infinite scroll
+  // Intersection Observer for infinite scroll
   useEffect(() => {
     if (!loadMoreRef.current || isFetchingNextPage || !hasNextPage) return
 
@@ -70,7 +77,7 @@ export default function GalleryPage() {
     return () => observer.disconnect()
   }, [fetchNextPage, isFetchingNextPage, hasNextPage])
 
-  // ✅ Flatten pages into single array
+  // Flatten pages into single array
   const cakes = data?.pages.flatMap((page) => page.cakes) ?? []
 
   return (
@@ -163,7 +170,7 @@ export default function GalleryPage() {
         {/* END OF RESULTS */}
         {!hasNextPage && !isLoading && cakes.length > 0 && (
           <div className="pb-8 text-center text-sm text-slate-500">
-            You've reached the end! 🎂
+            You&apos;ve reached the end! 🎂
           </div>
         )}
       </div>

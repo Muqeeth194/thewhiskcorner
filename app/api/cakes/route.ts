@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db/dbConfig"
 import { cakes } from "@/db/schema/cakes"
-import { like, and, or, inArray } from "drizzle-orm"
+import { like, and, or, inArray, sql } from "drizzle-orm"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -11,6 +11,8 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get("limit") || "12")
   const categoryParam = searchParams.get("category")
   const flavorParam = searchParams.get("flavor")
+
+  // console.log("flavor from the payload", flavorParam)
 
   // Calculate offset for pagination
   const offset = (page - 1) * limit
@@ -27,16 +29,19 @@ export async function GET(request: Request) {
     }
 
     // Filter by Flavor
-    // Since flavor is inside the 'details' JSON string, we use LIKE to find it.
     if (flavorParam) {
-      const flavors = flavorParam.split(",")
-      // Creates condition: details LIKE '%"flavor": "Chocolate"%' OR ...
-      const flavorConditions = flavors.map((f) =>
-        like(cakes.details, `%"flavor": "${f}"%`)
+      // 1. Split string into array and clean whitespace
+      const flavors = flavorParam.split(",").map((f) => f.trim())
+
+      // 2. Build condition: Look inside the JSON 'details' column at the key '$.flavor'
+      // We use SQL LIKE to match substring (e.g. finding "Chocolate" inside "Chocolate, Vanilla")
+      const flavorConditions = flavors.map(
+        (f) => sql`json_extract(${cakes.details}, '$.flavor') LIKE ${`%${f}%`}`
       )
+
+      // 3. Push OR condition (if cake has ANY of the selected flavors)
       conditions.push(or(...flavorConditions))
     }
-
     // Combine all conditions with AND
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
