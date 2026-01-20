@@ -4,6 +4,11 @@ import { Inter, Playfair_Display, Lato } from "next/font/google"
 import Navbar from "@/components/layout/navbar"
 import Footer from "@/components/layout/footer"
 import { Toaster } from "@/components/ui/sonner"
+import { cookies } from "next/headers"
+import { getSessionUser } from "@/lib/auth"
+import { AuthProvider } from "@/context/AuthContext"
+import { User } from "@/types/contents"
+import Providers from "./providers"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -58,7 +63,7 @@ export const metadata = {
     creator: "@_rdev7",
   },
   icons: {
-    icon: "/favicon.ico",
+    icon: "/favicon.ico?v=2",
   },
 }
 
@@ -70,16 +75,33 @@ interface RootLayoutProps {
   children: React.ReactNode
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  // Check the cookie on the server (Server can always see httpOnly cookies)
+  const cookieStore = cookies()
+  const token = cookieStore.get("session_token")?.value
+
+  // Verify it on the Server
+  const user = await getSessionUser(token)
+
+  // console.log("layout user", user)
+
+  const isLoggedIn = !!user
+
+  // console.log("initial login status in layout", isLoggedIn)
+
   return (
     <html lang="en" suppressHydrationWarning>
       <body
         className={`${inter.className} flex min-h-screen flex-col bg-background bg-body text-primary ${playfair.variable} ${lato.variable} font-sans`}
       >
-        <Navbar />
-        <Toaster />
-        {children}
-        <Footer />
+        <AuthProvider initialUser={user as User}>
+          <Providers>
+            <Navbar />
+            <main className="pt-16">{children}</main>
+            <Toaster />
+            <Footer />
+          </Providers>
+        </AuthProvider>
       </body>
     </html>
   )

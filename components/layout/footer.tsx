@@ -46,7 +46,7 @@ export default function Footer() {
                 className="flex items-center gap-3 transition-colors hover:text-white"
               >
                 <Mail className="h-5 w-5 shrink-0 text-pink-400" />
-                <span>thewhiskcorner@gmail.com</span>
+                <span>thewhiskcornerhyderabad@gmail.com</span>
               </a>
               <a
                 href="tel:+917032867259"

@@ -1,11 +1,19 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
-import { Send, Loader2, CheckCircle, Info } from "lucide-react"
+import {
+  Send,
+  Loader2,
+  CheckCircle,
+  Info,
+  X,
+  ChevronDown,
+  Check,
+} from "lucide-react"
 import { toast } from "sonner"
 import { Cake, Form } from "@/types/contents"
 import HeadingText from "../heading-text"
@@ -19,6 +27,31 @@ import {
 } from "@/components/ui/breadcrumb"
 import { useSearchParams } from "next/navigation"
 
+// ✅ FLAVOR CONSTANTS
+const CHOCOLATE_FLAVORS = [
+  "Classic truffle",
+  "Rich Chocolate and raspberry",
+  "Dulce de leche",
+  "Chocolate and caramel",
+  "Chocolate & Hazelnuts Praline",
+  "Hazelnut praline with french biscuits",
+  "Mocha",
+  "Chocolate Biscoff",
+  "Nutella hazelnut",
+  "Nutella Strawberry (seasonal)",
+  "Hazelnut praline French Biscuit and Caramel",
+]
+
+const VANILLA_FLAVORS = [
+  "Strawberry and cream (seasonal)",
+  "Lemon and raspberry",
+  "Vanilla and caramel",
+  "Caramel & roasted almonds",
+  "Biscoff",
+  "Almond praline",
+  "Vanilla and Milk chocolate",
+]
+
 export default function QuoteForm() {
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
@@ -30,17 +63,55 @@ export default function QuoteForm() {
   const searchParams = useSearchParams()
   const searchId = searchParams.get("cakeId")
 
+  // ✅ FLAVOR DROPDOWN STATE
+  const [isFlavorOpen, setIsFlavorOpen] = useState(false)
+  const flavorDropdownRef = useRef<HTMLDivElement>(null)
+
   // 1. STATE FOR FORM FIELDS
   const [quoteFormData, setQuoteFormData] = useState<Form>({
     name: "",
     contact: "",
     instagram: "",
-    type: "Wedding Cake", // Will be overwritten by autofill
-    flavour: "", // New Field
-    servings: "", // New Field
-    budget: "", // New Field
+    type: "Wedding Cake",
+    flavour: "",
+    servings: "",
+    budget: "",
     message: "",
   })
+
+  // ✅ HELPER: Parse current selected flavors
+  const currentFlavors = quoteFormData.flavour
+    ? quoteFormData.flavour
+        .split(",")
+        .map((f) => f.trim())
+        .filter(Boolean)
+    : []
+
+  // ✅ HELPER: Toggle flavors
+  const toggleFlavor = (flavor: string) => {
+    const newFlavors = currentFlavors.includes(flavor)
+      ? currentFlavors.filter((f) => f !== flavor) // Remove
+      : [...currentFlavors, flavor] // Add
+
+    setQuoteFormData({
+      ...quoteFormData,
+      flavour: newFlavors.join(", "), // Convert back to string
+    })
+  }
+
+  // ✅ EFFECT: Close dropdown on click outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        flavorDropdownRef.current &&
+        !flavorDropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsFlavorOpen(false)
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
 
   // 3. Fetch the cake details & AUTOFILL FORM
   useEffect(() => {
@@ -59,7 +130,7 @@ export default function QuoteForm() {
         if (data && data.category) {
           setQuoteFormData((prev) => ({
             ...prev,
-            type: data.category, // Map category to form type
+            type: data.category,
           }))
         }
       } catch (error) {
@@ -78,22 +149,16 @@ export default function QuoteForm() {
     setLoading(true)
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/quote", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Accept: "application/json",
         },
         body: JSON.stringify({
-          // REPLACE THIS WITH YOUR ACTUAL ACCESS KEY FROM WEB3FORMS
-          access_key: "YOUR_ACCESS_KEY_HERE",
-          subject: `Quote Request for ${cakeData?.name || "Custom Cake"} - ${quoteFormData.name}`,
-          from_name: "The Whisk Corner Website",
-
-          // Send formatted data including the referenced cake
-          selected_cake_id: cakeData?.id || "N/A",
-          selected_cake_name: cakeData?.name || "N/A",
           ...quoteFormData,
+          selected_cake_id: cakeData?.id || null,
+          selected_cake_name: cakeData?.name || null,
         }),
       })
 
@@ -102,12 +167,11 @@ export default function QuoteForm() {
       if (result.success) {
         toast.success(result.message)
         setSuccess(true)
-        // Reset form but keep the selected cake info
         setQuoteFormData({
           name: "",
           contact: "",
           instagram: "",
-          type: quoteFormData.type, // Keep the type selected
+          type: quoteFormData.type,
           flavour: "",
           servings: "",
           budget: "",
@@ -129,7 +193,6 @@ export default function QuoteForm() {
       <main className="container mx-auto max-w-2xl py-6">
         {/* SUCCESS STATE UI */}
         <Breadcrumb className="px-4 md:p-4">
-          {/* Breadcrumb content is hidden in success state in original logic, keeping minimal */}
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -141,7 +204,6 @@ export default function QuoteForm() {
           </BreadcrumbList>
         </Breadcrumb>
 
-        {/* UPDATED: min-h instead of fixed h to prevent cutting off on landscape mobile */}
         <div className="mt-8 flex min-h-[400px] flex-col items-center justify-center space-y-4 rounded-3xl border border-pink-100 bg-pink-50/50 p-6 text-center md:p-8">
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100">
             <CheckCircle className="h-8 w-8 text-green-600" />
@@ -207,8 +269,8 @@ export default function QuoteForm() {
         {/* 1. SELECTED CAKE PREVIEW CARD */}
         {!isLoading && cakeData && (
           <div className="flex w-full justify-center">
-            <div className="flex w-full items-center gap-5 rounded-2xl border border-pink-100 bg-pink-50 p-4 lg:w-[35vw]">
-              {/* Image Thumbnail */}
+            {/* Added md:w-auto to prevent fixed width issue on mobile */}
+            <div className="flex w-full items-center gap-5 rounded-2xl border border-pink-100 bg-pink-50 p-4 md:w-auto lg:w-[35vw]">
               <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-white shadow-sm">
                 <img
                   src={cakeData.image}
@@ -216,8 +278,6 @@ export default function QuoteForm() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              {/* Text Info */}
-              {/* UPDATED: min-w-0 ensures text truncates instead of breaking layout on small phones */}
               <div className="flex min-w-0 flex-col text-left">
                 <span className="text-xs font-bold uppercase tracking-wider text-pink-400">
                   Inquiring About
@@ -235,7 +295,8 @@ export default function QuoteForm() {
 
         <form onSubmit={handleSubmit} className="space-y-7">
           {/* PERSONAL DETAILS SECTION */}
-          <div className="grid gap-4 md:grid-cols-2">
+          {/* Added grid-cols-1 for mobile, md:grid-cols-2 for tablet+ */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="name" className="text-slate-600">
                 Your Name
@@ -293,8 +354,8 @@ export default function QuoteForm() {
           <hr className="border-pink-100" />
 
           {/* CAKE DETAILS SECTION */}
-          <div className="grid gap-4 md:grid-cols-2">
-            {/* Type (Autofilled but editable) */}
+          {/* Added grid-cols-1 for mobile, md:grid-cols-2 for tablet+ */}
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="type" className="text-slate-600">
                 Occasion / Category
@@ -315,7 +376,6 @@ export default function QuoteForm() {
               </select>
             </div>
 
-            {/* Servings */}
             <div className="space-y-2">
               <Label htmlFor="servings" className="text-slate-600">
                 No. of Guests
@@ -336,26 +396,94 @@ export default function QuoteForm() {
             </div>
           </div>
 
-          {/* Flavour Preference */}
-          <div className="space-y-2">
+          {/* ✅ UPDATED: MULTI-SELECT FLAVOR SECTION */}
+          <div className="relative space-y-2" ref={flavorDropdownRef}>
             <Label htmlFor="flavour" className="text-slate-600">
-              Preferred Flavour
+              Preferred Flavour(s)
             </Label>
-            <Input
-              id="flavour"
-              placeholder="e.g. Chocolate Hazelnut, Vanilla, Red Velvet..."
-              className="border-pink-100 bg-pink-50/30"
-              value={quoteFormData.flavour}
-              onChange={(e) =>
-                setQuoteFormData({ ...quoteFormData, flavour: e.target.value })
-              }
-            />
+
+            {/* Custom Trigger */}
+            <div
+              className="flex h-auto min-h-[2.5rem] w-full cursor-pointer items-center justify-between rounded-md border border-pink-100 bg-pink-50/30 px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-pink-200"
+              onClick={() => setIsFlavorOpen(!isFlavorOpen)}
+            >
+              {currentFlavors.length > 0 ? (
+                <div className="flex flex-wrap gap-1">
+                  {currentFlavors.map((flavor) => (
+                    <span
+                      key={flavor}
+                      className="inline-flex items-center rounded-full border border-pink-200 bg-pink-200/60 px-2 py-0.5 text-xs font-medium text-pink-900"
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        toggleFlavor(flavor)
+                      }}
+                    >
+                      {flavor}
+                      <X className="ml-1 h-3 w-3 cursor-pointer hover:text-red-500" />
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                <span className="text-slate-400">Select flavors...</span>
+              )}
+              <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            </div>
+
+            {/* Custom Dropdown Content */}
+            {isFlavorOpen && (
+              <div className="absolute z-50 mt-1 max-h-60 w-full overflow-y-auto rounded-md border border-pink-200 bg-white p-1 shadow-lg">
+                <div className="bg-pink-50/50 px-2 py-1.5 text-xs font-semibold text-slate-500">
+                  Chocolate Based
+                </div>
+                {CHOCOLATE_FLAVORS.map((flavor) => {
+                  const isSelected = currentFlavors.includes(flavor)
+                  return (
+                    <div
+                      key={flavor}
+                      onClick={() => toggleFlavor(flavor)}
+                      className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-pink-50 hover:text-pink-900"
+                    >
+                      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                        {isSelected && (
+                          <Check className="h-4 w-4 text-pink-600" />
+                        )}
+                      </span>
+                      <span>{flavor}</span>
+                    </div>
+                  )
+                })}
+
+                <div className="my-1 h-px bg-pink-100" />
+
+                <div className="bg-pink-50/50 px-2 py-1.5 text-xs font-semibold text-slate-500">
+                  Vanilla Based
+                </div>
+                {VANILLA_FLAVORS.map((flavor) => {
+                  const isSelected = currentFlavors.includes(flavor)
+                  return (
+                    <div
+                      key={flavor}
+                      onClick={() => toggleFlavor(flavor)}
+                      className="relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors hover:bg-pink-50 hover:text-pink-900"
+                    >
+                      <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                        {isSelected && (
+                          <Check className="h-4 w-4 text-pink-600" />
+                        )}
+                      </span>
+                      <span>{flavor}</span>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+
             <p className="text-[10px] text-slate-400">
-              We can suggest pairings if you aren&apos;t sure!
+              You can select multiple. We can suggest pairings if you
+              aren&apos;t sure!
             </p>
           </div>
 
-          {/* Budget */}
           <div className="space-y-2">
             <Label htmlFor="budget" className="text-slate-600">
               Approx. Budget (Optional)
@@ -371,7 +499,6 @@ export default function QuoteForm() {
             />
           </div>
 
-          {/* Message Field */}
           <div className="space-y-2">
             <Label htmlFor="message" className="text-slate-600">
               Additional Customization Details
@@ -388,24 +515,25 @@ export default function QuoteForm() {
             />
           </div>
 
-          {/* Submit Button */}
-          <Button
-            type="submit"
-            disabled={loading}
-            className="h-12 w-full gap-2 rounded-full bg-pink-700 text-lg text-white shadow-lg transition-all hover:bg-pink-800 hover:shadow-xl"
-          >
-            {loading ? (
-              <>
-                <Loader2 className="h-5 w-5 animate-spin" />
-                Sending Request...
-              </>
-            ) : (
-              <>
-                <Send className="h-5 w-5" />
-                Get My Quote
-              </>
-            )}
-          </Button>
+          <div className="flex w-full justify-center pt-4">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="h-12 w-full gap-2 rounded-full bg-pink-700 text-lg text-white shadow-lg transition-all hover:bg-pink-800 hover:shadow-xl sm:w-3/4"
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="h-5 w-5 animate-spin" />
+                  Sending Request...
+                </>
+              ) : (
+                <>
+                  <Send className="h-5 w-5" />
+                  Get My Quote
+                </>
+              )}
+            </Button>
+          </div>
 
           <div className="flex items-center justify-center gap-2 text-center text-xs text-slate-400">
             <Info className="h-3 w-3" />

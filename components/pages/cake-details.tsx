@@ -23,45 +23,81 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import { getOptimizedUrl } from "@/lib/cloudinary/optimizer"
+import axios from "axios"
 
 export default function CakeDetailsPage() {
-  const [cake, setCake] = useState<Cake | null>(null)
   const [categoryCakes, setCategoryCakes] = useState<Cake[]>([])
-
-  const [isLoading, setIsLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
+  const [cake, setCake] = useState<Cake>()
 
   const searchParams = useSearchParams()
   const searchId = searchParams.get("id")
-  //   console.log("param id: ", searchId)
 
   useEffect(() => {
-    // FIXED: Defined fetchData inside useEffect to prevent build errors
     const fetchData = async () => {
       if (!searchId) return // Dont fetch anything if no ID exists
 
       try {
+        setLoading(true)
         const idResponse = await fetch(`/api/cakes/${searchId}`)
+        if (!idResponse.ok) throw new Error("Failed to fetch")
         const cakeData = await idResponse.json()
-        setCake(cakeData)
+        // In order to populate the data of the 'details' object it needs to be in JSON format.
+        // Check if 'details' is a string. If so, parse it to JSON.
+        let parsedDetails = { servings: "", flavor: "", leadTime: "" }
 
-        if (cakeData?.category) {
-          const categoryResponse = await fetch(
-            `/api/cakes?category=${cakeData.category}`
-          )
-          const categoryData = await categoryResponse.json()
-          setCategoryCakes(categoryData)
+        if (typeof cakeData.details === "string") {
+          try {
+            parsedDetails = JSON.parse(cakeData.details)
+          } catch (e) {
+            console.error("Could not parse details JSON", e)
+          }
+        } else if (
+          typeof cakeData.details === "object" &&
+          cakeData.details !== null
+        ) {
+          // It might already be an object if your DB driver handled it
+          parsedDetails = cakeData.details
+        }
+
+        // Merge parsed details back into the object
+        const finalCake = { ...cakeData, details: parsedDetails }
+        setCake(finalCake)
+
+        // Fetch the Similar cakes
+        if (finalCake.category) {
+          try {
+            const params = new URLSearchParams({
+              category: finalCake.category,
+              limit: "12",
+            })
+
+            const similarResponse = await fetch(`/api/cakes?${params}`)
+            const similarData = await similarResponse.json()
+
+            const similarList = (similarData.cakes || []).filter(
+              (c: Cake) => c.id !== finalCake.id
+            )
+
+            setCategoryCakes(similarList)
+          } catch (error) {
+            console.error("Failed to fetch similar cakes", error)
+          }
         }
       } catch (error) {
         console.error("failed to fetch the cakes", error)
       } finally {
-        setIsLoading(false)
+        setLoading(false)
       }
     }
 
     fetchData()
-  }, [searchId]) // Now only depends on searchId
+  }, [searchId])
 
-  if (isLoading) {
+  console.log("Fetched cake", cake)
+
+  if (loading) {
     return <div className="py-10 text-center">Loading the cakes ...</div>
   }
 
@@ -91,7 +127,7 @@ export default function CakeDetailsPage() {
         <div className="flex w-full items-center justify-center p-3 lg:w-1/2">
           {cake && (
             <img
-              src={cake.image}
+              src={getOptimizedUrl(cake.image, 1000)}
               alt={cake.name}
               className="aspect-square h-auto w-full max-w-[480px] rounded-xl object-cover drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]"
             />
@@ -131,12 +167,26 @@ export default function CakeDetailsPage() {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-slate-800">
                   Details
                 </h3>
-                <div className="pl-4 text-sm leading-relaxed text-slate-700">
-                  <li>Serves: 80-100 people</li>
-                  <li>Tiers: 3</li>
-                  <li>Popular flavors: Vanilla, Chocolate, Red Velvet</li>
-                  <li>Lead time: 2 weeks</li>
-                </div>
+                <ul className="ml-4 list-disc space-y-1 text-sm leading-relaxed text-slate-700">
+                  {cake && cake.details ? (
+                    // CHECK: If details is a string (from DB), parse it. If it's already an object, use it.
+                    Object.entries(
+                      typeof cake.details === "string"
+                        ? JSON.parse(cake.details)
+                        : cake.details
+                    ).map(([key, value], index) => (
+                      <li key={index} className="capitalize">
+                        {/* Formats "leadTime" to "Lead Time" roughly, or just prints the key */}
+                        <span className="font-semibold">
+                          {key.replace(/([A-Z])/g, " $1").trim()}:
+                        </span>{" "}
+                        {String(value)}
+                      </li>
+                    ))
+                  ) : (
+                    <li>No details available</li>
+                  )}
+                </ul>
               </div>
 
               {/* 4. ACTION BUTTON */}
@@ -150,7 +200,9 @@ export default function CakeDetailsPage() {
                     "hover:bg-black-300 w-fit rounded-full border-2 border-pink-800 bg-pink-700 px-6 py-4 font-sans text-lg font-semibold tracking-wider text-white shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-lg"
                   )}
                 >
-                  <Link href={`/quote?cakeId=${cake.id}`}>Request Quote</Link>
+                  <Link href={`/quote-form?cakeId=${cake.id}`}>
+                    Request Quote
+                  </Link>
                 </Button>
               </div>
             </div>
@@ -160,13 +212,16 @@ export default function CakeDetailsPage() {
 
       {/* SIMILAR CAKES CAROUSEL */}
       {categoryCakes.length > 0 && (
-        <div className="item-center flex h-full w-full justify-center pt-10">
-          <Carousel className="h-full w-full max-w-6xl">
-            <CarouselContent className="-ml-1">
+        <div className="mt-10 flex w-full flex-col items-center space-y-6">
+          <h3 className="font-serif text-xl font-bold text-pink-950 antialiased drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] lg:text-2xl">
+            You might also like
+          </h3>
+
+          <Carousel className="w-full max-w-sm px-4 md:max-w-2xl md:px-0 lg:max-w-6xl">
+            <CarouselContent className="-ml-2 md:-ml-4">
               {categoryCakes.map((cake) => (
                 <CarouselItem
                   key={cake.id}
-                  // UPDATED: basis-[70%] for mobile peek effect, md:basis-1/2 for tablet, lg:basis-1/5 for desktop
                   className="basis-[70%] pl-1 md:basis-1/2 lg:basis-1/5"
                 >
                   <div className="p-2">
@@ -179,7 +234,7 @@ export default function CakeDetailsPage() {
                         {/* Image Container with Zoom Effect */}
                         <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-lg transition-shadow duration-300 group-hover:shadow-xl">
                           <img
-                            src={cake.image}
+                            src={getOptimizedUrl(cake.image, 500)}
                             alt={cake.name}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />
