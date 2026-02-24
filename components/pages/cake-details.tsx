@@ -23,8 +23,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { getOptimizedUrl } from "@/lib/cloudinary/optimizer"
-import axios from "axios"
 
 export default function CakeDetailsPage() {
   const [categoryCakes, setCategoryCakes] = useState<Cake[]>([])
@@ -102,7 +100,7 @@ export default function CakeDetailsPage() {
   }
 
   return (
-    <main className="items-left container flex flex-col py-6">
+    <main className="items-left container flex flex-col py-4">
       {/* BREADCRUMBS */}
       <Breadcrumb className="px-4 md:p-5">
         <BreadcrumbList>
@@ -120,23 +118,20 @@ export default function CakeDetailsPage() {
         </BreadcrumbList>
       </Breadcrumb>
 
-      {/* UPDATED: flex-col for mobile (stacking), lg:flex-row for desktop (side-by-side) */}
-      <div className="item-center flex w-full flex-col justify-between gap-8 lg:flex-row">
+      <div className="flex w-full flex-col items-center justify-between gap-2 lg:flex-row lg:items-start">
         {/* COVER IMAGE */}
-        {/* UPDATED: w-full for mobile, lg:w-1/2 for desktop */}
-        <div className="flex w-full items-center justify-center p-3 lg:w-1/2">
+        <div className="flex w-full items-center justify-center p-2 lg:w-1/2">
           {cake && (
             <img
-              src={getOptimizedUrl(cake.image, 1000)}
+              src={cake.image}
               alt={cake.name}
-              className="aspect-square h-auto w-full max-w-[480px] rounded-xl object-cover drop-shadow-[0_1px_8px_rgba(0,0,0,0.3)]"
+              className="h-auto w-full max-w-[380px] rounded-xl object-cover shadow-lg lg:sticky lg:top-8"
             />
           )}
         </div>
 
         {/* 0. DETAILS SECTION */}
-        {/* UPDATED: p-4 for mobile, md:p-8 for tablet, lg:w-1/2 for desktop */}
-        <div className="flex w-full flex-col justify-center p-4 md:p-8 lg:w-1/2 lg:p-3">
+        <div className="flex w-full flex-col justify-start p-4 md:p-4 lg:w-1/2">
           {cake && (
             <div className="flex flex-col items-start gap-8 text-left">
               {/* 1. HEADER SECTION */}
@@ -169,14 +164,12 @@ export default function CakeDetailsPage() {
                 </h3>
                 <ul className="ml-4 list-disc space-y-1 text-sm leading-relaxed text-slate-700">
                   {cake && cake.details ? (
-                    // CHECK: If details is a string (from DB), parse it. If it's already an object, use it.
                     Object.entries(
                       typeof cake.details === "string"
                         ? JSON.parse(cake.details)
                         : cake.details
                     ).map(([key, value], index) => (
                       <li key={index} className="capitalize">
-                        {/* Formats "leadTime" to "Lead Time" roughly, or just prints the key */}
                         <span className="font-semibold">
                           {key.replace(/([A-Z])/g, " $1").trim()}:
                         </span>{" "}
@@ -234,7 +227,7 @@ export default function CakeDetailsPage() {
                         {/* Image Container with Zoom Effect */}
                         <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-lg transition-shadow duration-300 group-hover:shadow-xl">
                           <img
-                            src={getOptimizedUrl(cake.image, 500)}
+                            src={cake.image}
                             alt={cake.name}
                             className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                           />

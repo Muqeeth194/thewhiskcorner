@@ -25,7 +25,7 @@ export default function HeroHeader() {
         className="relative h-full w-full"
         opts={{ loop: true }}
       >
-        <CarouselContent className="h-[60vh] md:h-[70vh] lg:h-[80vh]">
+        <CarouselContent className="h-[60vh] md:h-[70vh] lg:h-[90vh]">
           {carouselSection.content.map((card, index) => (
             <CarouselItem key={index} className="h-full w-full pl-0">
               <Card className="h-full w-full border-0 bg-transparent shadow-none">

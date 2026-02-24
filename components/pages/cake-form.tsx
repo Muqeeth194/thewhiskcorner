@@ -39,35 +39,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useQueryClient } from "@tanstack/react-query"
-
-// ✅ DEFINED FLAVOR LISTS
-const CHOCOLATE_FLAVORS = [
-  "Classic truffle",
-  "Rich Chocolate and raspberry",
-  "Dulce de leche",
-  "Chocolate and caramel",
-  "Chocolate & Hazelnuts Praline",
-  "Hazelnut praline with french biscuits",
-  "Mocha",
-  "Chocolate Biscoff",
-  "Nutella hazelnut",
-  "Nutella Strawberry (seasonal)",
-  "Hazelnut praline French Biscuit and Caramel",
-]
-
-const VANILLA_FLAVORS = [
-  "Strawberry and cream (seasonal)",
-  "Lemon and raspberry",
-  "Vanilla and caramel",
-  "Caramel & roasted almonds",
-  "Biscoff",
-  "Almond praline",
-  "Vanilla and Milk chocolate",
-]
+import { CHOCOLATE_FLAVORS, VANILLA_FLAVORS } from "@/config/contents"
+import { uploadImageToCloudinary } from "@/lib/cloudinary/upload"
 
 export default function CakeForm() {
-  const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -93,7 +68,7 @@ export default function CakeForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>("")
 
-  // NEW: Validation Logic
+  // Validation Logic
   const isFormValid =
     (cakeFormData.name || "").trim() !== "" &&
     (cakeFormData.status || "").trim() !== "" &&
@@ -104,7 +79,7 @@ export default function CakeForm() {
     (cakeFormData.details?.leadTime || "").trim() !== "" &&
     previewUrl !== ""
 
-  // ✅ Helper to parse current selected flavors from string to array
+  // Helper to parse current selected flavors from string to array
   const currentFlavors = cakeFormData.details?.flavor
     ? cakeFormData.details.flavor
         .split(",")
@@ -112,7 +87,7 @@ export default function CakeForm() {
         .filter(Boolean)
     : []
 
-  // ✅ Helper to toggle flavors
+  // Helper to toggle flavors
   const toggleFlavor = (flavor: string) => {
     const newFlavors = currentFlavors.includes(flavor)
       ? currentFlavors.filter((f) => f !== flavor) // Remove
@@ -218,31 +193,6 @@ export default function CakeForm() {
       "image-upload"
     ) as HTMLInputElement
     if (fileInput) fileInput.value = ""
-  }
-
-  const uploadImageToCloudinary = async (file: File): Promise<string> => {
-    const formData = new FormData()
-    formData.append("file", file)
-    formData.append("upload_preset", "cake_uploads")
-    formData.append("folder", "cakes")
-
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      )
-
-      if (!response.ok) throw new Error("Failed to upload image")
-
-      const data = await response.json()
-      return data.secure_url
-    } catch (error) {
-      console.error("Cloudinary upload error:", error)
-      throw new Error("Failed to upload image to Cloudinary")
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -388,7 +338,7 @@ export default function CakeForm() {
 
               {previewUrl ? (
                 <div className="relative w-full">
-                  <div className="relative aspect-video h-48 w-full overflow-hidden rounded-xl border-2 border-pink-100 bg-pink-50">
+                  <div className="relative aspect-video h-28 w-full overflow-hidden rounded-xl border-2 border-pink-100 bg-pink-50">
                     <img
                       src={previewUrl}
                       alt="Cake preview"
@@ -411,13 +361,13 @@ export default function CakeForm() {
               ) : (
                 <label
                   htmlFor="image-upload"
-                  className="flex h-48 w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-pink-200 bg-pink-50/30 transition-all hover:border-pink-400 hover:bg-pink-50/50"
+                  className="flex h-28 w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-pink-200 bg-pink-50/30 transition-all hover:border-pink-400 hover:bg-pink-50/50"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-pink-100 text-pink-500">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 text-pink-500">
                     <ImageIcon className="h-6 w-6" />
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold text-slate-700">
+                    <p className="text-sm font-semibold text-slate-700">
                       Click to upload image
                     </p>
                     <p className="text-xs text-slate-400">

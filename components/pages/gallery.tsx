@@ -3,7 +3,6 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { Card, CardContent, CardFooter, CardTitle } from "../ui/card"
 import Link from "next/link"
-import { getOptimizedUrl } from "@/lib/cloudinary/optimizer"
 import { Loader2 } from "lucide-react"
 import CategoryFilter from "../filters/category-filter"
 import FlavorFilter from "../filters/flavor-filter"
@@ -133,12 +132,12 @@ export default function GalleryPage() {
                   href={`cake?id=${cake.id}`}
                   className="group mx-auto block h-full w-full max-w-[240px]"
                 >
-                  <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
-                    <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-[0_1px_8px_rgba(0,0,0,0.3)] transition-shadow duration-300 group-hover:shadow-xl">
+                  <Card className="h-full border-0 bg-transparent shadow-none transition-transform duration-300 hover:scale-105">
+                    <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-[0_1px_8px_rgba(0,0,0,0.3)] transition-shadow duration-700 group-hover:shadow-xl">
                       <img
-                        src={getOptimizedUrl(cake.image, 500)}
+                        src={cake.image}
                         alt={cake.name}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="h-full w-full object-cover"
                         loading="lazy"
                       />
                       <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5" />

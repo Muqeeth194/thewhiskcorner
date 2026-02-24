@@ -158,3 +158,27 @@ export const testimonials = {
     },
   ],
 }
+
+export const CHOCOLATE_FLAVORS = [
+  "Classic truffle",
+  "Rich Chocolate and raspberry",
+  "Dulce de leche",
+  "Chocolate and caramel",
+  "Chocolate & Hazelnuts Praline",
+  "Hazelnut praline with french biscuits",
+  "Mocha",
+  "Chocolate Biscoff",
+  "Nutella hazelnut",
+  "Nutella Strawberry (seasonal)",
+  "Hazelnut praline French Biscuit and Caramel",
+]
+
+export const VANILLA_FLAVORS = [
+  "Strawberry and cream (seasonal)",
+  "Lemon and raspberry",
+  "Vanilla and caramel",
+  "Caramel & roasted almonds",
+  "Biscoff",
+  "Almond praline",
+  "Vanilla and Milk chocolate",
+]
