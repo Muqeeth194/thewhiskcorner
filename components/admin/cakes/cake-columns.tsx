@@ -6,17 +6,34 @@ import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import ActionCell from "./action-cell"
 
+// Helper function to inject Cloudinary transformations
+const getThumbnailUrl = (url: string) => {
+  if (!url) return ""
+  if (!url.includes("cloudinary")) return url // Safety check
+
+  // We inject:
+  // w_100: Width 100px (approx 2x your 36px container for Retina screens)
+  // h_100: Height 100px
+  // c_fill: Crop to fill (prevents stretching)
+  // q_auto: Automatic quality optimization
+  // f_auto: Automatic format (serves AVIF/WebP to supported browsers)
+  return url.replace("/upload/", "/upload/w_100,h_100,c_fill,q_auto,f_auto/")
+}
+
 export const columns: ColumnDef<CakeTable>[] = [
   {
     accessorKey: "image",
     header: "Image",
     cell: ({ row }) => {
+      const imageUrl = row.getValue("image") as string
+
       return (
         <div className="h-9 w-9 overflow-hidden rounded-md border border-slate-100">
           <img
-            src={row.getValue("image")}
+            src={getThumbnailUrl(imageUrl)} // <--- WRAP IT HERE
             alt={row.getValue("name")}
             className="h-full w-full object-cover"
+            loading="lazy" // Good practice for lists
           />
         </div>
       )
@@ -51,23 +68,8 @@ export const columns: ColumnDef<CakeTable>[] = [
   },
 
   {
-    id: "flavor",
-    // 1. Safe Accessor: Parses JSON string if needed, or reads object directly
-    accessorFn: (row) => {
-      const details = row.details
-      if (!details) return ""
+    accessorKey: "flavor",
 
-      if (typeof details === "string") {
-        try {
-          const parsed = JSON.parse(details)
-          return parsed.flavor || ""
-        } catch (e) {
-          return ""
-        }
-      }
-      // @ts-ignore - Handle case where details is already an object
-      return details.flavor || ""
-    },
     header: ({ column }) => {
       return (
         <Button
@@ -82,6 +84,7 @@ export const columns: ColumnDef<CakeTable>[] = [
     },
     cell: ({ row }) => {
       const flavor = row.getValue("flavor") as string
+
       return (
         <div
           className="max-w-[200px] truncate capitalize text-slate-600"

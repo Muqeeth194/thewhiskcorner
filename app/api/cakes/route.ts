@@ -84,7 +84,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  // ... (Keep your existing POST logic exactly as is)
   try {
     const body = await request.json()
     const createdCake = await db

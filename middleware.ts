@@ -36,5 +36,9 @@ export async function middleware(request: NextRequest) {
 
 // Optimization: Only run middleware on specific paths
 export const config = {
-  matcher: ["/profile/:path*", "/admin/:path*"],
+  matcher: [
+    "/profile/:path*",
+    "/admin/:path*",
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.svg).*)",
+  ],
 }
