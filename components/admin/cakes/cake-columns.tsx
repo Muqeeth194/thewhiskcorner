@@ -5,6 +5,7 @@ import { CakeTable } from "@/types/contents"
 import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import ActionCell from "./action-cell"
+import Link from "next/link"
 
 // Helper function to inject Cloudinary transformations
 const getThumbnailUrl = (url: string) => {
@@ -30,7 +31,7 @@ export const columns: ColumnDef<CakeTable>[] = [
       return (
         <div className="h-9 w-9 overflow-hidden rounded-md border border-slate-100">
           <img
-            src={getThumbnailUrl(imageUrl)} // <--- WRAP IT HERE
+            src={getThumbnailUrl(imageUrl)}
             alt={row.getValue("name")}
             className="h-full w-full object-cover"
             loading="lazy" // Good practice for lists
@@ -43,7 +44,12 @@ export const columns: ColumnDef<CakeTable>[] = [
     accessorKey: "name",
     header: "Name",
     cell: ({ row }) => (
-      <div className="font-medium text-slate-900">{row.getValue("name")}</div>
+      <Link
+        href={`/admin/cakes/editor?id=${row.original.id}`}
+        className="font-medium text-slate-900 hover:text-pink-600 hover:underline"
+      >
+        {row.getValue("name")}
+      </Link>
     ),
   },
   {

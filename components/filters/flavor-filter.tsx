@@ -66,8 +66,8 @@ export const Flavores = [
   },
   {
     id: "nutella-strawberry-seasonal",
-    label: "Nutella Strawberry (Seasonal)",
-    value: "Nutella Strawberry (Seasonal)",
+    label: "Nutella Strawberry",
+    value: "Nutella Strawberry",
   },
   {
     id: "hazelnut-praline-french-biscuit-caramel",
@@ -78,8 +78,8 @@ export const Flavores = [
   // Vanilla Based
   {
     id: "strawberry-cream-seasonal",
-    label: "Strawberry and Cream (Seasonal)",
-    value: "Strawberry and Cream (Seasonal)",
+    label: "Strawberry and Cream",
+    value: "Strawberry and Cream",
   },
   {
     id: "lemon-raspberry",

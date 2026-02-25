@@ -44,10 +44,6 @@ export const getPasswordResetEmailHtml = (
         <a href="${resetUrl}" class="btn">Reset Password</a>
       </div>
 
-      <p style="font-size: 14px; color: #6b7280;">
-        Or copy and paste this link into your browser:<br>
-        <a href="${resetUrl}" class="link-text">${resetUrl}</a>
-      </p>
       
       <hr style="border: none; border-top: 1px solid #f3f4f6; margin: 32px 0;">
       

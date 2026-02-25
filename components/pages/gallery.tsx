@@ -8,14 +8,16 @@ import CategoryFilter from "../filters/category-filter"
 import FlavorFilter from "../filters/flavor-filter"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
+import TierFilter from "../filters/tier-filter"
 
-async function fetchCakesAPI({ pageParam = 1, category, flavor }: any) {
+async function fetchCakesAPI({ pageParam = 1, category, flavor, tier }: any) {
   const params = new URLSearchParams({
     page: pageParam.toString(),
     limit: "12",
   })
   if (category) params.append("category", category)
   if (flavor) params.append("flavor", flavor)
+  if (tier) params.append("tier", tier)
 
   const response = await fetch(`/api/cakes?${params}`)
   return response.json()
@@ -33,6 +35,9 @@ export default function GalleryPage() {
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([])
   const [isFlavorOpen, setIsFlavorOpen] = useState(false)
 
+  const [selectedTier, setSelectedTier] = useState<string[]>([])
+  const [isTierOpen, setIsTierOpen] = useState(false)
+
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
   // Infinite query with React Query
@@ -45,12 +50,13 @@ export default function GalleryPage() {
     isLoading,
     isError,
   } = useInfiniteQuery({
-    queryKey: ["cakes", selectedCategories, selectedFlavors],
+    queryKey: ["cakes", selectedCategories, selectedFlavors, selectedTier],
     queryFn: ({ pageParam = 1 }) =>
       fetchCakesAPI({
         pageParam,
         category: selectedCategories.join(","),
         flavor: selectedFlavors.join(","),
+        tier: selectedTier.join(","),
       }),
     getNextPageParam: (lastPage) => {
       const { page, totalPages } = lastPage.pagination
@@ -96,6 +102,13 @@ export default function GalleryPage() {
             setIsFlavorOpen={setIsFlavorOpen}
             selectedFlavors={selectedFlavors}
             setSelectedFlavors={setSelectedFlavors}
+          />
+
+          <TierFilter
+            isTierOpen={isTierOpen}
+            setIsTierOpen={setIsTierOpen}
+            selectedTier={selectedTier}
+            setSelectedTier={setSelectedTier}
           />
         </div>
       </div>
