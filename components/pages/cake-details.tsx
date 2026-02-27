@@ -23,6 +23,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
+import Image from "next/image"
 
 export default function CakeDetailsPage() {
   const [categoryCakes, setCategoryCakes] = useState<Cake[]>([])
@@ -93,8 +94,6 @@ export default function CakeDetailsPage() {
     fetchData()
   }, [searchId])
 
-  console.log("Fetched cake", cake)
-
   if (loading) {
     return <div className="py-10 text-center">Loading the cakes ...</div>
   }
@@ -122,11 +121,16 @@ export default function CakeDetailsPage() {
         {/* COVER IMAGE */}
         <div className="flex w-full items-center justify-center p-2 lg:w-1/2">
           {cake && (
-            <img
-              src={cake.image}
-              alt={cake.name}
-              className="h-auto w-full max-w-[380px] rounded-xl object-cover shadow-lg lg:sticky lg:top-8"
-            />
+            <div className="relative aspect-[4/5] w-full max-w-[380px] overflow-hidden rounded-xl shadow-lg lg:sticky lg:top-8">
+              <Image
+                src={cake.image}
+                alt={cake.name}
+                fill
+                priority
+                className="object-cover"
+                sizes="(max-width: 1024px) 100vw, 50vw"
+              />
+            </div>
           )}
         </div>
 
@@ -226,10 +230,12 @@ export default function CakeDetailsPage() {
                       <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
                         {/* Image Container with Zoom Effect */}
                         <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-lg transition-shadow duration-300 group-hover:shadow-xl">
-                          <img
+                          <Image
                             src={cake.image}
                             alt={cake.name}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                           />
                           {/* Subtle gradient overlay on hover */}
                           <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5" />

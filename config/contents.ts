@@ -40,63 +40,86 @@ export const cakeFilterSection: CakeFilterSection = {
 
 const cakeImages = [
   {
-    path: "v1772178771/knlt9m8xenmca8pd6s9m.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183955/frigdoj9tpmygnigoskd.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/rd4cqwmubgknygsmji6m.jpg",
     alt: "Signature Chocolate Truffle Wedding Cake",
   },
   {
-    path: "v1772178772/u9cals8mcleooj0ouuwj.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183914/ymfc3ll1orqojybkopos.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/e77l95z457qgutqmxfet.jpg",
     alt: "Elegant Vanilla Bean Anniversary Cake",
   },
   {
-    path: "v1772178773/xditfvbbp5dz7czwgbkn.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183967/ebjihdefgicqdobabio6.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/uyuxexmwxfdfw71vpd1m.jpg",
     alt: "Custom Birthday Cake with Fresh Flowers",
   },
   {
-    path: "v1772178775/awjpikxql106juqqjyrj.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183944/grwjpznevclsz90kw5mg.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185905/eg0jtuj86u9nacg6qmzv.jpg",
     alt: "Decadent Red Velvet Celebration Cake",
   },
   {
-    path: "v1772178776/lippn7jyu3gguu7ay58f.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183106/b0nkqwfuryonbimqersh.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185906/xlfhh2zwmguudeyijlaa.jpg",
     alt: "Artisan Lemon & Raspberry Cake",
   },
   {
-    path: "v1772178777/ou0d7traad5iglfm8we8.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183988/mpjgjm41x4jpseuyl8f2.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185905/mpcgz7yufdbkfevihyic.jpg",
     alt: "Elegant Vanilla Bean Anniversary Cake",
   },
   {
-    path: "v1772178780/o2wx6qlnyuunmxvkbru6.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183979/ebg2qyirjlqxzr8qfbjj.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185908/eiwmucvcyt8xiunyqja8.jpg",
     alt: "Custom Birthday Cake with Fresh Flowers",
   },
   {
-    path: "v1772178783/phlvruwpdiotbiwaxnxn.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183997/iawbqjsoz1qojn0oswub.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185909/nug41vedhz4ggufpcqkn.jpg",
     alt: "Decadent Red Velvet Celebration Cake",
   },
   {
-    path: "v1772178779/jegtmzs8lgyh8tbed7pu.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772184016/j4rswzpn3obf6cfmhyce.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185910/axytb0pzo82zqmmqvde8.jpg",
     alt: "Artisan Lemon & Raspberry Cake",
   },
   {
-    path: "v1772181700/ryihfyxli0ln4fk20tm8.jpg",
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772184006/hqkjjvftjurwmnkfl6xp.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185910/gzoxtyx3swfrctipexyr.jpg",
     alt: "Artisan Lemon & Raspberry Cake",
   },
 ]
-
-// 2. Base URL (so you don't have to repeat it)
-const CLOUDINARY_BASE = "https://res.cloudinary.com/djhageblb/image/upload/"
 
 // 3. The Exported Object
 
 export const carouselSection: CarouselSection = {
   content: cakeImages.map((cake, index) => {
-    // Generate a repeating slide number (2, 3, 4, 5, 2, 3...) for your local fallbacks
-    // since you seem to be using /slide-2/ through /slide-5/
-    const slideNum = (index % 4) + 2
-
     return {
-      image: `/images/slide-${slideNum}/desktop.png`,
-      imageMobile: `/images/slide-${slideNum}/mobile.png`,
-      imageDesktop: `${CLOUDINARY_BASE}${cake.path}`,
-      imageWide: `${CLOUDINARY_BASE}${cake.path}`,
+      image: `${cake.mobilePath}`,
+      imageMobile: `${cake.mobilePath}`,
+      imageDesktop: `${cake.desktopPath}`,
+      imageWide: `${cake.desktopPath}`,
       altText: cake.alt,
     }
   }),
@@ -109,22 +132,26 @@ export const featuredCategory: ContentSection = {
     {
       text: `Wedding Cakes`,
       subtext: `The perfect centerpiece for your forever.`,
-      image: "/images/label/wedding_cake.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091350/bbdgtiy6hji07mxo0ddv.png",
     },
     {
       text: `Anniversary Cakes`,
       subtext: `Celebrating your love story, slice by slice.`,
-      image: "/images/label/anniversary_cake.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091349/ej7jqgzipnjgjgunnesv.png",
     },
     {
       text: `Celebration Cakes`,
       subtext: `Make every milestone unforgettable.`,
-      image: "/images/label/birthday_cake.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091349/ccgyjtopc4niceguslxu.png",
     },
     {
       text: `Desserts`,
       subtext: `Bite-sized bliss for every craving.`,
-      image: "/images/label/desert.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091352/cgyp2lct07g8jdbbcapf.png",
     },
   ],
 }

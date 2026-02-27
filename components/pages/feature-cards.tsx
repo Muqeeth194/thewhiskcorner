@@ -4,6 +4,7 @@ import { Card, CardDescription, CardTitle } from "@/components/ui/card"
 import { buttonVariants } from "../ui/button"
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import Image from "next/image"
 
 export default function FeatureCards() {
   return (
@@ -59,17 +60,22 @@ export default function FeatureCards() {
                   </div>
 
                   {/* IMAGE SECTION */}
-                  <div
-                    className={`relative mb-6 drop-shadow-xl transition-all duration-500 group-hover:scale-110 md:absolute md:top-1/2 md:mb-0 md:-translate-y-1/2 ${
-                      isEven ? "md:-right-0" : "md:-left-0"
-                    }`}
-                  >
-                    <img
-                      src={cards.image}
-                      alt={cards.text}
-                      className="h-40 w-40 object-contain md:h-[450px] md:w-[450px]"
-                    />
-                  </div>
+                  {cards.image && (
+                    <div
+                      className={`relative mb-6 h-40 w-40 drop-shadow-xl transition-all duration-500 group-hover:scale-110 md:absolute md:top-1/2 md:mb-0 md:h-[450px] md:w-[450px] md:-translate-y-1/2 ${
+                        isEven ? "md:-right-0" : "md:-left-0"
+                      }`}
+                    >
+                      <Image
+                        src={cards.image}
+                        alt={cards.text}
+                        fill
+                        className="object-contain"
+                        // Tells Next.js to serve a tiny 160px image on mobile, and a 450px one on desktop
+                        sizes="(max-width: 768px) 160px, 450px"
+                      />
+                    </div>
+                  )}
                 </Card>
               </Link>
             )
