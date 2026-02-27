@@ -51,7 +51,7 @@ export function AuthProvider({
     await logoutUser()
 
     router.refresh() // Refresh server components (Layouts)
-    router.push("/login")
+    router.push("/")
   }
 
   return (

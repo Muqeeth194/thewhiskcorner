@@ -636,22 +636,34 @@ export default function CakeForm() {
                   <Label htmlFor="tier" className="text-xs text-slate-500">
                     Tiers
                   </Label>
-                  <Input
-                    required
-                    id="tier"
-                    placeholder="e.g. 1, 2, 3"
-                    className="border-pink-100 bg-white"
-                    value={cakeFormData.details?.tier || ""}
-                    onChange={(e) =>
+                  <Select
+                    value={cakeFormData.details?.tier?.toString() || ""}
+                    // onValueChange gives us the new value directly, no need for e.target.value
+                    onValueChange={(value) =>
                       setCakeFormData({
                         ...cakeFormData,
                         details: {
                           ...cakeFormData.details!,
-                          tier: e.target.value,
+                          // Note: If your TypeScript interface requires a number, wrap 'value' in Number(value)
+                          tier: Number(value),
                         },
                       })
                     }
-                  />
+                  >
+                    <SelectTrigger
+                      id="tier"
+                      className="border-pink-100 bg-white"
+                    >
+                      <SelectValue placeholder="Select tiers" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="1">1 Tier</SelectItem>
+                      <SelectItem value="2">2 Tiers</SelectItem>
+                      <SelectItem value="3">3 Tiers</SelectItem>
+                      <SelectItem value="4">4 Tiers</SelectItem>
+                      <SelectItem value="5">5 Tiers</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
             </div>

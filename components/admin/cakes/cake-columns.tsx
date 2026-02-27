@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { ArrowUpDown } from "lucide-react"
 import ActionCell from "./action-cell"
 import Link from "next/link"
+import Image from "next/image"
 
 // Helper function to inject Cloudinary transformations
 const getThumbnailUrl = (url: string) => {
@@ -29,12 +30,13 @@ export const columns: ColumnDef<CakeTable>[] = [
       const imageUrl = row.getValue("image") as string
 
       return (
-        <div className="h-9 w-9 overflow-hidden rounded-md border border-slate-100">
-          <img
-            src={getThumbnailUrl(imageUrl)}
-            alt={row.getValue("name")}
-            className="h-full w-full object-cover"
-            loading="lazy" // Good practice for lists
+        <div className="relative h-9 w-9 overflow-hidden rounded-md border border-slate-100">
+          <Image
+            src={getThumbnailUrl(imageUrl) || "/images/placeholder-cake.png"}
+            alt={row.getValue("name") || "Cake thumbnail"}
+            fill
+            className="object-cover"
+            sizes="36px"
           />
         </div>
       )
@@ -125,6 +127,41 @@ export const columns: ColumnDef<CakeTable>[] = [
       return filterValue.some((selectedFilter: string) =>
         rowFlavors.includes(selectedFilter.toLowerCase())
       )
+    },
+  },
+  {
+    accessorKey: "tier",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="justify-start pl-0 font-semibold"
+        >
+          Tier
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({ row }) => {
+      const tier = row.getValue("tier") as number | string
+
+      return (
+        <div className="text-slate-600">
+          {tier ? (
+            <span>
+              {tier} Tier{Number(tier) > 1 ? "s" : ""}
+            </span>
+          ) : (
+            <span className="text-slate-300">--</span>
+          )}
+        </div>
+      )
+    },
+    filterFn: (row, columnId, filterValue) => {
+      if (!filterValue || filterValue.length === 0) return true
+      const rowValue = String(row.getValue(columnId))
+      return filterValue.includes(rowValue)
     },
   },
   {

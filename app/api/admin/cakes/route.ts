@@ -15,6 +15,7 @@ export async function GET() {
         // OPTIMIZATION: Extract 'flavor' directly in SQL
         // This avoids fetching the massive 'details' column entirely
         flavor: sql<string>`json_extract(${cakes.details}, '$.flavor')`,
+        tier: sql<string>`json_extract(${cakes.details}, '$.tier')`,
       })
       .from(cakes)
       .orderBy(desc(cakes.createdAt))

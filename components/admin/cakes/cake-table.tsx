@@ -27,6 +27,7 @@ import { Loader2, SearchIcon, FilterX } from "lucide-react"
 import CategoryFilter from "@/components/filters/category-filter"
 import StatusFilter from "@/components/filters/status-filter"
 import FlavorFilter from "@/components/filters/flavor-filter"
+import TierFilter from "@/components/filters/tier-filter"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, any>[]
@@ -53,6 +54,9 @@ export function DataTable<TData, TValue>({
 
   const [isFlavorOpen, setIsFlavorOpen] = React.useState(false)
   const [selectedFlavors, setSelectedFlavors] = React.useState<string[]>([])
+
+  const [selectedTier, setSelectedTier] = React.useState<string[]>([])
+  const [isTierOpen, setIsTierOpen] = React.useState(false)
 
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -96,19 +100,28 @@ export function DataTable<TData, TValue>({
       ?.setFilterValue(selectedFlavors.length > 0 ? selectedFlavors : undefined)
   }, [selectedFlavors, table])
 
+  // 4. Sync Tier Filter
+  React.useEffect(() => {
+    table
+      .getColumn("tier") // Ensure this matches the accessorKey/id in columns.tsx
+      ?.setFilterValue(selectedTier.length > 0 ? selectedTier : undefined)
+  }, [selectedTier, table])
+
   // Reset Function
   const resetFilters = () => {
     table.resetColumnFilters()
     setSelectedCategories([])
     setSelectedStatus([])
     setSelectedFlavors([])
+    setSelectedTier([])
   }
 
   const isFiltered =
     table.getState().columnFilters.length > 0 ||
     selectedCategories.length > 0 ||
     selectedStatus.length > 0 ||
-    selectedFlavors.length > 0
+    selectedFlavors.length > 0 ||
+    selectedTier.length > 0
 
   // console.log("selected falvor", selectedFlavors)
 
@@ -135,6 +148,13 @@ export function DataTable<TData, TValue>({
           setIsFlavorOpen={setIsFlavorOpen}
           selectedFlavors={selectedFlavors}
           setSelectedFlavors={setSelectedFlavors}
+        />
+
+        <TierFilter
+          isTierOpen={isTierOpen}
+          setIsTierOpen={setIsTierOpen}
+          selectedTier={selectedTier}
+          setSelectedTier={setSelectedTier}
         />
 
         {/* Reset Button for Mobile/Sidebar context */}
