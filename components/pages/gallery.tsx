@@ -145,6 +145,8 @@ export default function GalleryPage() {
                   key={cake.id} // Ensure ID is unique across pages
                   href={`cake?id=${cake.id}`}
                   className="group mx-auto block h-full w-full max-w-[240px]"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Card className="h-full border-0 bg-transparent shadow-none transition-transform duration-300 hover:scale-105">
                     <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-[0_1px_8px_rgba(0,0,0,0.3)] transition-shadow duration-700 group-hover:shadow-xl">

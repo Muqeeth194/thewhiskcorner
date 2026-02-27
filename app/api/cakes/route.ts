@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { db } from "@/db/dbConfig"
 import { cakes } from "@/db/schema/cakes"
-import { like, and, or, inArray, sql } from "drizzle-orm"
+import { like, and, or, inArray, sql, desc } from "drizzle-orm"
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url)
@@ -64,7 +64,7 @@ export async function GET(request: Request) {
       .where(whereClause)
       .limit(limit)
       .offset(offset)
-      .orderBy(cakes.id) // Consistently order results
+      .orderBy(desc(cakes.aiVisualScore))
 
     // 4. Get Total Count (for Pagination Metadata)
     // We need to know the total number of matching items to calculate totalPages
@@ -106,6 +106,7 @@ export async function POST(request: Request) {
         category: body.category,
         description: body.description,
         details: JSON.stringify(body.details),
+        aiVisualScore: body.aiVisualScore || 85,
         status: body.status,
       })
       .returning()

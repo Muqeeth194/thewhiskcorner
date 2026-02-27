@@ -24,6 +24,8 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import Image from "next/image"
+import { useAuth } from "@/context/AuthContext"
+import { Loader2, Pencil } from "lucide-react"
 
 export default function CakeDetailsPage() {
   const [categoryCakes, setCategoryCakes] = useState<Cake[]>([])
@@ -32,6 +34,7 @@ export default function CakeDetailsPage() {
 
   const searchParams = useSearchParams()
   const searchId = searchParams.get("id")
+  const { isLoggedIn, user } = useAuth()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -95,7 +98,18 @@ export default function CakeDetailsPage() {
   }, [searchId])
 
   if (loading) {
-    return <div className="py-10 text-center">Loading the cakes ...</div>
+    return (
+      <div className="flex min-h-[40vh] flex-col items-center justify-center space-y-4 py-20">
+        <div className="relative flex items-center justify-center">
+          <div className="absolute h-16 w-16 animate-ping rounded-full bg-pink-200/50" />
+          <Loader2 className="relative z-10 h-12 w-12 animate-spin text-pink-700" />
+        </div>
+
+        <p className="text-md animate-pulse font-serif italic tracking-wide text-pink-900/80">
+          Baking your cakes...
+        </p>
+      </div>
+    )
   }
 
   return (
@@ -139,13 +153,30 @@ export default function CakeDetailsPage() {
           {cake && (
             <div className="flex flex-col items-start gap-8 text-left">
               {/* 1. HEADER SECTION */}
-              <div className="space-y-4">
-                {/* Category Badge */}
-                <span className="inline-block rounded-full bg-pink-200 px-4 py-1.5 text-sm font-semibold tracking-wide text-pink-800 antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.2)]">
-                  {cake.category}
-                </span>
+              <div className="space-y-3">
+                <div className="flex w-full items-center justify-between">
+                  {/* Category Badge  */}
+                  <span className="inline-block rounded-full bg-pink-200 px-4 py-1.5 text-sm font-semibold tracking-wide text-pink-800 antialiased drop-shadow-[0_1px_8px_rgba(0,0,0,0.2)]">
+                    {cake.category}
+                  </span>
 
-                {/* Category Title */}
+                  {/* Admin Edit Button */}
+                  {user?.isAdmin && (
+                    <Button
+                      asChild
+                      variant="outline"
+                      size="sm"
+                      className="gap-2 rounded-full  border-pink-300 bg-white/50 text-base text-pink-800 backdrop-blur-sm transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl"
+                    >
+                      <Link href={`/admin/cakes/editor?id=${cake.id}`}>
+                        <Pencil className="h-4 w-4" />
+                        Edit
+                      </Link>
+                    </Button>
+                  )}
+                </div>
+
+                {/* Category Title (Stays on its own line below) */}
                 <HeadingText className="tracking-tight text-slate-900">
                   {cake.name}
                 </HeadingText>
