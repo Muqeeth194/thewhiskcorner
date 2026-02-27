@@ -89,7 +89,7 @@ export default function GalleryPage() {
     <main className="container flex space-x-8 px-2">
       {/* SIDEBAR FILTERS */}
       <div className="flex w-1/4 flex-col items-start space-y-4">
-        <div className="sticky top-20 z-10 max-h-[calc(100vh-100px)] w-full space-y-4 overflow-y-auto pr-2">
+        <div className="sticky top-24 z-10 max-h-[calc(100vh-100px)] w-full space-y-4 overflow-y-auto pr-2">
           <CategoryFilter
             isCategoryOpen={isCategoryOpen}
             setIsCategoryOpen={setIsCategoryOpen}

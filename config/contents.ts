@@ -38,61 +38,68 @@ export const cakeFilterSection: CakeFilterSection = {
   ],
 }
 
+const cakeImages = [
+  {
+    path: "v1772178771/knlt9m8xenmca8pd6s9m.jpg",
+    alt: "Signature Chocolate Truffle Wedding Cake",
+  },
+  {
+    path: "v1772178772/u9cals8mcleooj0ouuwj.jpg",
+    alt: "Elegant Vanilla Bean Anniversary Cake",
+  },
+  {
+    path: "v1772178773/xditfvbbp5dz7czwgbkn.jpg",
+    alt: "Custom Birthday Cake with Fresh Flowers",
+  },
+  {
+    path: "v1772178775/awjpikxql106juqqjyrj.jpg",
+    alt: "Decadent Red Velvet Celebration Cake",
+  },
+  {
+    path: "v1772178776/lippn7jyu3gguu7ay58f.jpg",
+    alt: "Artisan Lemon & Raspberry Cake",
+  },
+  {
+    path: "v1772178777/ou0d7traad5iglfm8we8.jpg",
+    alt: "Elegant Vanilla Bean Anniversary Cake",
+  },
+  {
+    path: "v1772178780/o2wx6qlnyuunmxvkbru6.jpg",
+    alt: "Custom Birthday Cake with Fresh Flowers",
+  },
+  {
+    path: "v1772178783/phlvruwpdiotbiwaxnxn.jpg",
+    alt: "Decadent Red Velvet Celebration Cake",
+  },
+  {
+    path: "v1772178779/jegtmzs8lgyh8tbed7pu.jpg",
+    alt: "Artisan Lemon & Raspberry Cake",
+  },
+  {
+    path: "v1772181700/ryihfyxli0ln4fk20tm8.jpg",
+    alt: "Artisan Lemon & Raspberry Cake",
+  },
+]
+
+// 2. Base URL (so you don't have to repeat it)
+const CLOUDINARY_BASE = "https://res.cloudinary.com/djhageblb/image/upload/"
+
+// 3. The Exported Object
+
 export const carouselSection: CarouselSection = {
-  content: [
-    // SLIDE 1
-    {
-      // Fallback for very old browsers
-      image: "/images/slide-1/desktop.jpg",
+  content: cakeImages.map((cake, index) => {
+    // Generate a repeating slide number (2, 3, 4, 5, 2, 3...) for your local fallbacks
+    // since you seem to be using /slide-2/ through /slide-5/
+    const slideNum = (index % 4) + 2
 
-      // 📱 Mobile: 4:5 Portrait (e.g. 800x1000px)
-      imageMobile: "/images/slide-1/mobile.png",
-
-      // 💻 Laptop/Desktop: 23:9 Landscape (e.g. 1200x800px)
-      imageDesktop: "/images/slide-1/desktop.jpg",
-
-      // 🖥️ Ultra-Wide: 23:9 or wider (e.g. 1920x800px) - Optional
-      imageWide: "/images/slide-1/desktop.jpg",
-
-      altText: "Signature Chocolate Truffle Wedding Cake",
-    },
-
-    // SLIDE 2
-    {
-      image: "/images/slide-2/desktop.png",
-      imageMobile: "/images/slide-2/mobile.png",
-      imageDesktop: "/images/slide-2/desktop.png",
-      imageWide: "/images/slide-2/desktop.png",
-      altText: "Elegant Vanilla Bean Anniversary Cake",
-    },
-
-    // SLIDE 3
-    {
-      image: "/images/slide-3/desktop.png",
-      imageMobile: "/images/slide-3/mobile.png",
-      imageDesktop: "/images/slide-3/desktop.png",
-      imageWide: "/images/slide-3/desktop.png",
-      altText: "Custom Birthday Cake with Fresh Flowers",
-    },
-
-    // SLIDE 4
-    {
-      image: "/images/slide-4/desktop.png",
-      imageMobile: "/images/slide-4/mobile.png",
-      imageDesktop: "/images/slide-4/desktop.png",
-      imageWide: "/images/slide-4/desktop.png",
-      altText: "Decadent Red Velvet Celebration Cake",
-    },
-
-    // SLIDE 5
-    {
-      image: "/images/slide-5/desktop.png",
-      imageMobile: "/images/slide-5/mobile.png",
-      imageDesktop: "/images/slide-5/desktop.png",
-      imageWide: "/images/slide-5/desktop.png",
-      altText: "Artisan Lemon & Raspberry Cake",
-    },
-  ],
+    return {
+      image: `/images/slide-${slideNum}/desktop.png`,
+      imageMobile: `/images/slide-${slideNum}/mobile.png`,
+      imageDesktop: `${CLOUDINARY_BASE}${cake.path}`,
+      imageWide: `${CLOUDINARY_BASE}${cake.path}`,
+      altText: cake.alt,
+    }
+  }),
 }
 
 export const featuredCategory: ContentSection = {

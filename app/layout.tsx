@@ -9,6 +9,7 @@ import { getSessionUser } from "@/lib/auth"
 import { AuthProvider } from "@/context/AuthContext"
 import { User } from "@/types/contents"
 import Providers from "./providers"
+import MainWrapper from "@/components/main-wrapper"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -97,7 +98,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         <AuthProvider initialUser={user as User}>
           <Providers>
             <Navbar />
-            <main className="pt-16">{children}</main>
+            <MainWrapper>{children}</MainWrapper>
             <Toaster />
             <Footer />
           </Providers>

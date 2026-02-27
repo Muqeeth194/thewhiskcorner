@@ -15,8 +15,8 @@ import { useAuth } from "@/context/AuthContext"
 export default function Navbar() {
   const [isVisible, setIsVisible] = React.useState(true)
   const [lastScrollY, setLastScrollY] = React.useState(0)
+  const [isAtTop, setIsAtTop] = React.useState(true)
 
-  // 👇 No more useAppSelector!
   const { isLoggedIn, user } = useAuth()
 
   // console.log("Login status:", isLoggedIn)
@@ -40,6 +40,12 @@ export default function Navbar() {
         setIsVisible(true)
       }
 
+      if (currentScrollY <= 100) {
+        setIsAtTop(true)
+      } else {
+        setIsAtTop(false)
+      }
+
       setLastScrollY(currentScrollY)
     }
 
@@ -56,23 +62,29 @@ export default function Navbar() {
   return (
     <header
       className={cn(
-        "fixed top-0 z-50 w-full bg-pink-200/70 px-6 shadow-md backdrop-blur-md transition-transform duration-100 supports-[backdrop-filter]:bg-pink-200/70 md:px-12",
-        isVisible ? "translate-y-0" : "-translate-y-full"
+        // 1. FLOAT & SHAPE: Centered pill, floated 1rem (top-4) from the top
+        "fixed left-0 right-0 top-4 z-50 mx-auto w-[calc(100%-2rem)] max-w-6xl rounded-full border border-pink-200 backdrop-blur-md transition-all duration-300 supports-[backdrop-filter]:bg-white/50",
+
+        // 2. VISIBILITY: Use a larger negative translation to clear the top-4 gap
+        // isVisible ? "translate-y-0" : "-translate-y-24",
+
+        // 3. COLOR & GLASS: Translucent white at the top, pink when scrolled
+        isVisible ? "translate-y-0" : "-translate-y-24"
       )}
     >
-      <div className="container flex h-16 items-center justify-between">
+      <div className="flex h-16 w-full items-center justify-between px-6 md:px-8">
         {/* 1. LOGO SECTION */}
         <div className="flex items-center gap-2">
           <Link href="/" className="flex items-center space-x-2">
             {/* Optional: Add a small logo icon here*/}
-            <span className="font-serif text-xl font-bold tracking-tight text-pink-950 transition-colors hover:text-pink-700 md:text-2xl">
+            <span className="font-serif text-xl font-bold tracking-tight text-pink-950 transition-colors hover:text-pink-700 md:text-xl">
               {siteConfig.name}
             </span>
           </Link>
         </div>
 
         {/* 2. DESKTOP NAVIGATION (Hidden on mobile) */}
-        <nav className="hidden gap-8 md:flex">
+        <nav className="hidden gap-8 font-serif md:flex ">
           {navLinks.map((link) => {
             const isActive = pathname === link.href
             return (
@@ -80,8 +92,8 @@ export default function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "text-base font-semibold transition-colors hover:text-pink-600",
-                  isActive ? "font-bold text-pink-900" : "text-slate-600"
+                  "text-lg font-semibold transition-colors hover:text-pink-600",
+                  isActive ? "font-bold text-pink-900" : "text-slate-700"
                 )}
               >
                 {link.title}
@@ -113,7 +125,7 @@ export default function Navbar() {
             <Button
               asChild
               variant="outline"
-              className="rounded-full border-pink-700 bg-pink-700 px-6 text-base text-white shadow-md hover:bg-pink-800 hover:text-white"
+              className="rounded-full border-pink-700 bg-pink-700 px-6 text-sm text-white shadow-md hover:bg-pink-800 hover:text-white"
             >
               <Link href="/login">Sign In / Join Rewards</Link>
             </Button>
