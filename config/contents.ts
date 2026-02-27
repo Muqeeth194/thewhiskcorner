@@ -97,7 +97,7 @@ const cakeImages = [
   },
   {
     desktopPath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772184016/j4rswzpn3obf6cfmhyce.webp",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772227955/ztepgn4o1xo3ebdy4bly.jpg",
     mobilePath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772185910/axytb0pzo82zqmmqvde8.jpg",
     alt: "Artisan Lemon & Raspberry Cake",
