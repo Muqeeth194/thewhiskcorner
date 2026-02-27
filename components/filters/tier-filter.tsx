@@ -17,9 +17,10 @@ interface TierFilterProps {
 }
 
 const tiers = [
-  { id: "1", label: "1", value: "1" },
-  { id: "2", label: "2", value: "2" },
-  { id: "3", label: "3", value: "3" },
+  { id: "1", label: "1 Tier", value: "1" },
+  { id: "2", label: "2 Tier", value: "2" },
+  { id: "3", label: "3 Tier", value: "3" },
+  { id: "4", label: "4 Tier", value: "4" },
 ]
 
 export default function TierFilter({
@@ -46,7 +47,7 @@ export default function TierFilter({
         <CollapsibleTrigger asChild>
           <div className="flex cursor-pointer items-center justify-between px-2">
             <h4 className="text-sm font-semibold text-slate-600 hover:text-pink-600">
-              Tier
+              Tiers
             </h4>
             <Button
               variant="ghost"
