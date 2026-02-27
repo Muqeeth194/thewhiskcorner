@@ -6,13 +6,11 @@ import Link from "next/link"
 import { columns } from "../admin/cakes/cake-columns"
 import { DataTable } from "../admin/cakes/cake-table"
 import { useQuery } from "@tanstack/react-query"
-import { Loader2 } from "lucide-react"
 
 // 1. Define the fetcher function
 async function fetchAllCakes() {
-  // We request a higher limit (e.g., 100) to populate the admin table
-  // so client-side searching/filtering works well.
-  const response = await fetch("/api/cakes?limit=100")
+  // Calls the new lightweight endpoint
+  const response = await fetch("/api/admin/cakes")
   if (!response.ok) {
     throw new Error("Failed to fetch cakes")
   }
@@ -25,7 +23,7 @@ export default function AdminConsole() {
     queryFn: fetchAllCakes,
   })
 
-  const cakes = data?.cakes || []
+  const cakes = data || []
 
   if (isError) {
     return (

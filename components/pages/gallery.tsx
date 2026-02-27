@@ -3,20 +3,22 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { Card, CardContent, CardFooter, CardTitle } from "../ui/card"
 import Link from "next/link"
-import { getOptimizedUrl } from "@/lib/cloudinary/optimizer"
 import { Loader2 } from "lucide-react"
 import CategoryFilter from "../filters/category-filter"
 import FlavorFilter from "../filters/flavor-filter"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
+import TierFilter from "../filters/tier-filter"
+import Image from "next/image"
 
-async function fetchCakesAPI({ pageParam = 1, category, flavor }: any) {
+async function fetchCakesAPI({ pageParam = 1, category, flavor, tier }: any) {
   const params = new URLSearchParams({
     page: pageParam.toString(),
     limit: "12",
   })
   if (category) params.append("category", category)
   if (flavor) params.append("flavor", flavor)
+  if (tier) params.append("tier", tier)
 
   const response = await fetch(`/api/cakes?${params}`)
   return response.json()
@@ -34,6 +36,9 @@ export default function GalleryPage() {
   const [selectedFlavors, setSelectedFlavors] = useState<string[]>([])
   const [isFlavorOpen, setIsFlavorOpen] = useState(false)
 
+  const [selectedTier, setSelectedTier] = useState<string[]>([])
+  const [isTierOpen, setIsTierOpen] = useState(false)
+
   const loadMoreRef = useRef<HTMLDivElement>(null)
 
   // Infinite query with React Query
@@ -46,12 +51,13 @@ export default function GalleryPage() {
     isLoading,
     isError,
   } = useInfiniteQuery({
-    queryKey: ["cakes", selectedCategories, selectedFlavors],
+    queryKey: ["cakes", selectedCategories, selectedFlavors, selectedTier],
     queryFn: ({ pageParam = 1 }) =>
       fetchCakesAPI({
         pageParam,
         category: selectedCategories.join(","),
         flavor: selectedFlavors.join(","),
+        tier: selectedTier.join(","),
       }),
     getNextPageParam: (lastPage) => {
       const { page, totalPages } = lastPage.pagination
@@ -84,7 +90,7 @@ export default function GalleryPage() {
     <main className="container flex space-x-8 px-2">
       {/* SIDEBAR FILTERS */}
       <div className="flex w-1/4 flex-col items-start space-y-4">
-        <div className="sticky top-20 z-10 max-h-[calc(100vh-100px)] w-full space-y-4 overflow-y-auto pr-2">
+        <div className="sticky top-24 z-10 max-h-[calc(100vh-100px)] w-full space-y-4 overflow-y-auto pr-2">
           <CategoryFilter
             isCategoryOpen={isCategoryOpen}
             setIsCategoryOpen={setIsCategoryOpen}
@@ -97,6 +103,13 @@ export default function GalleryPage() {
             setIsFlavorOpen={setIsFlavorOpen}
             selectedFlavors={selectedFlavors}
             setSelectedFlavors={setSelectedFlavors}
+          />
+
+          <TierFilter
+            isTierOpen={isTierOpen}
+            setIsTierOpen={setIsTierOpen}
+            selectedTier={selectedTier}
+            setSelectedTier={setSelectedTier}
           />
         </div>
       </div>
@@ -133,13 +146,14 @@ export default function GalleryPage() {
                   href={`cake?id=${cake.id}`}
                   className="group mx-auto block h-full w-full max-w-[240px]"
                 >
-                  <Card className="h-full overflow-hidden border-0 bg-transparent shadow-none transition-all duration-300">
-                    <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-[0_1px_8px_rgba(0,0,0,0.3)] transition-shadow duration-300 group-hover:shadow-xl">
-                      <img
-                        src={getOptimizedUrl(cake.image, 500)}
+                  <Card className="h-full border-0 bg-transparent shadow-none transition-transform duration-300 hover:scale-105">
+                    <CardContent className="relative aspect-[4/5] overflow-hidden rounded-2xl bg-slate-100 p-0 shadow-[0_1px_8px_rgba(0,0,0,0.3)] transition-shadow duration-700 group-hover:shadow-xl">
+                      <Image
+                        src={cake.image}
                         alt={cake.name}
-                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        loading="lazy"
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       />
                       <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/5" />
                     </CardContent>

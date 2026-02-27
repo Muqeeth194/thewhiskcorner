@@ -10,6 +10,19 @@ import HeadingText from "../heading-text"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import axios from "axios"
+import { z } from "zod"
+
+const signupSchema = z
+  .object({
+    name: z.string().min(2, "Name must be at least 2 characters"),
+    email: z.string().email("Please enter a valid email address"),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"],
+  })
 
 export default function SignupForm() {
   const [loading, setLoading] = useState(false)
@@ -23,7 +36,6 @@ export default function SignupForm() {
     confirmPassword: "",
   })
 
-  // 🆕 NEW: Validation Logic
   const isFormValid =
     (signupData.name || "").trim() !== "" &&
     (signupData.email || "").trim() !== "" &&
@@ -33,6 +45,13 @@ export default function SignupForm() {
   // 2. HANDLE SIGNUP
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    const result = signupSchema.safeParse(signupData)
+
+    if (!result.success) {
+      // Get the first error message and show it
+      toast.error(result.error.errors[0].message)
+      return
+    }
     setLoading(true)
 
     // Basic Validation

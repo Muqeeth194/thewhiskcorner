@@ -39,35 +39,10 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { useQueryClient } from "@tanstack/react-query"
-
-// ✅ DEFINED FLAVOR LISTS
-const CHOCOLATE_FLAVORS = [
-  "Classic truffle",
-  "Rich Chocolate and raspberry",
-  "Dulce de leche",
-  "Chocolate and caramel",
-  "Chocolate & Hazelnuts Praline",
-  "Hazelnut praline with french biscuits",
-  "Mocha",
-  "Chocolate Biscoff",
-  "Nutella hazelnut",
-  "Nutella Strawberry (seasonal)",
-  "Hazelnut praline French Biscuit and Caramel",
-]
-
-const VANILLA_FLAVORS = [
-  "Strawberry and cream (seasonal)",
-  "Lemon and raspberry",
-  "Vanilla and caramel",
-  "Caramel & roasted almonds",
-  "Biscoff",
-  "Almond praline",
-  "Vanilla and Milk chocolate",
-]
+import { CHOCOLATE_FLAVORS, VANILLA_FLAVORS } from "@/config/contents"
+import { uploadImageToCloudinary } from "@/lib/cloudinary/upload"
 
 export default function CakeForm() {
-  const queryClient = useQueryClient()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -86,6 +61,7 @@ export default function CakeForm() {
       servings: "",
       flavor: "",
       leadTime: "",
+      tier: "",
     },
     status: "Active",
   })
@@ -93,7 +69,7 @@ export default function CakeForm() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>("")
 
-  // NEW: Validation Logic
+  // Validation Logic
   const isFormValid =
     (cakeFormData.name || "").trim() !== "" &&
     (cakeFormData.status || "").trim() !== "" &&
@@ -104,7 +80,7 @@ export default function CakeForm() {
     (cakeFormData.details?.leadTime || "").trim() !== "" &&
     previewUrl !== ""
 
-  // ✅ Helper to parse current selected flavors from string to array
+  // Helper to parse current selected flavors from string to array
   const currentFlavors = cakeFormData.details?.flavor
     ? cakeFormData.details.flavor
         .split(",")
@@ -112,7 +88,7 @@ export default function CakeForm() {
         .filter(Boolean)
     : []
 
-  // ✅ Helper to toggle flavors
+  // Helper to toggle flavors
   const toggleFlavor = (flavor: string) => {
     const newFlavors = currentFlavors.includes(flavor)
       ? currentFlavors.filter((f) => f !== flavor) // Remove
@@ -218,31 +194,6 @@ export default function CakeForm() {
       "image-upload"
     ) as HTMLInputElement
     if (fileInput) fileInput.value = ""
-  }
-
-  const uploadImageToCloudinary = async (file: File): Promise<string> => {
-    const formData = new FormData()
-    formData.append("file", file)
-    formData.append("upload_preset", "cake_uploads")
-    formData.append("folder", "cakes")
-
-    try {
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
-        {
-          method: "POST",
-          body: formData,
-        }
-      )
-
-      if (!response.ok) throw new Error("Failed to upload image")
-
-      const data = await response.json()
-      return data.secure_url
-    } catch (error) {
-      console.error("Cloudinary upload error:", error)
-      throw new Error("Failed to upload image to Cloudinary")
-    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -384,11 +335,13 @@ export default function CakeForm() {
           <form onSubmit={handleSubmit} className="space-y-7">
             {/* IMAGE UPLOAD SECTION */}
             <div className="w-full space-y-4">
-              <Label className="text-slate-600">Upload Cake Image</Label>
+              <Label className="font-semibold text-slate-600">
+                Upload Cake Image
+              </Label>
 
               {previewUrl ? (
                 <div className="relative w-full">
-                  <div className="relative aspect-video h-48 w-full overflow-hidden rounded-xl border-2 border-pink-100 bg-pink-50">
+                  <div className="relative aspect-video h-28 w-full overflow-hidden rounded-xl border-2 border-pink-100 bg-pink-50">
                     <img
                       src={previewUrl}
                       alt="Cake preview"
@@ -411,13 +364,13 @@ export default function CakeForm() {
               ) : (
                 <label
                   htmlFor="image-upload"
-                  className="flex h-48 w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-pink-200 bg-pink-50/30 transition-all hover:border-pink-400 hover:bg-pink-50/50"
+                  className="flex h-28 w-full cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-pink-200 bg-pink-50/30 transition-all hover:border-pink-400 hover:bg-pink-50/50"
                 >
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-pink-100 text-pink-500">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-pink-100 text-pink-500">
                     <ImageIcon className="h-6 w-6" />
                   </div>
                   <div className="text-center">
-                    <p className="font-semibold text-slate-700">
+                    <p className="text-sm font-semibold text-slate-700">
                       Click to upload image
                     </p>
                     <p className="text-xs text-slate-400">
@@ -437,9 +390,10 @@ export default function CakeForm() {
 
             <hr className="w-full border-pink-100" />
 
+            {/* CATEGORY */}
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="name" className="text-slate-600">
+                <Label htmlFor="name" className="font-semibold text-slate-600">
                   Cake Name
                 </Label>
                 <Input
@@ -455,7 +409,10 @@ export default function CakeForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="status" className="text-slate-600">
+                <Label
+                  htmlFor="status"
+                  className="font-semibold text-slate-600"
+                >
                   Status
                 </Label>
                 <div className="relative">
@@ -477,7 +434,10 @@ export default function CakeForm() {
               </div>
 
               <div className="space-y-2 md:col-span-2">
-                <Label htmlFor="category" className="text-slate-600">
+                <Label
+                  htmlFor="category"
+                  className="font-semibold text-slate-600"
+                >
                   Category
                 </Label>
                 <Select
@@ -508,15 +468,19 @@ export default function CakeForm() {
               </div>
             </div>
 
+            {/* DESCRIPTION */}
             <div className="space-y-2">
-              <Label htmlFor="description" className="text-slate-600">
+              <Label
+                htmlFor="description"
+                className="font-semibold text-slate-600"
+              >
                 Description
               </Label>
               <Textarea
                 required
                 id="description"
                 placeholder="Describe the cake design, textures, and details..."
-                className="min-h-[120px] border-pink-100 bg-pink-50/30 leading-relaxed"
+                className="min-h-[80px] border-pink-100 bg-pink-50/30 leading-relaxed"
                 value={cakeFormData.description || ""}
                 onChange={(e) =>
                   setCakeFormData({
@@ -533,7 +497,7 @@ export default function CakeForm() {
                 Product Specifications
               </h4>
 
-              <div className="grid gap-4 sm:grid-cols-4">
+              <div className="grid gap-4 sm:grid-cols-5">
                 <div className="space-y-2">
                   <Label htmlFor="servings" className="text-xs text-slate-500">
                     Servings
@@ -542,7 +506,7 @@ export default function CakeForm() {
                     required
                     id="servings"
                     placeholder="e.g. 100"
-                    className="border-white bg-white"
+                    className="border-pink-100 bg-white"
                     value={cakeFormData.details?.servings || ""}
                     onChange={(e) =>
                       setCakeFormData({
@@ -556,7 +520,7 @@ export default function CakeForm() {
                   />
                 </div>
 
-                {/* ✅ UPDATED: MULTI-SELECT FLAVOR SECTION WITH PILLS */}
+                {/* MULTI-SELECT FLAVOR SECTION WITH PILLS */}
                 <div
                   className="relative space-y-2 sm:col-span-2"
                   ref={flavorDropdownRef}
@@ -567,7 +531,7 @@ export default function CakeForm() {
 
                   {/* Custom Trigger behaving like Shadcn Select */}
                   <div
-                    className="flex h-auto min-h-[2.5rem] w-full cursor-pointer items-center justify-between rounded-md border border-white bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex h-auto min-h-[2.5rem] w-full cursor-pointer items-center justify-between rounded-md border border-pink-100 bg-white px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                     onClick={() => setIsFlavorOpen(!isFlavorOpen)}
                   >
                     {currentFlavors.length > 0 ? (
@@ -654,7 +618,7 @@ export default function CakeForm() {
                     required
                     id="leadTime"
                     placeholder="e.g. 2 weeks"
-                    className="border-white bg-white"
+                    className="border-pink-100 bg-white"
                     value={cakeFormData.details?.leadTime || ""}
                     onChange={(e) =>
                       setCakeFormData({
@@ -662,6 +626,28 @@ export default function CakeForm() {
                         details: {
                           ...cakeFormData.details!,
                           leadTime: e.target.value,
+                        },
+                      })
+                    }
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="tier" className="text-xs text-slate-500">
+                    Tiers
+                  </Label>
+                  <Input
+                    required
+                    id="tier"
+                    placeholder="e.g. 1, 2, 3"
+                    className="border-pink-100 bg-white"
+                    value={cakeFormData.details?.tier || ""}
+                    onChange={(e) =>
+                      setCakeFormData({
+                        ...cakeFormData,
+                        details: {
+                          ...cakeFormData.details!,
+                          tier: e.target.value,
                         },
                       })
                     }

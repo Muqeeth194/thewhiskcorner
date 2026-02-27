@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   const limit = parseInt(searchParams.get("limit") || "12")
   const categoryParam = searchParams.get("category")
   const flavorParam = searchParams.get("flavor")
+  const tierParam = searchParams.get("tier")
 
   // console.log("flavor from the payload", flavorParam)
 
@@ -38,10 +39,21 @@ export async function GET(request: Request) {
       const flavorConditions = flavors.map(
         (f) => sql`json_extract(${cakes.details}, '$.flavor') LIKE ${`%${f}%`}`
       )
-
       // 3. Push OR condition (if cake has ANY of the selected flavors)
       conditions.push(or(...flavorConditions))
     }
+
+    // Filter by tier
+    if (tierParam) {
+      const tiers = tierParam.split(",").map((t) => parseInt(t.trim()))
+
+      const tierConditions = tiers.map(
+        (t) => sql`json_extract(${cakes.details}, '$.tier') = ${t}`
+      )
+
+      conditions.push(or(...tierConditions))
+    }
+
     // Combine all conditions with AND
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined
 
@@ -84,7 +96,6 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  // ... (Keep your existing POST logic exactly as is)
   try {
     const body = await request.json()
     const createdCake = await db

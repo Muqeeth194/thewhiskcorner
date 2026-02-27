@@ -7,7 +7,7 @@ export async function POST(request: Request) {
 
     // Send Email Notification to Admin (You)
     const emailResult = await sendEmail({
-      to: "muqeethahmed44@gmail.com", // 👈 REPLACE with your email
+      to: "thewhiskcornerhyderabad@gmail.com",
       name: "Admin",
       emailType: "CONTACT",
       contactData: {

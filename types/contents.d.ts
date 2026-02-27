@@ -50,6 +50,7 @@ export type Cake = {
     servings?: number | string
     flavor?: string
     leadTime?: string
+    tier?: number | string
   }
   status?: string
 }
@@ -64,6 +65,7 @@ export type CakeTable = {
     servings?: number | string
     flavor?: string
     leadTime?: string
+    tier?: number | string
   }
   status: "Active" | "Inactive"
 }

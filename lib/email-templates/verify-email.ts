@@ -38,11 +38,6 @@ export const getVerificationEmailHtml = (
       <div style="text-align: center; margin: 32px 0;">
         <a href="${verifyUrl}" class="btn">Verify My Account</a>
       </div>
-
-      <p style="font-size: 14px; color: #6b7280;">
-        Or copy and paste this link into your browser:<br>
-        <a href="${verifyUrl}" class="link-text">${verifyUrl}</a>
-      </p>
       
       <hr style="border: none; border-top: 1px solid #f3f4f6; margin: 32px 0;">
       

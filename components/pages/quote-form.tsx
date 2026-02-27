@@ -26,6 +26,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import { useSearchParams } from "next/navigation"
+import Link from "next/link"
 
 // ✅ FLAVOR CONSTANTS
 const CHOCOLATE_FLAVORS = [
@@ -216,11 +217,10 @@ export default function QuoteForm() {
             the <strong>{cakeData?.name}</strong> and contact you shortly.
           </p>
           <Button
-            variant="outline"
-            onClick={() => setSuccess(false)}
-            className="mt-4 border-pink-200 text-pink-900"
+            asChild
+            className="w-full bg-pink-700 text-white hover:bg-pink-800"
           >
-            Send Another Request
+            <Link href="/">Browse Gallery</Link>
           </Button>
         </div>
       </main>
@@ -304,7 +304,7 @@ export default function QuoteForm() {
               <Input
                 required
                 id="name"
-                placeholder="e.g. Mahreen Khan"
+                placeholder="e.g. Khan"
                 className="border-pink-100 bg-pink-50/30"
                 value={quoteFormData.name}
                 onChange={(e) =>

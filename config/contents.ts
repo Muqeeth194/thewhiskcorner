@@ -38,61 +38,91 @@ export const cakeFilterSection: CakeFilterSection = {
   ],
 }
 
+const cakeImages = [
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183955/frigdoj9tpmygnigoskd.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/rd4cqwmubgknygsmji6m.jpg",
+    alt: "Signature Chocolate Truffle Wedding Cake",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183914/ymfc3ll1orqojybkopos.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/e77l95z457qgutqmxfet.jpg",
+    alt: "Elegant Vanilla Bean Anniversary Cake",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183967/ebjihdefgicqdobabio6.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/uyuxexmwxfdfw71vpd1m.jpg",
+    alt: "Custom Birthday Cake with Fresh Flowers",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183944/grwjpznevclsz90kw5mg.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185905/eg0jtuj86u9nacg6qmzv.jpg",
+    alt: "Decadent Red Velvet Celebration Cake",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183106/b0nkqwfuryonbimqersh.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185906/xlfhh2zwmguudeyijlaa.jpg",
+    alt: "Artisan Lemon & Raspberry Cake",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183988/mpjgjm41x4jpseuyl8f2.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185905/mpcgz7yufdbkfevihyic.jpg",
+    alt: "Elegant Vanilla Bean Anniversary Cake",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183979/ebg2qyirjlqxzr8qfbjj.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185908/eiwmucvcyt8xiunyqja8.jpg",
+    alt: "Custom Birthday Cake with Fresh Flowers",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772183997/iawbqjsoz1qojn0oswub.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185909/nug41vedhz4ggufpcqkn.jpg",
+    alt: "Decadent Red Velvet Celebration Cake",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772184016/j4rswzpn3obf6cfmhyce.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185910/axytb0pzo82zqmmqvde8.jpg",
+    alt: "Artisan Lemon & Raspberry Cake",
+  },
+  {
+    desktopPath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772184006/hqkjjvftjurwmnkfl6xp.webp",
+    mobilePath:
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772185910/gzoxtyx3swfrctipexyr.jpg",
+    alt: "Artisan Lemon & Raspberry Cake",
+  },
+]
+
+// 3. The Exported Object
+
 export const carouselSection: CarouselSection = {
-  content: [
-    // SLIDE 1
-    {
-      // Fallback for very old browsers
-      image: "/images/slide-1/desktop.jpg",
-
-      // 📱 Mobile: 4:5 Portrait (e.g. 800x1000px)
-      imageMobile: "/images/slide-1/mobile.png",
-
-      // 💻 Laptop/Desktop: 23:9 Landscape (e.g. 1200x800px)
-      imageDesktop: "/images/slide-1/desktop.jpg",
-
-      // 🖥️ Ultra-Wide: 23:9 or wider (e.g. 1920x800px) - Optional
-      imageWide: "/images/slide-1/desktop.jpg",
-
-      altText: "Signature Chocolate Truffle Wedding Cake",
-    },
-
-    // SLIDE 2
-    {
-      image: "/images/slide-2/desktop.png",
-      imageMobile: "/images/slide-2/mobile.png",
-      imageDesktop: "/images/slide-2/desktop.png",
-      imageWide: "/images/slide-2/desktop.png",
-      altText: "Elegant Vanilla Bean Anniversary Cake",
-    },
-
-    // SLIDE 3
-    {
-      image: "/images/slide-3/desktop.png",
-      imageMobile: "/images/slide-3/mobile.png",
-      imageDesktop: "/images/slide-3/desktop.png",
-      imageWide: "/images/slide-3/desktop.png",
-      altText: "Custom Birthday Cake with Fresh Flowers",
-    },
-
-    // SLIDE 4
-    {
-      image: "/images/slide-4/desktop.png",
-      imageMobile: "/images/slide-4/mobile.png",
-      imageDesktop: "/images/slide-4/desktop.png",
-      imageWide: "/images/slide-4/desktop.png",
-      altText: "Decadent Red Velvet Celebration Cake",
-    },
-
-    // SLIDE 5
-    {
-      image: "/images/slide-5/desktop.png",
-      imageMobile: "/images/slide-5/mobile.png",
-      imageDesktop: "/images/slide-5/desktop.png",
-      imageWide: "/images/slide-5/desktop.png",
-      altText: "Artisan Lemon & Raspberry Cake",
-    },
-  ],
+  content: cakeImages.map((cake, index) => {
+    return {
+      image: `${cake.mobilePath}`,
+      imageMobile: `${cake.mobilePath}`,
+      imageDesktop: `${cake.desktopPath}`,
+      imageWide: `${cake.desktopPath}`,
+      altText: cake.alt,
+    }
+  }),
 }
 
 export const featuredCategory: ContentSection = {
@@ -102,22 +132,26 @@ export const featuredCategory: ContentSection = {
     {
       text: `Wedding Cakes`,
       subtext: `The perfect centerpiece for your forever.`,
-      image: "/images/label/wedding_cake.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091350/bbdgtiy6hji07mxo0ddv.png",
     },
     {
       text: `Anniversary Cakes`,
       subtext: `Celebrating your love story, slice by slice.`,
-      image: "/images/label/anniversary_cake.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091349/ej7jqgzipnjgjgunnesv.png",
     },
     {
       text: `Celebration Cakes`,
       subtext: `Make every milestone unforgettable.`,
-      image: "/images/label/birthday_cake.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091349/ccgyjtopc4niceguslxu.png",
     },
     {
       text: `Desserts`,
       subtext: `Bite-sized bliss for every craving.`,
-      image: "/images/label/desert.png",
+      image:
+        "https://res.cloudinary.com/djhageblb/image/upload/v1772091352/cgyp2lct07g8jdbbcapf.png",
     },
   ],
 }
@@ -158,3 +192,27 @@ export const testimonials = {
     },
   ],
 }
+
+export const CHOCOLATE_FLAVORS = [
+  "Classic truffle",
+  "Rich Chocolate and raspberry",
+  "Dulce de leche",
+  "Chocolate and caramel",
+  "Chocolate & Hazelnuts Praline",
+  "Hazelnut praline with french biscuits",
+  "Mocha",
+  "Chocolate Biscoff",
+  "Nutella hazelnut",
+  "Nutella Strawberry (seasonal)",
+  "Hazelnut praline French Biscuit and Caramel",
+]
+
+export const VANILLA_FLAVORS = [
+  "Strawberry and cream (seasonal)",
+  "Lemon and raspberry",
+  "Vanilla and caramel",
+  "Caramel & roasted almonds",
+  "Biscoff",
+  "Almond praline",
+  "Vanilla and Milk chocolate",
+]

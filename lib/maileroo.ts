@@ -86,7 +86,10 @@ export const sendEmail = async ({
       )
     } else if (emailType === "WELCOME") {
       emailSubject = "Welcome Onboard"
-      emailHtml = getWelcomeEmailHtml(name, "http://localhost:3000/gallery")
+      emailHtml = getWelcomeEmailHtml(
+        name,
+        `${process.env.NEXT_PUBLIC_APP_URL}/gallery`
+      )
     } else if (emailType === "QUOTE") {
       emailSubject = `New Quote Request: ${name}`
       // Check if data exists to prevent crash
@@ -110,7 +113,7 @@ export const sendEmail = async ({
     const referenceId = await client.sendBasicEmail({
       from: new EmailAddress(
         process.env.MAILEROO_FROM_EMAIL!,
-        "The Whisk Corner"
+        process.env.MAILEROO_FROM_NAME!
       ),
       to: [new EmailAddress(to, name)],
       subject: emailSubject,
