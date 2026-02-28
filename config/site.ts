@@ -2,33 +2,34 @@ import { SiteConfig, ContactConfig } from "@/types"
 
 /* ====================
 [> WEBSITE CONFIG <]
--- Fill the details about your website
+-- The Whisk Corner Details
  ==================== */
 
-const baseUrl = "https://nextlanding.rdev.pro"
+const baseUrl = "https://www.thewhiskcorner.com"
 
 export const siteConfig: SiteConfig = {
-  name: "TheWhiskCorner",
+  name: "The Whisk Corner",
   author: "Muqeeth",
   description:
-    "Easy to setup, customizable, quick, and responsive landing page starter built with Next.js and shadcn/ui.",
+    "Exquisite handcrafted cakes and artisanal desserts. Order custom wedding cakes, anniversary cakes, and beautiful treats for your special celebrations.",
   keywords: [
-    "Next.js",
-    "React",
-    "Tailwind CSS",
-    "Radix UI",
-    "shadcn/ui",
-    "Landing Page",
-    "Template",
-    "Starter",
+    "custom cakes",
+    "wedding cakes",
+    "birthday cakes",
+    "anniversary cakes",
+    "bakery",
+    "artisanal desserts",
+    "The Whisk Corner",
+    "bespoke cakes",
+    "celebration cakes",
   ],
   url: {
     base: baseUrl,
-    author: "",
+    author: "https://www.thewhiskcorner.com",
   },
-  ogImage: `${baseUrl}/og.jpg`,
+  ogImage: `${baseUrl}/twc.png`,
 }
 
 export const contactConfig: ContactConfig = {
-  email: "",
+  email: "hello@thewhiskcorner.com",
 }
