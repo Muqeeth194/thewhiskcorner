@@ -27,7 +27,7 @@ export const siteConfig: SiteConfig = {
     base: baseUrl,
     author: "https://www.thewhiskcorner.com",
   },
-  ogImage: `${baseUrl}/twc.png`,
+  ogImage: `${baseUrl}/logo.png`,
 }
 
 export const contactConfig: ContactConfig = {
