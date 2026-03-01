@@ -56,9 +56,6 @@ export const metadata = {
       },
     ],
   },
-  icons: {
-    icon: "/favicon.ico?v=2",
-  },
 }
 
 export const viewport = {
