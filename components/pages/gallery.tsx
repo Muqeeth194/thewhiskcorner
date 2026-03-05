@@ -3,13 +3,14 @@
 import { useEffect, useState, useCallback, useRef } from "react"
 import { Card, CardContent, CardFooter, CardTitle } from "../ui/card"
 import Link from "next/link"
-import { Loader2 } from "lucide-react"
+import { Filter, Loader2, X } from "lucide-react"
 import CategoryFilter from "../filters/category-filter"
 import FlavorFilter from "../filters/flavor-filter"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { useSearchParams } from "next/navigation"
 import TierFilter from "../filters/tier-filter"
 import Image from "next/image"
+import { Button } from "../ui/button"
 
 async function fetchCakesAPI({ pageParam = 1, category, flavor, tier }: any) {
   const params = new URLSearchParams({
@@ -27,6 +28,8 @@ async function fetchCakesAPI({ pageParam = 1, category, flavor, tier }: any) {
 export default function GalleryPage() {
   const searchParams = useSearchParams()
   const categoryFromURL = searchParams.get("category")
+
+  const [isFilterMenuOpen, setIsFilterMenuOpen] = useState(false)
 
   // Filters
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
@@ -83,14 +86,88 @@ export default function GalleryPage() {
     return () => observer.disconnect()
   }, [fetchNextPage, isFetchingNextPage, hasNextPage])
 
+  // Freeze background scrolling when the mobile filter menu is open
+  useEffect(() => {
+    if (isFilterMenuOpen) {
+      document.body.style.overflow = "hidden"
+    } else {
+      document.body.style.overflow = "unset"
+    }
+
+    // Cleanup just in case the component unmounts
+    return () => {
+      document.body.style.overflow = "unset"
+    }
+  }, [isFilterMenuOpen])
+
   // Flatten pages into single array
   const cakes = data?.pages.flatMap((page) => page.cakes) ?? []
 
   return (
-    <main className="container flex space-x-8 px-2">
+    <main className="container px-6 md:flex md:justify-between md:gap-6">
+      {/* MOBILE HEADER & FILTER BUTTON WRAPPER */}
+      <div className="relative mb-6 flex w-full flex-col items-end md:hidden">
+        {/* THE OPEN BUTTON */}
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setIsFilterMenuOpen(true)}
+          className={`gap-2 rounded-full border-pink-300 bg-white/50 text-base text-pink-800 backdrop-blur-sm transition-all duration-300 ${
+            isFilterMenuOpen ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
+        >
+          Filter
+          <Filter className="h-4 w-4" />
+        </Button>
+
+        {/* MOBILE FILTER MENU */}
+        {isFilterMenuOpen && (
+          <div className="absolute right-0 top-0 z-50 max-h-[75vh] w-full origin-top-right overflow-y-auto rounded-2xl border border-pink-100 bg-white/95 p-6 shadow-2xl backdrop-blur-md duration-300 animate-in fade-in zoom-in-75 dark:border-slate-800 dark:bg-slate-900/95">
+            {/* STICKY CLOSE BUTTON */}
+            <div className="pointer-events-none sticky top-0 z-50 flex h-0 w-full justify-end">
+              <Button
+                variant="default"
+                size="sm"
+                onClick={() => setIsFilterMenuOpen(false)}
+                className="pointer-events-auto rounded-full bg-pink-200 text-base text-pink-800 shadow-md transition-all duration-200 hover:scale-105 hover:bg-pink-300"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+
+            {/* THE FILTERS */}
+            <div className="mt-2 grid grid-cols-1 gap-6">
+              <h1 className="text-xl font-semibold text-slate-800 dark:text-slate-200">
+                Filter
+              </h1>
+              <CategoryFilter
+                isCategoryOpen={isCategoryOpen}
+                setIsCategoryOpen={setIsCategoryOpen}
+                selectedCategories={selectedCategories}
+                setSelectedCategories={setSelectedCategories}
+              />
+
+              <FlavorFilter
+                isFlavorOpen={isFlavorOpen}
+                setIsFlavorOpen={setIsFlavorOpen}
+                selectedFlavors={selectedFlavors}
+                setSelectedFlavors={setSelectedFlavors}
+              />
+
+              <TierFilter
+                isTierOpen={isTierOpen}
+                setIsTierOpen={setIsTierOpen}
+                selectedTier={selectedTier}
+                setSelectedTier={setSelectedTier}
+              />
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* SIDEBAR FILTERS */}
-      <div className="flex w-1/4 flex-col items-start space-y-4">
-        <div className="sticky top-24 z-10 max-h-[calc(100vh-100px)] w-full space-y-4 overflow-y-auto pr-2">
+      <div className="mb-4 hidden w-1/5 flex-col justify-items-start space-y-4 md:flex">
+        <div className="sticky top-24 z-10 max-h-[calc(100vh-100px)] w-full space-y-4 overflow-y-auto pb-12 pr-2">
           <CategoryFilter
             isCategoryOpen={isCategoryOpen}
             setIsCategoryOpen={setIsCategoryOpen}

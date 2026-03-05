@@ -4,7 +4,7 @@ import HeadingText from "@/components/heading-text"
 
 const page = () => {
   return (
-    <main className="container flex flex-col items-center">
+    <main className="container flex flex-col items-center px-0">
       <div className="flex flex-col items-center space-y-2 py-8 text-center">
         <HeadingText subtext="Explore our handcrafted cakes">
           Our Creations

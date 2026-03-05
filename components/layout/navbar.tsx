@@ -60,96 +60,97 @@ export default function Navbar() {
   const showLoggedIn = isLoggedIn
 
   return (
-    <header
-      className={cn(
-        // 1. FLOAT & SHAPE: Centered pill, floated 1rem (top-4) from the top
-        "fixed left-0 right-0 top-4 z-50 mx-auto w-[calc(100%-2rem)] max-w-6xl rounded-full border border-pink-200 backdrop-blur-md transition-all duration-300 supports-[backdrop-filter]:bg-white/50",
+    <>
+      <header
+        className={cn(
+          "fixed left-0 right-0 top-4 z-50 mx-auto w-[calc(100%-2rem)] max-w-6xl rounded-full border border-pink-200 backdrop-blur-md transition-all duration-300 supports-[backdrop-filter]:bg-white/50",
+          isVisible ? "translate-y-0" : "-translate-y-24"
+        )}
+      >
+        <div className="flex h-16 w-full items-center justify-between px-6 md:px-8">
+          {/* 1. LOGO SECTION */}
+          <div className="flex items-center gap-2">
+            <Link href="/" className="flex items-center space-x-2">
+              <span className="font-serif text-xl font-bold tracking-tight text-pink-950 transition-colors hover:text-pink-700 md:text-xl">
+                {siteConfig.name}
+              </span>
+            </Link>
+          </div>
 
-        // 2. VISIBILITY: Use a larger negative translation to clear the top-4 gap
-        // isVisible ? "translate-y-0" : "-translate-y-24",
-
-        // 3. COLOR & GLASS: Translucent white at the top, pink when scrolled
-        isVisible ? "translate-y-0" : "-translate-y-24"
-      )}
-    >
-      <div className="flex h-16 w-full items-center justify-between px-6 md:px-8">
-        {/* 1. LOGO SECTION */}
-        <div className="flex items-center gap-2">
-          <Link href="/" className="flex items-center space-x-2">
-            {/* Optional: Add a small logo icon here*/}
-            <span className="font-serif text-xl font-bold tracking-tight text-pink-950 transition-colors hover:text-pink-700 md:text-xl">
-              {siteConfig.name}
-            </span>
-          </Link>
-        </div>
-
-        {/* 2. DESKTOP NAVIGATION (Hidden on mobile) */}
-        <nav className="hidden gap-8 font-serif md:flex ">
-          {navLinks.map((link) => {
-            const isActive = pathname === link.href
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "text-lg font-semibold transition-colors hover:text-pink-600",
-                  isActive ? "font-bold text-pink-900" : "text-slate-700"
-                )}
-              >
-                {link.title}
-              </Link>
-            )
-          })}
-        </nav>
-
-        {/* 3. DESKTOP BUTTON (Hidden on mobile) */}
-        <div className="hidden md:flex">
-          {showLoggedIn ? (
-            <div className="space-x-5">
-              {/* ADMIN DASHBOARD BUTTON */}
-              {user?.isAdmin && (
-                <Button
-                  asChild
-                  variant="ghost"
-                  className="gap-2 text-pink-900 hover:bg-pink-300/50 hover:text-pink-950"
+          {/* 2. DESKTOP NAVIGATION (Hidden on mobile) */}
+          <nav className="hidden gap-8 font-serif md:flex ">
+            {navLinks.map((link) => {
+              const isActive = pathname === link.href
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "text-lg font-semibold transition-colors hover:text-pink-600",
+                    isActive ? "font-bold text-pink-900" : "text-slate-700"
+                  )}
                 >
-                  <Link href="/admin">
-                    <LayoutDashboard className="h-4 w-4" />
-                    Dashboard
-                  </Link>
-                </Button>
-              )}
-              <LogoutButton />
-            </div>
-          ) : (
-            <Button
-              asChild
-              variant="outline"
-              className="rounded-full border-pink-700 bg-pink-700 px-6 text-sm text-white shadow-md hover:bg-pink-800 hover:text-white"
-            >
-              <Link href="/login">Sign In / Join Rewards</Link>
-            </Button>
-          )}
+                  {link.title}
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* 3. DESKTOP BUTTON (Hidden on mobile) */}
+          <div className="hidden md:flex">
+            {showLoggedIn ? (
+              <div className="space-x-5">
+                {user?.isAdmin && (
+                  <Button
+                    asChild
+                    variant="ghost"
+                    className="gap-2 text-pink-900 hover:bg-pink-300/50 hover:text-pink-950"
+                  >
+                    <Link href="/admin">
+                      <LayoutDashboard className="h-4 w-4" />
+                      Dashboard
+                    </Link>
+                  </Button>
+                )}
+                <LogoutButton />
+              </div>
+            ) : (
+              <Button
+                asChild
+                variant="outline"
+                className="rounded-full border-pink-700 bg-pink-700 px-6 text-sm text-white shadow-md hover:bg-pink-800 hover:text-white"
+              >
+                <Link href="/login">Sign In / Join Rewards</Link>
+              </Button>
+            )}
+          </div>
+
+          {/* 4. MOBILE MENU TOGGLE */}
+          <button
+            className="relative flex items-center justify-center p-2 text-pink-900 md:hidden"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {isMobileMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
+          </button>
         </div>
+      </header>
 
-        {/* 4. MOBILE MENU TOGGLE */}
-        <button
-          className="flex items-center justify-center p-2 text-pink-900 md:hidden"
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Toggle menu"
-        >
-          {isMobileMenuOpen ? (
-            <X className="h-6 w-6" />
-          ) : (
-            <Menu className="h-6 w-6" />
-          )}
-        </button>
-      </div>
-
-      {/* 5. MOBILE MENU DROPDOWN */}
+      {/* 5. MOBILE MENU DROPDOWN (Now outside the header!) */}
       {isMobileMenuOpen && (
-        <div className="border-t border-pink-100 bg-pink-50 px-4 py-6 md:hidden">
-          <nav className="flex flex-col gap-4">
+        <div
+          className={cn(
+            "fixed left-0 right-0 top-[88px] z-50 mx-auto max-h-[75vh] w-[calc(100%-2rem)] max-w-6xl overflow-y-auto rounded-2xl border border-pink-200 bg-white/60 p-6 shadow-2xl backdrop-blur-md transition-all duration-300 animate-in fade-in slide-in-from-top-4 md:hidden",
+            isVisible
+              ? "translate-y-0"
+              : "pointer-events-none -translate-y-24 opacity-0"
+          )}
+        >
+          <nav className="flex flex-col justify-center gap-4">
             {navLinks.map((link) => {
               const isActive = pathname === link.href
               return (
@@ -174,13 +175,12 @@ export default function Navbar() {
                     <Link
                       href="/admin"
                       onClick={() => setIsMobileMenuOpen(false)}
-                      className="flex items-center gap-2 pb-4 text-lg font-medium text-pink-700"
+                      className="flex items-center gap-2 pb-4 text-lg font-medium text-pink-700 hover:text-pink-900"
                     >
                       <LayoutDashboard className="h-5 w-5" />
                       Admin Dashboard
                     </Link>
                   )}
-                  {/* Note: LogoutButton typically refreshes the page/redirects, which inherently closes state, but checking inside it is good practice if it's purely client-side */}
                   <div onClick={() => setIsMobileMenuOpen(false)}>
                     <LogoutButton />
                   </div>
@@ -202,6 +202,6 @@ export default function Navbar() {
           </nav>
         </div>
       )}
-    </header>
+    </>
   )
 }

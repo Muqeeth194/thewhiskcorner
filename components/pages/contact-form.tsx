@@ -82,7 +82,7 @@ export default function ContactForm() {
   }
 
   return (
-    <div className="mx-auto max-w-lg space-y-8 rounded-3xl border border-pink-100 bg-white p-8 shadow-xl md:p-12">
+    <div className="w-full space-y-8 rounded-3xl border border-pink-100 bg-white p-6 shadow-xl md:mx-auto md:w-[50vw] md:p-12">
       <div className="space-y-2 text-center">
         <HeadingText subtext="Fill out the details below and we will call you to discuss your dream cake.">
           {/* FIXED: Escaped the quote here */}
