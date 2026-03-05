@@ -122,7 +122,7 @@ export default function GalleryPage() {
 
         {/* MOBILE FILTER MENU */}
         {isFilterMenuOpen && (
-          <div className="absolute right-0 top-0 z-50 max-h-[75vh] w-full origin-top-right overflow-y-auto rounded-2xl border border-pink-100 bg-white/95 p-6 shadow-2xl backdrop-blur-md duration-300 animate-in fade-in zoom-in-75 dark:border-slate-800 dark:bg-slate-900/95">
+          <div className="absolute right-0 top-0 z-50 max-h-[60vh] w-full origin-top-right overflow-y-auto rounded-2xl border border-pink-100 bg-white/95 p-6 shadow-2xl backdrop-blur-md duration-300 animate-in fade-in zoom-in-75 dark:border-slate-800 dark:bg-slate-900/95">
             {/* STICKY CLOSE BUTTON */}
             <div className="pointer-events-none sticky top-0 z-50 flex h-0 w-full justify-end">
               <Button
