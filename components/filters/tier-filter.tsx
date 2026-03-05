@@ -46,7 +46,7 @@ export default function TierFilter({
       >
         <CollapsibleTrigger asChild>
           <div className="flex cursor-pointer items-center justify-between px-2">
-            <h4 className="text-sm font-semibold text-slate-600 hover:text-pink-600">
+            <h4 className="text-base font-semibold text-slate-600 hover:text-pink-600">
               Tiers
             </h4>
             <Button

@@ -12,7 +12,7 @@ export default function MainWrapper({
   const isHome = pathname === "/"
 
   return (
-    <main className={cn("flex-1", !isHome && "pt-16 md:pt-20")}>
+    <main className={cn("flex-1", !isHome && "pt-20 md:pt-20")}>
       {children}
     </main>
   )

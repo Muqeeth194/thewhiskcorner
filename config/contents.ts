@@ -43,70 +43,70 @@ const cakeImages = [
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183955/frigdoj9tpmygnigoskd.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/rd4cqwmubgknygsmji6m.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694486/llxrgwwsk7bmybfiwibf.jpg",
     alt: "Signature Chocolate Truffle Wedding Cake",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183914/ymfc3ll1orqojybkopos.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/e77l95z457qgutqmxfet.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694485/jamzbqbnlpbujrpx0gbf.jpg",
     alt: "Elegant Vanilla Bean Anniversary Cake",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183967/ebjihdefgicqdobabio6.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185904/uyuxexmwxfdfw71vpd1m.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694486/lih4diyvqmd8nj6byc8i.jpg",
     alt: "Custom Birthday Cake with Fresh Flowers",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183944/grwjpznevclsz90kw5mg.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185905/eg0jtuj86u9nacg6qmzv.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694484/xhfngfgpj1fu3ssdrxdl.jpg",
     alt: "Decadent Red Velvet Celebration Cake",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183106/b0nkqwfuryonbimqersh.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185906/xlfhh2zwmguudeyijlaa.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694486/wfnmf2oicgh1vo4viidf.jpg",
     alt: "Artisan Lemon & Raspberry Cake",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183988/mpjgjm41x4jpseuyl8f2.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185905/mpcgz7yufdbkfevihyic.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694484/gi8jfphwvjmhd8hhdbrv.jpg",
     alt: "Elegant Vanilla Bean Anniversary Cake",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183979/ebg2qyirjlqxzr8qfbjj.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185908/eiwmucvcyt8xiunyqja8.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694486/fjnvlx5mwl8singkfazs.jpg",
     alt: "Custom Birthday Cake with Fresh Flowers",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772183997/iawbqjsoz1qojn0oswub.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185909/nug41vedhz4ggufpcqkn.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694486/girbex8326fna4o0lppl.jpg",
     alt: "Decadent Red Velvet Celebration Cake",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772227955/ztepgn4o1xo3ebdy4bly.jpg",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185910/axytb0pzo82zqmmqvde8.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694484/ecwukvdygm8mnsk6wabs.jpg",
     alt: "Artisan Lemon & Raspberry Cake",
   },
   {
     desktopPath:
       "https://res.cloudinary.com/djhageblb/image/upload/v1772184006/hqkjjvftjurwmnkfl6xp.webp",
     mobilePath:
-      "https://res.cloudinary.com/djhageblb/image/upload/v1772185910/gzoxtyx3swfrctipexyr.jpg",
+      "https://res.cloudinary.com/djhageblb/image/upload/v1772694483/gydogqjah4hyhzjadnaz.jpg",
     alt: "Artisan Lemon & Raspberry Cake",
   },
 ]

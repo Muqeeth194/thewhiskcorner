@@ -48,7 +48,7 @@ export default function CategoryFilter({
   }
 
   return (
-    <div className=" w-full">
+    <div className="w-full">
       <Collapsible
         open={isCategoryOpen}
         onOpenChange={setIsCategoryOpen}
@@ -56,7 +56,7 @@ export default function CategoryFilter({
       >
         <CollapsibleTrigger asChild>
           <div className="flex cursor-pointer items-center justify-between px-2">
-            <h4 className="text-sm font-semibold text-slate-600 hover:text-pink-600">
+            <h4 className="text-base font-semibold text-slate-600 hover:text-pink-600">
               Category
             </h4>
             <Button

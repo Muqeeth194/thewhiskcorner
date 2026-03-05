@@ -9,14 +9,14 @@ import Image from "next/image"
 export default function FeatureCards() {
   return (
     <section className="bg-body ">
-      <div className="container space-y-8 py-12 text-center lg:py-20">
+      <div className="container space-y-8 py-16 text-center lg:py-20">
         {featuredCategory.header || featuredCategory.subheader ? (
           <HeadingText subtext={featuredCategory.subheader}>
             {featuredCategory.header}
           </HeadingText>
         ) : null}
 
-        <div className="grid grid-cols-1 place-items-center gap-16 py-12 md:grid-cols-1 md:gap-40 md:py-20">
+        <div className="grid grid-cols-1 place-items-center gap-16 py-4 md:grid-cols-1 md:gap-40 md:py-20">
           {featuredCategory.content.map((cards, index) => {
             const isEven = index % 2 === 0
             return (

@@ -191,9 +191,9 @@ export default function QuoteForm() {
 
   if (success) {
     return (
-      <main className="container mx-auto max-w-2xl py-6">
+      <main className="container flex w-full flex-col items-start px-6 py-5 md:py-2">
         {/* SUCCESS STATE UI */}
-        <Breadcrumb className="px-4 md:p-4">
+        <Breadcrumb className="py-4 md:p-5">
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -228,10 +228,10 @@ export default function QuoteForm() {
   }
 
   return (
-    <main className="container pb-12 pt-2">
+    <main className="container flex w-full flex-col items-start px-6 py-5 md:py-2">
       {/* BREADCRUMBS */}
       <section className="items-left">
-        <Breadcrumb className="px-4 md:pb-10">
+        <Breadcrumb className="py-4 md:p-5">
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -258,7 +258,7 @@ export default function QuoteForm() {
         </Breadcrumb>
       </section>
 
-      <div className="mx-4 max-w-3xl space-y-8 rounded-3xl border border-pink-100 bg-white p-6 shadow-xl md:mx-auto md:p-12">
+      <div className="w-full space-y-8 rounded-3xl border border-pink-100 bg-white p-6 shadow-xl md:mx-auto md:w-[60vw] md:p-12">
         {/* HEADER */}
         <div className="space-y-2 text-center">
           <HeadingText subtext="Customize your order details below.">

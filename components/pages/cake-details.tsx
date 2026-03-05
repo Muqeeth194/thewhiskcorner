@@ -113,9 +113,9 @@ export default function CakeDetailsPage() {
   }
 
   return (
-    <main className="items-left container flex flex-col py-4">
+    <main className="container flex w-full flex-col items-start px-6 py-5 md:py-2">
       {/* BREADCRUMBS */}
-      <Breadcrumb className="px-4 md:p-5">
+      <Breadcrumb className="py-4 md:p-5">
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink href="/">Home</BreadcrumbLink>
@@ -220,13 +220,9 @@ export default function CakeDetailsPage() {
               {/* 4. ACTION BUTTON */}
               <div className="pt-0">
                 <Button
-                  className={cn(
-                    buttonVariants({
-                      variant: "outline",
-                      size: "lg",
-                    }),
-                    "hover:bg-black-300 w-fit rounded-full border-2 border-pink-800 bg-pink-700 px-6 py-4 font-sans text-lg font-semibold tracking-wider text-white shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] transition-all duration-200 hover:scale-105 hover:bg-pink-800 hover:text-white hover:shadow-2xl md:px-8 md:py-5 md:text-base lg:px-10 lg:py-2 lg:text-lg"
-                  )}
+                  asChild
+                  variant="outline"
+                  className="rounded-full border-pink-700 bg-pink-700 px-12 text-base text-white shadow-md shadow-xl drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] hover:bg-pink-800 hover:text-white"
                 >
                   <Link href={`/quote-form?cakeId=${cake.id}`}>
                     Request Quote
@@ -240,7 +236,7 @@ export default function CakeDetailsPage() {
 
       {/* SIMILAR CAKES CAROUSEL */}
       {categoryCakes.length > 0 && (
-        <div className="mt-10 flex w-full flex-col items-center space-y-6">
+        <div className="mt-10 flex w-full flex-col items-center gap-6 px-6 md:px-0">
           <h3 className="font-serif text-xl font-bold text-pink-950 antialiased drop-shadow-[0_2px_10px_rgba(0,0,0,0.3)] lg:text-2xl">
             You might also like
           </h3>
