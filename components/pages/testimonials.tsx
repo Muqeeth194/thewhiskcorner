@@ -1,6 +1,5 @@
 "use client"
 
-import Image from "next/image"
 import HeadingText from "@/components/heading-text"
 import { testimonials } from "@/config/contents"
 import {
@@ -26,7 +25,10 @@ export default function Testimonials() {
   )
 
   return (
-    <section className="lg:py-18 container space-y-8 py-8" id="testimonials">
+    <section
+      className="lg:py-18 container space-y-8 bg-white py-20"
+      id="testimonials"
+    >
       {testimonials.header || testimonials.subheader ? (
         <HeadingText subtext={testimonials.subheader} className="text-center">
           {testimonials.header}
@@ -49,7 +51,7 @@ export default function Testimonials() {
                 className="pl-4 md:basis-1/2 lg:basis-1/3"
               >
                 <div className="h-full p-1">
-                  <Card className="h-full border-none bg-pink-50/50 shadow-none transition-all hover:bg-pink-100/50">
+                  <Card className="h-full border-none shadow-none transition-all hover:bg-pink-100/50">
                     <CardContent className="flex flex-col items-center justify-between gap-6 p-8">
                       <Quote className="h-8 w-8 rotate-180 fill-pink-200 text-pink-200" />
 

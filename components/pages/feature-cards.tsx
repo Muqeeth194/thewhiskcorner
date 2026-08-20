@@ -8,26 +8,26 @@ import Image from "next/image"
 
 export default function FeatureCards() {
   return (
-    <section className="bg-body ">
-      <div className="container space-y-8 py-16 text-center lg:py-20">
+    <section className="relative bg-body pb-20">
+      <div className="container  space-y-8 py-16 text-center lg:py-16">
         {featuredCategory.header || featuredCategory.subheader ? (
           <HeadingText subtext={featuredCategory.subheader}>
             {featuredCategory.header}
           </HeadingText>
         ) : null}
 
-        <div className="grid grid-cols-1 place-items-center gap-16 py-4 md:grid-cols-1 md:gap-40 md:py-20">
+        <div className="grid grid-cols-1 place-items-center gap-16 py-4 md:grid-cols-1 md:gap-36 md:pt-20">
           {featuredCategory.content.map((cards, index) => {
             const isEven = index % 2 === 0
             return (
               <Link
                 key={cards.text}
                 href={`/gallery?category=${encodeURIComponent(cards.text)}`}
-                className="flex w-full justify-center md:max-w-[85vw] lg:max-w-[75vw]"
+                className="flex w-full justify-center md:max-w-[80vw] lg:max-w-[70vw]"
               >
                 <Card
                   key={cards.text}
-                  className={`group relative flex h-auto w-full flex-col-reverse items-center justify-between overflow-visible rounded-3xl border-none p-8 shadow-xl transition-all duration-500 hover:bg-pink-200 hover:shadow-2xl dark:bg-secondary md:h-64 md:flex-row md:p-12 ${
+                  className={`group relative flex h-auto w-full flex-col-reverse items-center justify-between overflow-visible rounded-3xl border-none p-8 shadow-xl transition-all duration-500 hover:bg-pink-200 hover:shadow-2xl md:h-64 md:flex-row md:p-12 ${
                     isEven ? "md:flex-row " : "md:flex-row-reverse"
                   }`}
                 >
@@ -45,14 +45,15 @@ export default function FeatureCards() {
                     <CardDescription className="pb-4 font-sans font-light text-pink-600 transition-colors duration-300 group-hover:text-slate-500 md:text-lg">
                       {cards.subtext}
                     </CardDescription>
+
+                    {/* Button */}
                     <div
                       key={cards.text}
                       className={cn(
                         buttonVariants({
-                          variant: "outline",
-                          size: "sm",
+                          variant: "ghost",
                         }),
-                        "rounded-full px-6 py-5 text-black transition-all duration-500 group-hover:scale-110"
+                        "h-auto rounded-full bg-pink-200 px-6 py-3 font-medium text-pink-950 transition-all duration-500 group-hover:scale-110 group-hover:bg-pink-700 group-hover:text-white group-hover:shadow-lg"
                       )}
                     >
                       Learn More
@@ -62,7 +63,7 @@ export default function FeatureCards() {
                   {/* IMAGE SECTION */}
                   {cards.image && (
                     <div
-                      className={`relative mb-6 h-40 w-40 drop-shadow-xl transition-all duration-500 group-hover:scale-110 md:absolute md:top-1/2 md:mb-0 md:h-[450px] md:w-[450px] md:-translate-y-1/2 ${
+                      className={`relative mb-6 h-40 w-40 drop-shadow-xl transition-all duration-500 group-hover:scale-110 md:absolute md:top-1/2 md:mb-0 md:h-[400px] md:w-[400px] md:-translate-y-1/2 ${
                         isEven ? "md:-right-0" : "md:-left-0"
                       }`}
                     >
