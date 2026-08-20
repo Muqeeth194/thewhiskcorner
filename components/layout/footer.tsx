@@ -4,7 +4,7 @@ import { Mail, MapPin, Phone, Instagram, ArrowUpRight } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="mt-10 border-t border-pink-900 bg-pink-950 text-pink-50">
+    <footer className="border-t border-pink-900 bg-pink-950 text-pink-50">
       <div className="container mx-auto px-6 py-12 lg:py-16">
         <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-4">
           {/* 1. Brand Section */}

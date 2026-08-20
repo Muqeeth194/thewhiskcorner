@@ -22,9 +22,9 @@ export default function HeadingText({
         </h3>
       )}
       {subtext && (
-        <h2 className="font-sans font-light text-muted-foreground text-pink-600 lg:text-lg">
+        <p className="pt-3 font-sans font-light text-pink-600 lg:text-lg">
           {subtext}
-        </h2>
+        </p>
       )}
     </div>
   )

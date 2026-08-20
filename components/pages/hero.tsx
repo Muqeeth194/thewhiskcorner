@@ -8,6 +8,7 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
+  type CarouselApi,
 } from "@/components/ui/carousel"
 import { Card, CardContent } from "@/components/ui/card"
 import Autoplay from "embla-carousel-autoplay"
@@ -18,10 +19,19 @@ export default function HeroHeader() {
   const plugin = React.useRef(
     Autoplay({ delay: 4000, stopOnInteraction: false })
   )
+  const [api, setApi] = React.useState<CarouselApi>()
+  const [current, setCurrent] = React.useState(0)
+
+  React.useEffect(() => {
+    if (!api) return
+    setCurrent(api.selectedScrollSnap())
+    api.on("select", () => setCurrent(api.selectedScrollSnap()))
+  }, [api])
 
   return (
     <section className="relative w-full overflow-hidden pb-0 pt-0 shadow-lg">
       <Carousel
+        setApi={setApi}
         plugins={[plugin.current]}
         className="relative h-full w-full"
         opts={{ loop: true }}
@@ -31,7 +41,6 @@ export default function HeroHeader() {
             <CarouselItem key={index} className="h-full w-full pl-0">
               <Card className="h-full w-full border-0 bg-transparent shadow-none">
                 <CardContent className="relative flex h-full w-full items-center justify-center p-0">
-                  {/* 1. Desktop/Laptop */}
                   <div className="hidden h-full w-full bg-pink-50/20 lg:block">
                     <Image
                       src={card.imageWide || card.imageDesktop || card.image}
@@ -42,8 +51,6 @@ export default function HeroHeader() {
                       sizes="100vw"
                     />
                   </div>
-
-                  {/* 2. Mobile/Tablet fallback */}
                   <div className="block h-full w-full bg-pink-50/20 lg:hidden">
                     <Image
                       src={card.imageMobile || card.image}
@@ -54,8 +61,6 @@ export default function HeroHeader() {
                       sizes="100vw"
                     />
                   </div>
-
-                  {/* Modern Gradient Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent lg:from-black/70 lg:via-transparent" />
                 </CardContent>
               </Card>
@@ -79,17 +84,15 @@ export default function HeroHeader() {
                 <h1 className="font-serif text-3xl font-bold leading-tight tracking-tight text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.2)] md:text-pink-950 lg:text-5xl">
                   {heroHeader.header}
                 </h1>
-
                 <h2 className="font-sans text-xs font-light italic leading-relaxed text-white drop-shadow-[0_2px_10px_rgba(0,0,0,0.7)] sm:text-lg md:text-lg lg:text-lg">
                   {heroHeader.subheader}
                 </h2>
               </div>
-
               <div className="mt-2 flex justify-center sm:mt-0 lg:justify-start">
                 <Button
                   asChild
                   className={cn(
-                    "rounded-full bg-white/80 px-5 py-3 text-base font-semibold text-pink-800 shadow-xl transition-all duration-200 hover:scale-105 hover:bg-pink-900 hover:text-white hover:shadow-2xl md:text-lg",
+                    "h-auto rounded-full bg-pink-100 px-8 py-3 text-base font-semibold text-pink-950 transition-all duration-300 hover:scale-110 hover:bg-pink-800 hover:text-white hover:shadow-lg",
                     "border-0 ring-0"
                   )}
                 >
@@ -100,8 +103,22 @@ export default function HeroHeader() {
           </div>
         </div>
 
-        {/* THE BOTTOM SHADOW FADE */}
-        <div className="pointer-events-none absolute bottom-0 left-0 z-10 h-1/3 w-full bg-gradient-to-t from-black/80 to-transparent" />
+        {/* Dot Indicators */}
+        <div className="absolute bottom-10 left-1/2 z-30 flex -translate-x-1/2 gap-2">
+          {carouselSection.content.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => api?.scrollTo(index)}
+              className={cn(
+                "h-2 rounded-full transition-all duration-300",
+                current === index
+                  ? "w-6 bg-white"
+                  : "w-2 bg-white/50 hover:bg-white/75"
+              )}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </Carousel>
     </section>
   )

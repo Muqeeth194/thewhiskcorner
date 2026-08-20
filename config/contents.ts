@@ -5,6 +5,15 @@ import {
   ContentSection,
 } from "@/types/contents"
 
+import {
+  Search,
+  MessageSquare,
+  ClipboardEdit,
+  ChefHat,
+  PartyPopper,
+  Send,
+} from "lucide-react"
+
 /* ====================
 [> CUSTOMIZING CONTENT <]
 -- Setup image by typing `/image-name.file` (Example: `/header-image.png`)
@@ -193,6 +202,21 @@ export const testimonials = {
   ],
 }
 
+export const intro = {
+  header: `Where Flour Meets Imagination`,
+  subheader: `Crafting unforgettable centerpieces for life's sweetest moments`,
+  part_1: `At TheWhiskCorner, we believe that every great celebration
+                deserves a centerpiece as unique as the story behind it. We
+                don't just bake cakes; we craft edible memories tailored to your
+                exact vision.`,
+  part_2: `Using only the highest quality ingredients and a meticulous eye
+                for detail, our mission is to turn your sweetest dreams into
+                unforgettable, melt-in-your-mouth realities. From elegant
+                wedding tiers to whimsical birthday treats, we pour our passion
+                into every whisk, fold, and frost.`,
+  image: `https://res.cloudinary.com/djhageblb/image/upload/v1775050717/xjmexdwexyietny0ong1.png`,
+}
+
 export const CHOCOLATE_FLAVORS = [
   "Classic truffle",
   "Rich Chocolate and raspberry",
@@ -215,4 +239,55 @@ export const VANILLA_FLAVORS = [
   "Biscoff",
   "Almond praline",
   "Vanilla and Milk chocolate",
+]
+
+export const STEPS = [
+  {
+    id: "01",
+    title: "Find Inspiration",
+    description:
+      "Explore our gallery to find your favorite styles and flavors.",
+    icon: Search,
+    color: "bg-rose-50 text-rose-400 ring-rose-100",
+    border: "border-rose-100",
+    label: "Step one",
+  },
+  {
+    id: "02",
+    title: "Discuss Design",
+    description:
+      "Chat with our decorators to tailor the design to your vision.",
+    icon: MessageSquare,
+    color: "bg-orange-50 text-orange-400 ring-orange-100",
+    border: "border-orange-100",
+    label: "Step two",
+  },
+  {
+    id: "03",
+    title: "Request a Quote",
+    description: "Share your event details and guest count to get a quote.",
+    icon: ClipboardEdit,
+    color: "bg-pink-50 text-pink-400 ring-pink-100",
+    border: "border-pink-100",
+    label: "Step three",
+  },
+  {
+    id: "04",
+    title: "We Bake It",
+    description:
+      "We craft your dream centerpiece from scratch using premium ingredients.",
+    icon: ChefHat,
+    color: "bg-fuchsia-50 text-fuchsia-400 ring-fuchsia-100",
+    border: "border-fuchsia-100",
+    label: "Step four",
+  },
+  {
+    id: "05",
+    title: "You Celebrate!",
+    description: "Pick up your cake or get it delivered, and simply enjoy!",
+    icon: PartyPopper,
+    color: "bg-purple-50 text-purple-400 ring-purple-100",
+    border: "border-purple-100",
+    label: "Step five",
+  },
 ]
